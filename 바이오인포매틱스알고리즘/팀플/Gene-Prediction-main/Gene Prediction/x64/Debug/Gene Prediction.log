@@ -1,0 +1,20 @@
+﻿  Main.cpp
+E:\OneDrive - dongguk.edu\DGU_Unv\2022\3-2학기\바이오인포매틱스알고리즘\팀 프로젝트\Gene Prediction\Gene Prediction\Utility.h(47,30): warning C4244: '인수': 'double'에서 'const time_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\OneDrive - dongguk.edu\DGU_Unv\2022\3-2학기\바이오인포매틱스알고리즘\팀 프로젝트\Gene Prediction\Gene Prediction\Utility.h(47,20): warning C4244: '인수': 'double'에서 'const time_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\OneDrive - dongguk.edu\DGU_Unv\2022\3-2학기\바이오인포매틱스알고리즘\팀 프로젝트\Gene Prediction\Gene Prediction\Biological.h(109,24): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\OneDrive - dongguk.edu\DGU_Unv\2022\3-2학기\바이오인포매틱스알고리즘\팀 프로젝트\Gene Prediction\Gene Prediction\ExonChaining.h(71,1): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\OneDrive - dongguk.edu\DGU_Unv\2022\3-2학기\바이오인포매틱스알고리즘\팀 프로젝트\Gene Prediction\Gene Prediction\Main.cpp(35,243): warning C4244: '인수': 'const ExonChaining::int_l'에서 'dataType'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              dataType=int
+          ]
+E:\OneDrive - dongguk.edu\DGU_Unv\2022\3-2학기\바이오인포매틱스알고리즘\팀 프로젝트\Gene Prediction\Gene Prediction\Main.cpp(50,94): warning C4244: '인수': '_Ty'에서 'dataType'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty=ExonChaining::int_l
+          ]
+          and
+          [
+              dataType=int
+          ]
+  Gene Prediction.vcxproj -> E:\OneDrive - dongguk.edu\DGU_Unv\2022\3-2학기\바이오인포매틱스알고리즘\팀 프로젝트\Gene Prediction\x64\Debug\Gene Prediction.exe
