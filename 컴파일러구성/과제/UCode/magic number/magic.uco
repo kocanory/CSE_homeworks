@@ -1,0 +1,135 @@
+main       proc         231     2     2
+           sym            2     1   225
+           sym            2   226     1
+           sym            2   227     1
+           sym            2   228     1
+           sym            2   229     1
+           sym            2   230     1
+           sym            2   231     1
+           ldp
+           lda            2   226
+           call       read
+$$0        nop
+           lod            2   226
+           ldc            0
+           ne
+           fjp        $$1
+           lod            2   226
+           ldc            2
+           mod
+           ldc            1
+           eq
+           fjp        $$2
+           lod            2   226
+           lod            2   226
+           mult
+           str            2   231
+           ldc            0
+           str            2   227
+           lod            2   226
+           ldc            2
+           div
+           str            2   228
+           lod            2   227
+           lod            2   226
+           mult
+           lod            2   228
+           add
+           str            2   230
+           ldc            0
+           str            2   229
+$$3        nop
+           lod            2   229
+           lod            2   231
+           lt
+           fjp        $$4
+           lod            2   229
+           inc
+           str            2   229
+           lod            2   230
+           lda            2     1
+           add
+           lod            2   229
+           sti
+           lod            2   229
+           lod            2   226
+           mod
+           ldc            0
+           eq
+           fjp        $$5
+           lod            2   227
+           inc
+           str            2   227
+           ujp        $$6
+$$5        nop
+           lod            2   227
+           dec
+           str            2   227
+           lod            2   228
+           dec
+           str            2   228
+$$6        nop
+           lod            2   227
+           ldc            0
+           lt
+           fjp        $$7
+           lod            2   226
+           ldc            1
+           sub
+           str            2   227
+$$7        nop
+           lod            2   228
+           ldc            0
+           lt
+           fjp        $$8
+           lod            2   226
+           ldc            1
+           sub
+           str            2   228
+$$8        nop
+           lod            2   227
+           lod            2   226
+           mult
+           lod            2   228
+           add
+           str            2   230
+           ujp        $$3
+$$4        nop
+           ldc            0
+           str            2   229
+$$9        nop
+           lod            2   229
+           lod            2   231
+           lt
+           fjp        $$10
+           ldp
+           lod            2   229
+           lda            2     1
+           add
+           ldi
+           call      write
+           lod            2   229
+           inc
+           str            2   229
+           lod            2   229
+           lod            2   226
+           mod
+           ldc            0
+           eq
+           fjp        $$11
+           call         lf
+$$11       nop
+           ujp        $$9
+$$10       nop
+$$2        nop
+           ldp
+           lda            2   226
+           call       read
+           ujp        $$0
+$$1        nop
+           ret
+           end
+           bgn            0
+           ldp
+           call        main
+           end

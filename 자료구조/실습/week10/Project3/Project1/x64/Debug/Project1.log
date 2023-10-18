@@ -1,0 +1,4 @@
+﻿  priority_queue_simulation.cpp
+c:\users\user\source\repos\project3\project1\priority_queue_simulation.cpp(6): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+c:\users\user\source\repos\project3\project1\priority_queue_simulation.cpp(8): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Project1.vcxproj -> C:\Users\USER\source\repos\Project3\x64\Debug\Project1.exe

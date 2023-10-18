@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.tbl": "c",
+        "cctype": "c"
+    }
+}

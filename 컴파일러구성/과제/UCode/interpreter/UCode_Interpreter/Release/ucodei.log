@@ -1,0 +1,7 @@
+﻿  ucodei.cpp
+C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴파일러구성\과제\UCode\UCode_Interpreter\ucodei.cpp(194,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴파일러구성\과제\UCode\UCode_Interpreter\ucodei.cpp(197,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴파일러구성\과제\UCode\UCode_Interpreter\ucodei.cpp(200,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴파일러구성\과제\UCode\UCode_Interpreter\ucodei.cpp(214,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴파일러구성\과제\UCode\UCode_Interpreter\ucodei.cpp(236,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  ucodei.vcxproj -> C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴파일러구성\과제\UCode\UCode_Interpreter\Release\ucodei.exe

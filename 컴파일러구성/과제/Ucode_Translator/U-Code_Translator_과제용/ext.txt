@@ -1,0 +1,45 @@
+
+ line       object           ucode  source program
+
+   1    (38    1    1)                sym            1     1     1
+   2    (35    0    2)     main       proc           0     2     2
+   3    (23          )                ldp       
+   4    (29    9     )                call       func
+   5    (23          )                ldp       
+   6    (29   -2     )                call       write
+   7    (30          )                ret       
+   8    (36          )                end       
+   9    (35    0    2)     func       proc           0     2     2
+  10    (20  100     )                ldc          100
+  11    (24    1    1)                str            1     1
+  12    (30          )                ret       
+  13    (36          )                end       
+  14    (37    1     )                bgn            1
+  15    (23          )                ldp       
+  16    (29    2     )                call       main
+  17    (36          )                end       
+
+
+   ****    Result    ****
+
+ 2
+
+
+             ##### Statistics #####
+
+
+    ****  Static Instruction Counts  ****
+
+ldc    =  1       ldp    =  3       str    =  1       call   =  3       
+ret    =  2       proc   =  2       end    =  3       bgn    =  1       
+sym    =  1       
+
+    ****  Dynamic instruction counts  ****
+
+ldc    =  1         ldp    =  3         str    =  1         call   =  3         
+ret    =  2         proc   =  2         end    =  1         bgn    =  1         
+
+
+ Executable instruction count  =   12
+
+ Total execution cycle         =   250

@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/kocan/OneDrive - dongguk.edu/컴공/컴파일러구성/과제/Ucode_Translator/2018112007_이승현_Translator",
+      "program": "c:/Users/kocan/OneDrive - dongguk.edu/컴공/컴파일러구성/과제/Ucode_Translator/2018112007_이승현_Translator/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
