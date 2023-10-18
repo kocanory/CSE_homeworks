@@ -1,0 +1,25 @@
+formation: 4-4-2
+
+normal (many midfielders but less defenders and goalkeepers)
+- a lot of players don't prefer to play defender
+- many want to play midfielders
+- many want to play forwards despite the formation 4-4-2
+- usually, 1 or 2 goalkeepers only in a meetup
+
+20: FW-6, MF-8, DF-5, GK-1
+30: FW-8, MF-11, DF-9, GK-2
+40: FW-11, MF-15, DF-12, GK-2
+
+optimal (less forwards and goalkeepers but same ratio of midfielders and defenders)
+- close to ratio of 2:4:4 for [forwards:midfielders:defenders]
+- ratio of 10 total players to 1 goalkeeper (20:2, 30:3, 40:4)
+
+20: FW-4, MF-7, DF-7, GK-2
+30: FW-6, MF-10, DF-11, GK-3
+40: FW-8, MF-14, DF-14, GK-4
+
+random (using numbergenerator.net to decide number of each positions in a limit)
+
+20: FW-14, MF-1, DF-3, GK-2
+30: FW-3, MF-14, DF-1, GK-12
+40: FW-3, MF-14, DF-18, GK-5
