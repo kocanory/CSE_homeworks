@@ -1,0 +1,4 @@
+﻿  1.cpp
+1.cpp(5): error C2065: '에이다': undeclared identifier
+1.cpp(5): error C2065: '존': undeclared identifier
+1.cpp(5): error C2146: syntax error: missing ')' before identifier '베커스'

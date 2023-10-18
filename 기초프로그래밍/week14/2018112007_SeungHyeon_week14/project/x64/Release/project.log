@@ -1,0 +1,8 @@
+﻿  Resolve-Path : Cannot find path 'C:\users\3183\documents\visual studio 2015\Projects\2018112007_SeungHyeon_week14\x64\R
+  elease\project.exe' because it does not exist.
+  At C:\vcpkg\scripts\buildsystems\msbuild\applocal.ps1:31 char:41
+  +         $targetBinaryPath = Resolve-Path <<<<  $targetBinary -erroraction stop
+      + CategoryInfo          : ObjectNotFound: (C:\users\3183\d...ase\project.exe:String) [Resolve-Path], ItemNotFoundE 
+     xception
+      + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.ResolvePathCommand
+   
