@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This network was created in GeNIe Academic, which can be used for academic teaching and research purposes only -->
+<smile version="1.0" id="Network1" numsamples="10000" discsamples="10000">
+	<nodes>
+		<cpt id="meta_static_cancer">
+			<state id="T" />
+			<state id="F" />
+			<probabilities>0.2 0.8</probabilities>
+		</cpt>
+		<cpt id="serum_calcium">
+			<state id="T" />
+			<state id="F" />
+			<parents>meta_static_cancer</parents>
+			<probabilities>0.2 0.8 0.05 0.95</probabilities>
+		</cpt>
+		<cpt id="brain_tumor">
+			<state id="T" />
+			<state id="F" />
+			<parents>meta_static_cancer</parents>
+			<probabilities>0.8 0.2 0.2 0.8</probabilities>
+		</cpt>
+		<cpt id="coma">
+			<state id="T" />
+			<state id="F" />
+			<parents>serum_calcium brain_tumor</parents>
+			<probabilities>0.8 0.2 0.8 0.2 0.8 0.2 0.05 0.95</probabilities>
+		</cpt>
+		<cpt id="severe_headache">
+			<state id="T" />
+			<state id="F" />
+			<parents>brain_tumor</parents>
+			<probabilities>0.8 0.2 0.6 0.4</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 4.0.1922.0 ACADEMIC" name="Network1">
+			<node id="meta_static_cancer">
+				<name>meta-static cancer</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>308 131 409 194</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="serum_calcium">
+				<name>serum calcium</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>164 269 244 319</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="brain_tumor">
+				<name>brain tumor</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>457 277 525 319</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="coma">
+				<name>coma</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>315 406 360 434</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="severe_headache">
+				<name>severe headache</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>570 392 665 451</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+		</genie>
+	</extensions>
+</smile>

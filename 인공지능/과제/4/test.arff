@@ -1,0 +1,12 @@
+@relation Vote
+
+@attribute sex numeric
+@attribute age numeric
+@attribute income numeric
+@attribute Class {+, -}
+
+@data
+
+
+1,0.1,0.5,?
+

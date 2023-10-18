@@ -1,0 +1,18 @@
+@relation Vote
+
+@attribute sex {M, F}
+@attribute age numeric
+@attribute income numeric
+@attribute Class {yes. no}
+
+@data
+
+M,54,3800,yes
+M,20,1200,no
+F,45,4200,yes
+F,38,4800,yes
+M,29,2300,no
+F,30,3500,no
+M,48,2200,yes
+F,32,2000,no
+F,25,3300,yes
