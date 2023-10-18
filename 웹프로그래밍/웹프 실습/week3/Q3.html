@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>3주차 3번</title> 
+        <script type="text/javascript">
+            window.onload = function()
+            {
+                var back = document.createElement("img");
+                back.setAttribute('id', back);
+                back.setAttribute('src', "back.jpg");
+                document.body.appendChild(back);   
+            }
+
+            function oneclick()
+            {   
+                var one = document.getElementById('one');
+                one.style.background = 'black';
+                one.style.color = 'white';
+            }
+
+            function twoclick()
+            {
+                var two = document.getElementById('two');
+                var str = document.createTextNode("div2의 영역이죠");
+                two.appendChild(str);
+            }
+        </script>   
+    </head>
+    <body>
+        <div id="one" onclick="oneclick()">여긴 DIV1 영역</div>
+        <div id="two" onclick="twoclick()">여긴 DIV2 영역</div>
+    </body>
+</html>

@@ -1,0 +1,11 @@
+﻿  DrawFunctions.cpp
+  Game2D.cpp
+  main.cpp
+  sound.cpp
+  Timer.cpp
+  Generating code
+  673 of 679 functions (99.1%) were compiled, the rest were copied from previous compilation.
+    64 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Lecture1.vcxproj -> D:\Lecture1\x64\Release\Lecture1.exe

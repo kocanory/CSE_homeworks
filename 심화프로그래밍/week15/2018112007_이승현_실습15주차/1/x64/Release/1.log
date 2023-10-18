@@ -1,0 +1,36 @@
+﻿  Source.cpp
+Source.cpp(11): error C2065: 'People': undeclared identifier
+Source.cpp(11): error C2923: 'std::vector': 'People' is not a valid template type argument for parameter '_Ty'
+Source.cpp(11): error C3203: 'allocator': unspecialized class template can't be used as a template argument for template parameter '_Alloc', expected a real type
+Source.cpp(12): warning C4624: 'FriendList': destructor was implicitly defined as deleted
+Source.cpp(69): warning C4624: 'People': destructor was implicitly defined as deleted
+Source.cpp(27): error C2663: 'std::vector<_Ty,_Alloc>::push_back': 2 overloads have no legal conversion for 'this' pointer
+Source.cpp(32): error C2663: 'std::vector<_Ty,_Alloc>::begin': 2 overloads have no legal conversion for 'this' pointer
+Source.cpp(32): error C2663: 'std::vector<_Ty,_Alloc>::end': 2 overloads have no legal conversion for 'this' pointer
+Source.cpp(35): error C2678: binary '[': no operator found which takes a left-hand operand of type 'std::vector' (or there is no acceptable conversion)
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(1229): note: could be '_Vector_alloc<std::_Vec_base_types<_Ty,_Alloc_types::_Alloc>>::reference std::vector<_Ty,_Alloc>::operator [](_Vector_alloc<std::_Vec_base_types<_Ty,_Alloc_types::_Alloc>>::size_type)'
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(1213): note: or       '_Vector_alloc<std::_Vec_base_types<_Ty,_Alloc_types::_Alloc>>::const_reference std::vector<_Ty,_Alloc>::operator [](_Vector_alloc<std::_Vec_base_types<_Ty,_Alloc_types::_Alloc>>::size_type) const'
+  Source.cpp(35): note: while trying to match the argument list '(std::vector, int)'
+Source.cpp(36): error C2663: 'std::vector<_Ty,_Alloc>::begin': 2 overloads have no legal conversion for 'this' pointer
+Source.cpp(36): error C2663: 'std::vector<_Ty,_Alloc>::erase': 2 overloads have no legal conversion for 'this' pointer
+Source.cpp(44): error C2663: 'std::vector<_Ty,_Alloc>::begin': 2 overloads have no legal conversion for 'this' pointer
+Source.cpp(44): error C2663: 'std::vector<_Ty,_Alloc>::end': 2 overloads have no legal conversion for 'this' pointer
+Source.cpp(44): error C3536: '<begin>$L0': cannot be used before it is initialized
+Source.cpp(44): error C3536: '<end>$L0': cannot be used before it is initialized
+Source.cpp(44): error C2100: illegal indirection
+Source.cpp(46): error C2678: binary '==': no operator found which takes a left-hand operand of type 'int' (or there is no acceptable conversion)
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\system_error(389): note: could be 'bool std::operator ==(const std::error_condition &,const std::error_condition &) noexcept'
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\system_error(381): note: or       'bool std::operator ==(const std::error_condition &,const std::error_code &) noexcept'
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\system_error(373): note: or       'bool std::operator ==(const std::error_code &,const std::error_condition &) noexcept'
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\system_error(365): note: or       'bool std::operator ==(const std::error_code &,const std::error_code &) noexcept'
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\exception(339): note: or       'bool std::operator ==(const std::exception_ptr &,std::nullptr_t) throw()'
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\exception(334): note: or       'bool std::operator ==(std::nullptr_t,const std::exception_ptr &) throw()'
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\exception(329): note: or       'bool std::operator ==(const std::exception_ptr &,const std::exception_ptr &) throw()'
+  Source.cpp(46): note: while trying to match the argument list '(int, People)'
+Source.cpp(63): error C2663: 'std::vector<_Ty,_Alloc>::begin': 2 overloads have no legal conversion for 'this' pointer
+Source.cpp(63): error C2663: 'std::vector<_Ty,_Alloc>::end': 2 overloads have no legal conversion for 'this' pointer
+Source.cpp(63): error C3536: '<begin>$L0': cannot be used before it is initialized
+Source.cpp(63): error C3536: '<end>$L0': cannot be used before it is initialized
+Source.cpp(63): error C2100: illegal indirection
+Source.cpp(65): error C2228: left of '.name' must have class/struct/union
+  Source.cpp(65): note: type is 'int'

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>3주차 2번</title>
+        <style type="text/css">
+        h1{text-align: center;}
+        hr{border-color: red;}
+        </style>
+        <script type="text/javascript">
+        function calc()
+        {
+            re();
+            var score = 0;
+            var answer1 = document.getElementsByName('1');
+            var answer2 = document.getElementsByName('2');
+            var answer3 = document.getElementsByName('3');
+            
+            for(var i in answer1)
+            {
+                if(answer1[i].checked)
+                    if(answer1[i].value == "1.2") score++;
+            }
+
+            for(var i in answer2)
+            {
+                if(answer2[i].checked)
+                    if(answer2[i].value == "2.4") score++;
+            }
+
+            for(var i in answer3)
+            {
+                if(answer3[i].checked)
+                    if(answer3[i].value == "3.1") score++;
+            }
+            document.getElementById('answer').setAttribute('value',score);
+        }
+        function re()
+        {
+            document.getElementById('answer').setAttribute('value',0);
+        }
+        </script>
+    </head>
+    <body>
+        <h1>문 제</h1>
+        <hr></hr>
+        <ol>
+        <form>
+            <div>
+                <p><br><li>브라우저에게 문서의 유형을 알려주는 것으로, HTML5의 문서 유형을 선언하는 html의 태그는?</li></p><br>
+                <input type="radio" name="1" value="1.1"> !HTML5
+                <input type="radio" name="1" value="1.2"> !DOCTYPE
+                <input type="radio" name="1" value="1.3"> !DOCTYPE5
+                <input type="radio" name="1" value="1.4"> !HTML5-DOCTYPE
+            </div>
+            <div>
+                <p><br><li>input 태그의 속성 중 입력 요소에 힌트를 미리 표시하는 속성은?</li></p><br>
+                <input type="radio" name="2" value="2.1"> autocomplete
+                <input type="radio" name="2" value="2.2"> autofocus
+                <input type="radio" name="2" value="2.3"> pattern
+                <input type="radio" name="2" value="2.4"> placeholder
+            </div>
+            <div>
+                <p><br><li>input 태그의 타입 중 details 태그와 함께 사용하기도 하며, 주로 세부 사항의 요약을 표시하는 태그는?</li></p><br>
+                <input type="radio" name="3" value="3.1"> summary
+                <input type="radio" name="3" value="3.2"> fieldset
+                <input type="radio" name="3" value="3.3"> legend
+                <input type="radio" name="3" value="3.4"> meter
+            </div><br>
+        </ol> 
+            &nbsp;&nbsp;&nbsp;
+            <input type="button" value="채점" onclick="calc()">
+            <input type="reset" value="리셋" onclick="re()">
+            <meter id="answer" min="0" max="3" value="0" low="1.5">answer</meter>            
+        </form>       
+    </body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>4주차 1번</title>
+        <style type="text/css">
+        div{float: left;}
+        #div1, #div2{border: black solid 1px; width: 500px; height: 200px;}
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+            function dragover(wpevent)
+            {
+                wpevent.preventDefault();
+            }
+            function dragstart(wpevent)
+            { 
+                wpevent.dataTransfer.effectAllowed='move';
+                wpevent.dataTransfer.setData("Text",wpevent.target.id);
+            }
+            function dragend(wpevent)
+            {
+                wpevent.dataTransfer.clearData("Text");
+            }
+            function drop(wpevent)
+            {
+                wpevent.preventDefault();
+                var item = wpevent.dataTransfer.getData("Text");
+                wpevent.target.appendChild(document.getElementById(item));
+                var move = "";
+                if(item == "item1") move = "사과";
+                if(item == "item2") move = "포도";
+                if(item == "item3") move = "체리";
+                var str = move + "를 옮겼습니다.";
+                document.getElementById("status").innerHTML = str;
+                wpevent.stopPropagation();
+            }
+        </script>
+        <p><h1>과일 목록</h1></p>
+        <p><div id = "div1" ondrop="drop(event)" ondragover="dragover(event)">
+            <img src="apple.jpg" id="item1" draggable="true" ondragstart="dragstart(event)" ondragend ="dragend(event)">
+            <img src="grape.jpg" id="item2" draggable="true" ondragstart="dragstart(event)" ondragend ="dragend(event)">
+            <img src="cherry.jpg" id="item3" draggable="true" ondragstart="dragstart(event)" ondragend ="dragend(event)">
+        </div></p>
+        <p><h1><br><br><br><br><br>장바구니</h1></p>
+        <p><div id = "div2" ondrop="drop(event)" ondragover="dragover(event)"></div></p>
+        <p><br><br><br><br><br><br><br><br><br><br><h3 id = "status"></h3></p>
+    </body>
+</html>

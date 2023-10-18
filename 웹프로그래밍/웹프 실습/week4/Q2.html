@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>4주차 2번</title>
+        <style type="text/css">
+        #map{position: absolute; visibility: hidden;}
+        </style>
+        <script type="text/javascript">
+            function map_visible()
+            {
+                map.style.visibility = "visible";
+            }
+            function map_hidden()
+            {
+                map.style.visibility = "hidden";
+            }
+        </script>
+    </head>
+    <body>
+        <form>
+            <input type="radio" name="visible" value = "hidden" onclick="map_hidden()" checked = "checked">숨기기
+            <input type="radio" name="visible" value = "visible" onclick="map_visible()">보이기     
+            <div id="map"><img src="map1.jpg"></div>
+         </form>
+    </body>
+</html>

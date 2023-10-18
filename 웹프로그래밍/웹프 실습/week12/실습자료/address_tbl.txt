@@ -1,0 +1,10 @@
+create table address_tbl(
+student_id varchar(15),
+name varchar(15),
+address varchar(50),
+e_mail varchar(30),
+primary key(student_id));
+
+insert into address_tbl values('2018123456','홍길동','hong@hong.hong','데이터베이스 연구실 5128호');
+
+select * from address_tbl;

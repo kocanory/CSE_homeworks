@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>5주차 4번</title>
+        <style type="text/css">
+            h3{text-align: center;}
+            div{margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                width: 175px;}
+            #name1{background: yellow;}
+            #name2{background: green;}
+            #name3{background: gray;}
+            #name4{background: pink;}
+            #name5{background: orange;}
+        </style>
+        <script type="text/javascript">
+            window.onload = function()
+            {    
+                var s = '[' + 
+                '{"name" : "Hong", "age":"21"},'+
+                '{"name" : "Kim", "age":"21"},'+
+                '{"name" : "Kang", "age":"21"},'+
+                '{"name" : "Han", "age":"21"},'+
+                '{"name" : "Jang", "age":"21"}]';
+
+                var students = eval("(" + s + ")");
+                for(var i = 0; i < 5; i++)
+                {
+                    var n = i + 1;
+                    document.getElementById("name" + n.toString()).innerHTML = "이름 : " + students[i].name + " 나이 : " + students[i].age;
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h3>학생 명단</h3>
+        <p><div id="name1"></div></p>
+        <p><div id="name2"></div></p>
+        <p><div id="name3"></div></p>
+        <p><div id="name4"></div></p>
+        <p><div id="name5"></div></p>
+    </body>
+</html>

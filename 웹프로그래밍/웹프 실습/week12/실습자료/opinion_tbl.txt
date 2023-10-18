@@ -1,0 +1,5 @@
+create table opinion_tbl(
+id int,
+fruit varchar(15),
+sum int,
+primary key(id));

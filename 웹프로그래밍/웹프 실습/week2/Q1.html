@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style type="text/css">
+        h1{text-align: center;}
+        h4{text-align: center; color:blue;}
+        #blue_line{height:3px;border-width:0;color:blue;background-color:blue; width:250px;}
+        #box {border: 1px solid black; padding: 10px; text-align: center; width: 260px;
+        margin-left: auto; margin-right: auto;
+        font-style: italic; color:red;}
+        .time {text-align: center;}
+        textarea{width: 60%; height: 90px;}
+        </style>
+        <title>2주차 1번</title>
+    </head>
+    <body>
+        <form>
+        <h1>웹프로그래밍<br></h1>
+        <hr id = blue_line> 
+        <div id = "box">2주차 과제입니다</div>
+        <h4>Web Programming<br></h4>
+        <div class="time">
+            이론: 화요일 13시 ~ 15시<br>
+            실습: 목요일 10시 ~ 12시
+        </div>
+        <br><p>기타 정보 입력</p>
+        <hr id="gray_line">
+        <fieldset>
+            <legend>개인정보 입력</legend>
+            <table cellpadding = "10">
+                <tr>
+                    <td>학번: <input type="text" name="number" ></td>
+                </tr>
+                <tr>
+                    <td>PW: <input type="password" name="pass"></td>
+                </tr>
+            </table>
+        </fieldset>
+        <br>소감문
+        <br><textarea name="area">본인 소개 및 과제 소감문 작성</textarea>
+        <p><input type="submit" value="제출"></p>
+        </form>
+    </body>
+</html>

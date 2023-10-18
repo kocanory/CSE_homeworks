@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>5주차 2번</title>
+        <style type="text/css">
+            #box{width: 200px; height: 200px; background-color: skyblue; display: none;}
+        </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script>    
+            $(document).ready(function(){
+                    $('#start').click(function(){
+                        $('#box').slideDown('slow').fadeOut('fast').show('slow');
+                    });
+                    $('#stop').click(function(){
+                        $('#box').fadeOut('fast');
+                    });
+                });
+        </script>
+    </head>
+    <body>
+        <input type="button" id="start" value="시작">
+        <input type="button" id="stop" value="정지">
+        <p><img src="1.PNG" id="box"></div></p>
+    </body>
+</html>

@@ -1,0 +1,4 @@
+﻿  3.cpp
+c:\users\3183\source\repos\2018112007_이승현_실습3주차\3\3.cpp(11): warning C4302: 'type cast': truncation from 'char *' to 'char'
+c:\users\3183\source\repos\2018112007_이승현_실습3주차\3\3.cpp(28): warning C4302: 'type cast': truncation from 'char *' to 'char'
+  3.vcxproj -> C:\Users\3183\source\repos\2018112007_이승현_실습3주차\Debug\3.exe
