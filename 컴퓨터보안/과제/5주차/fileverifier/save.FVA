@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Created with FileVerifier++ v0.6.6.6050 -->
+
+<fvx version="1.0">
+    <entry name="file1.txt"> <size>15</size> <mtime>04/12/2023 01:22:52</mtime> <attrib>A-----</attrib> <algorithm>CRC16</algorithm> <hash display-as="Hexadecimal" encoded-as="Hexadecimal">3179</hash> </entry>
+    <entry name="file2.txt"> <size>12</size> <mtime>04/12/2023 01:22:56</mtime> <attrib>A-----</attrib> <algorithm>CRC16</algorithm> <hash display-as="Hexadecimal" encoded-as="Hexadecimal">4425</hash> </entry>
+    <entry name="file3.txt"> <size>12</size> <mtime>04/12/2023 01:23:00</mtime> <attrib>A-----</attrib> <algorithm>CRC32</algorithm> <hash display-as="Hexadecimal" encoded-as="Hexadecimal">4342266d</hash> </entry>
+    <entry name="test.txt"> <size>15</size> <mtime>04/12/2023 01:26:53</mtime> <attrib>A-----</attrib> <algorithm>CRC32</algorithm> <hash display-as="Hexadecimal" encoded-as="Hexadecimal">9c88f83b</hash> </entry>
+</fvx>

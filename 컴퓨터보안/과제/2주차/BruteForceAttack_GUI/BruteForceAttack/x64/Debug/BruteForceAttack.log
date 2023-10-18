@@ -1,0 +1,5 @@
+﻿  GUI.cpp
+C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴퓨터보안\과제\2주차\코드\BruteForceAttack-2\BruteForceAttack\code.h(67,1): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴퓨터보안\과제\2주차\코드\BruteForceAttack-2\BruteForceAttack\code.h(87,1): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  GUI.obj : MSIL 모듈이 발견되었습니다. MSIL에 증분 링크를 사용할 수 없습니다. 전체 링크를 수행하고 있습니다.
+  BruteForceAttack.vcxproj -> C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴퓨터보안\과제\2주차\코드\BruteForceAttack-2\x64\Debug\BruteForceAttack.exe

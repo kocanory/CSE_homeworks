@@ -1,0 +1,8 @@
+C:\Users\kocan\source\repos\BruteForceAttack\BruteForceAttack\x64\Debug\BruteForceAttack.vcxproj.AssemblyReference.cache
+C:\Users\kocan\source\repos\BruteForceAttack\BruteForceAttack\x64\Debug\BruteForceAttack.vcxproj.SuggestedBindingRedirects.cache
+C:\Users\kocan\source\repos\BruteForceAttack\BruteForceAttack\x64\Debug\BruteForceAttack.GUI.resources
+C:\Users\kocan\source\repos\BruteForceAttack\BruteForceAttack\x64\Debug\BruteForceAttack.vcxproj.GenerateResource.cache
+C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴퓨터보안\과제\2주차\코드\BruteForceAttack\BruteForceAttack\x64\Debug\BruteForceAttack.vcxproj.AssemblyReference.cache
+C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴퓨터보안\과제\2주차\코드\BruteForceAttack\BruteForceAttack\x64\Debug\BruteForceAttack.vcxproj.SuggestedBindingRedirects.cache
+C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴퓨터보안\과제\2주차\코드\BruteForceAttack\BruteForceAttack\x64\Debug\BruteForceAttack.GUI.resources
+C:\Users\kocan\OneDrive - dongguk.edu\컴공\컴퓨터보안\과제\2주차\코드\BruteForceAttack\BruteForceAttack\x64\Debug\BruteForceAttack.vcxproj.GenerateResource.cache

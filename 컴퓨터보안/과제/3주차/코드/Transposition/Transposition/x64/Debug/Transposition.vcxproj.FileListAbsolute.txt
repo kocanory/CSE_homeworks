@@ -1,0 +1,4 @@
+C:\Users\kocan\source\repos\Transposition\Transposition\x64\Debug\Transposition.vcxproj.AssemblyReference.cache
+C:\Users\kocan\source\repos\Transposition\Transposition\x64\Debug\Transposition.vcxproj.SuggestedBindingRedirects.cache
+C:\Users\kocan\source\repos\Transposition\Transposition\x64\Debug\Transposition.GUI.resources
+C:\Users\kocan\source\repos\Transposition\Transposition\x64\Debug\Transposition.vcxproj.GenerateResource.cache

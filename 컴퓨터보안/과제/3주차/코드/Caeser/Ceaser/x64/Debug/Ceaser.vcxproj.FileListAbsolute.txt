@@ -1,0 +1,8 @@
+C:\Users\kocan\source\repos\Ceaser\Ceaser\x64\Debug\Ceaser.vcxproj.AssemblyReference.cache
+C:\Users\kocan\source\repos\Ceaser\Ceaser\x64\Debug\Ceaser.vcxproj.SuggestedBindingRedirects.cache
+C:\Users\kocan\source\repos\Ceaser\Ceaser\x64\Debug\Ceaser.GUI.resources
+C:\Users\kocan\source\repos\Ceaser\Ceaser\x64\Debug\Ceaser.vcxproj.GenerateResource.cache
+C:\Users\kocan\source\repos\Caeser\Ceaser\x64\Debug\Ceaser.vcxproj.AssemblyReference.cache
+C:\Users\kocan\source\repos\Caeser\Ceaser\x64\Debug\Ceaser.vcxproj.SuggestedBindingRedirects.cache
+C:\Users\kocan\source\repos\Caeser\Ceaser\x64\Debug\Ceaser.GUI.resources
+C:\Users\kocan\source\repos\Caeser\Ceaser\x64\Debug\Ceaser.vcxproj.GenerateResource.cache

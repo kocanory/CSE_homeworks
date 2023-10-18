@@ -1,0 +1,4 @@
+﻿  BruteForceAttack.cpp
+C:\Users\kocan\source\repos\2018112007_이승현_실습2주차\2018112007_이승현_실습2주차\BruteForceAttack.cpp(39,94): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\kocan\source\repos\2018112007_이승현_실습2주차\2018112007_이승현_실습2주차\BruteForceAttack.cpp(60,91): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  2018112007_이승현_실습2주차.vcxproj -> C:\Users\kocan\source\repos\2018112007_이승현_실습2주차\x64\Debug\2018112007_이승현_실습2주차.exe
