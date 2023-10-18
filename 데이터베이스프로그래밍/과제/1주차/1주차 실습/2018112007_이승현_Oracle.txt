@@ -1,0 +1,442 @@
+<테이블 생성>
+SQL> CREATE TABLE CUSTOMER (CustomerID NUMBER NOT NULL CONSTRAINT PK_CUSTOMER PRIMARY KEY,
+  2  FirstName CHAR(25) NOT NULL,
+  3  LastName CHAR(25) NOT NULL,
+  4  Phone CHAR(12),
+  5  Email VARCHAR(100));
+
+테이블이 생성되었습니다.
+
+SQL> CREATE TABLE INVOICE (InvoiceNumber NUMBER NOT NULL CONSTRAINT PK_INVOICE PRIMARY KEY,
+  2  CustomerNumber NUMBER NOT NULL CONSTRAINT FK_CUSTOMERID REFERENCES CUSTOMER(CustomerID),
+  3  DateIn DATE NOT NULL,
+  4  DateOut DATE,
+  5  TotalAmount NUMBER(8,2));
+
+테이블이 생성되었습니다.
+
+SQL> CREATE TABLE INVOICE_ITEM (InvoiceNumber NUMBER NOT NULL CONSTRAINT FK_INVOICENUMBER REFERENCES INVOICE,
+  2  ItemNumber NUMBER NOT NULL,
+  3  Item CHAR(50) NOT NULL,
+  4  Quantity NUMBER NOT NULL,
+  5  UnitPrice NUMBER(8,2) NOT NULL,
+  6  CONSTRAINT PK_INVOIECEITEM PRIMARY KEY (InvoiceNumber, ItemNumber));
+
+테이블이 생성되었습니다.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<테이블 스키마 출력>
+SQL> desc customer;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ CUSTOMERID                                NOT NULL NUMBER
+ FIRSTNAME                                 NOT NULL CHAR(25)
+ LASTNAME                                  NOT NULL CHAR(25)
+ PHONE                                              CHAR(12)
+ EMAIL                                             VARCHAR2(100)
+
+SQL> desc invoice
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ INVOICENUMBER                             NOT NULL NUMBER
+ CUSTOMERNUMBER                            NOT NULL NUMBER
+ DATEIN                                    NOT NULL DATE
+ DATEOUT                                            DATE
+ TOTALAMOUNT                                        NUMBER(8,2)
+
+SQL> desc invoice_item
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ INVOICENUMBER                             NOT NULL NUMBER
+ ITEMNUMBER                                NOT NULL NUMBER
+ ITEM                                      NOT NULL CHAR(50)
+ QUANTITY                                  NOT NULL NUMBER
+ UNITPRICE                                 NOT NULL NUMBER(8,2)
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Insert - Cunstomer>
+SQL> INSERT INTO CUSTOMER VALUES (1, 'Nikki', 'Kaccation', '723-543-1233', 'Nikki.Kaccation@somewhere.com');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO CUSTOMER VALUES (2, 'Brenda', 'Catnazaro', '723-543-2344', 'Brenda.Catnazaro@somewhere.com');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO CUSTOMER VALUES (3, 'Bruce', 'LeCat', '723-543-3455', 'Bruce.LeCat@somewhere.com');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO CUSTOMER VALUES (4, 'Besty', 'Miller', '725-654-3211', 'Besty.Miller@somewhere.com');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO CUSTOMER VALUES (5, 'George', 'Miller', '725-654-4322', 'George.Miller@somewhere.com');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO CUSTOMER VALUES (6, 'Kathy', 'Miller', '723-513-9877', 'Kathy.Miller@somewhere.com');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO CUSTOMER VALUES (7, 'Besty', 'Miller', '723-513-8766', 'Besty.Miller@elsewhere.com');
+
+1 개의 행이 만들어졌습니다.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Insert - Invoice>
+SQL> INSERT INTO INVOICE VALUES (2015001, 1, to_date('04-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('06-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 158.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE VALUES (2015002, 2, to_date('04-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('06-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 25.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE VALUES (2015003, 1, to_date('06-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('08-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 49.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE VALUES (2015004, 4, to_date('06-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('08-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 17.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE VALUES (2015005, 6, to_date('07-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('11-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 12.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE VALUES (2015006, 3, to_date('11-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('13-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 152.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE VALUES (2015007, 3, to_date('11-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('13-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 7.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE VALUES (2015008, 7, to_date('12-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('14-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 140.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE VALUES (2015009, 5, to_date('12-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('14-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 27.00);
+
+1 개의 행이 만들어졌습니다.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Insert - Invoice_Item>
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015001, 1, 'Blouse', 2, 3.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015001, 2, 'Dress Shirt', 5, 2.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015001, 3, 'Formal Gown', 2, 10.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015001, 4, 'Slacks-Mens', 10, 5.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015001, 5, 'Slacks-Womens', 10, 6.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015001, 6, 'Suit-Mens', 1, 9.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015002, 1, 'Dress shirt', 10, 2.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015003, 1, 'Slacks-Mens', 5, 5.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015003, 2, 'Slacks-Womens', 4, 6.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015004, 1, 'Dress shirt', 7, 2.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015005, 1, 'Blouse', 2, 3.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015005, 2, 'Dress shirt', 2, 2.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015006, 1, 'Blouse', 5, 3.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015006, 2, 'Dress shirt', 10, 2.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015006, 3, 'Slacks-Mens', 10, 5.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015006, 4, 'Slacks-Womens', 10, 6.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015007, 1, 'Blouse', 2, 3.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015008, 1, 'Blouse', 3, 3.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015008, 2, 'Dress shirt', 12, 2.50);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015008, 3, 'Slacks-Mens', 8, 5.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015008, 4, 'Slacks-Womens', 10, 6.00);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO INVOICE_ITEM VALUES (2015009, 1, 'Suit-Mens', 3, 9.00);
+
+1 개의 행이 만들어졌습니다.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<테이블 인스턴스 출력>
+SQL> select * from customer;
+
+CUSTOMERID FIRSTNAME                 LASTNAME                  PHONE        EMAIL                                                                                                                                                                                                                          
+---------- ------------------------- ------------------------- ------------ ----------------------------------------------------------------------------------------------------                                                                                                                            
+         1 Nikki                     Kaccation                 723-543-1233 Nikki.Kaccation@somewhere.com                                                                                                                                                                                                   
+         2 Brenda                    Catnazaro                 723-543-2344 Brenda.Catnazaro@somewhere.com                                                                                                                                                                                                  
+         3 Bruce                     LeCat                     723-543-3455 Bruce.LeCat@somewhere.com                                                                                                                                                                                                       
+         4 Besty                     Miller                    725-654-3211 Besty.Miller@somewhere.com                                                                                                                                                                                                      
+         5 George                    Miller                    725-654-4322 George.Miller@somewhere.com                                                                                                                                                                                                     
+         6 Kathy                     Miller                    723-513-9877 Kathy.Miller@somewhere.com                                                                                                                                                                                                      
+         7 Besty                     Miller                    723-513-8766 Besty.Miller@elsewhere.com                                                                                                                                                                                                      
+
+7 행이 선택되었습니다.
+
+SQL> select * from invoice;
+
+INVOICENUMBER CUSTOMERNUMBER DATEIN   DATEOUT  TOTALAMOUNT                                                                                                                                                                                                                                                  
+------------- -------------- -------- -------- -----------                                                                                                                                                                                                                                                  
+      2015001              1 15/10/04 15/10/06       158.5                                                                                                                                                                                                                                                  
+      2015002              2 15/10/04 15/10/06          25                                                                                                                                                                                                                                                  
+      2015003              1 15/10/06 15/10/08          49                                                                                                                                                                                                                                                  
+      2015004              4 15/10/06 15/10/08        17.5                                                                                                                                                                                                                                                  
+      2015005              6 15/10/07 15/10/11          12                                                                                                                                                                                                                                                  
+      2015006              3 15/10/11 15/10/13       152.5                                                                                                                                                                                                                                                  
+      2015007              3 15/10/11 15/10/13           7                                                                                                                                                                                                                                                  
+      2015008              7 15/10/12 15/10/14         140                                                                                                                                                                                                                                                  
+      2015009              5 15/10/12 15/10/14          27                                                                                                                                                                                                                                                  
+
+9 행이 선택되었습니다.
+
+SQL> select  * from invoice_item;
+
+INVOICENUMBER ITEMNUMBER ITEM                                                 QUANTITY  UNITPRICE                                                                                                                                                                                                           
+------------- ---------- -------------------------------------------------- ---------- ----------                                                                                                                                                                                                           
+      2015001          1 Blouse                                                      2        3.5                                                                                                                                                                                                           
+      2015001          2 Dress Shirt                                                 5        2.5                                                                                                                                                                                                           
+      2015001          3 Formal Gown                                                 2         10                                                                                                                                                                                                           
+      2015001          4 Slacks-Mens                                                10          5                                                                                                                                                                                                           
+      2015001          5 Slacks-Womens                                              10          6                                                                                                                                                                                                           
+      2015001          6 Suit-Mens                                                   1          9                                                                                                                                                                                                           
+      2015002          1 Dress shirt                                                10        2.5                                                                                                                                                                                                           
+      2015003          1 Slacks-Mens                                                 5          5                                                                                                                                                                                                           
+      2015003          2 Slacks-Womens                                               4          6                                                                                                                                                                                                           
+      2015004          1 Dress shirt                                                 7        2.5                                                                                                                                                                                                           
+      2015005          1 Blouse                                                      2        3.5                                                                                                                                                                                                           
+      2015005          2 Dress shirt                                                 2        2.5                                                                                                                                                                                                           
+      2015006          1 Blouse                                                      5        3.5                                                                                                                                                                                                           
+      2015006          2 Dress shirt                                                10        2.5                                                                                                                                                                                                           
+      2015006          3 Slacks-Mens                                                10          5                                                                                                                                                                                                           
+      2015006          4 Slacks-Womens                                              10          6                                                                                                                                                                                                           
+      2015007          1 Blouse                                                      2        3.5                                                                                                                                                                                                           
+      2015008          1 Blouse                                                      3        3.5                                                                                                                                                                                                           
+      2015008          2 Dress shirt                                                12        2.5                                                                                                                                                                                                           
+      2015008          3 Slacks-Mens                                                 8          5                                                                                                                                                                                                           
+      2015008          4 Slacks-Womens                                              10          6                                                                                                                                                                                                           
+      2015009          1 Suit-Mens                                                   3          9                                                                                                                                                                                                           
+
+22 행이 선택되었습니다.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Q1>
+SQL> select DateIn, DateOut, Phone
+  2  from customer, invoice
+  3  where CustomerID = CustomerNumber and TotalAmount >= 100.00;
+
+DATEIN   DATEOUT  PHONE                                                                                                                                                                                                                                                                                     
+-------- -------- ------------                                                                                                                                                                                                                                                                              
+15/10/04 15/10/06 723-543-1233                                                                                                                                                                                                                                                                              
+15/10/11 15/10/13 723-543-3455                                                                                                                                                                                                                                                                              
+15/10/12 15/10/14 723-513-8766
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Q2>
+SQL> select Phone, FirstName
+  2  from customer
+  3  where FirstName like 'B%';
+
+PHONE        FIRSTNAME                                                                                                                                                                                                                                                                                      
+------------ -------------------------                                                                                                                                                                                                                                                                      
+723-543-2344 Brenda                                                                                                                                                                                                                                                                                         
+723-543-3455 Bruce                                                                                                                                                                                                                                                                                          
+725-654-3211 Besty                                                                                                                                                                                                                                                                                          
+723-513-8766 Besty                                                                                                                                                                                                                                                                                          
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Q3>
+SQL> select max(TotalAmount) as max, min(TotalAmount) as min, avg(TotalAmount) as average
+  2  from invoice;
+
+       MAX        MIN    AVERAGE                                                                                                                                                                                                                                                                            
+---------- ---------- ----------                                                                                                                                                                                                                                                                            
+     158.5          7 65.3888889                                                                                                                                                                                                                                                                       
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Q4>
+SQL> select FirstName, LastName, Phone
+  2  from customer
+  3  where CustomerID in (select CustomerNumber
+  4  from invoice
+  5  where TotalAmount >= 100.00)
+  6  order by LastName ASC, FirstName DESC;
+
+FIRSTNAME                 LASTNAME                  PHONE                                                                                                                                                                                                                                                   
+------------------------- ------------------------- ------------                                                                                                                                                                                                                                            
+Nikki                     Kaccation                 723-543-1233                                                                                                                                                                                                                                            
+Bruce                     LeCat                     723-543-3455                                                                                                                                                                                                                                            
+Besty                     Miller                    723-513-8766                                                                                                                                                                                                                                           
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Q5>
+SQL> select FirstName, LastName, Phone
+  2  from customer, invoice
+  3  where CustomerID = CustomerNumber and TotalAmount >= 100.00
+  4  order by LastName ASC, FirstName DESC;
+
+FIRSTNAME                 LASTNAME                  PHONE                                                                                                                                                                                                                                                   
+------------------------- ------------------------- ------------                                                                                                                                                                                                                                            
+Nikki                     Kaccation                 723-543-1233                                                                                                                                                                                                                                            
+Bruce                     LeCat                     723-543-3455                                                                                                                                                                                                                                            
+Besty                     Miller                    723-513-8766                                                                                                                                                                                                                                            
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Q6>                                                                                                                                                                                                                                          
+SQL> select FirstName, LastName, Phone
+  2  from customer
+  3  join invoice
+  4  on CustomerID = CustomerNumber
+  5  where TotalAmount >= 100.00
+  6  order by LastName ASC, FirstName DESC;
+
+FIRSTNAME                 LASTNAME                  PHONE                                                                                                                                                                                                                                                   
+------------------------- ------------------------- ------------                                                                                                                                                                                                                                            
+Nikki                     Kaccation                 723-543-1233                                                                                                                                                                                                                                            
+Bruce                     LeCat                     723-543-3455                                                                                                                                                                                                                                            
+Besty                     Miller                    723-513-8766                                                                                                                                                                                                                                            
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Q7>
+SQL> select FirstName, LastName, Phone
+  2  from customer
+  3  where CustomerID in (select CustomerNumber
+  4  from invoice
+  5  where InvoiceNumber in (select InvoiceNumber
+  6  from invoice_item
+  7  where Item = 'Dress Shirt'))
+  8  order by LastName ASC, FIrstName DESC;
+
+FIRSTNAME                 LASTNAME                  PHONE                                                                                                                                                                                                                                                   
+------------------------- ------------------------- ------------                                                                                                                                                                                                                                            
+Brenda                    Catnazaro                 723-543-2344                                                                                                                                                                                                                                            
+Nikki                     Kaccation                 723-543-1233                                                                                                                                                                                                                                            
+Bruce                     LeCat                     723-543-3455                                                                                                                                                                                                                                            
+Kathy                     Miller                    723-513-9877                                                                                                                                                                                                                                            
+Besty                     Miller                    723-513-8766                                                                                                                                                                                                                                            
+Besty                     Miller                    725-654-3211                                                                                                                                                                                                                                            
+
+6 행이 선택되었습니다.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Q8>
+SQL> select FirstName, LastName, Phone
+  2  from customer, invoice A, invoice_item B
+  3  where CustomerID = A.CustomerNumber and A.InvoiceNumber = B.InvoiceNumber and B.Item = 'Dress Shirt'
+  4  order by LastName ASC, FIrstName DESC;
+
+FIRSTNAME                 LASTNAME                  PHONE                                                                                                                                                                                                                                                   
+------------------------- ------------------------- ------------                                                                                                                                                                                                                                            
+Brenda                    Catnazaro                 723-543-2344                                                                                                                                                                                                                                            
+Nikki                     Kaccation                 723-543-1233                                                                                                                                                                                                                                            
+Bruce                     LeCat                     723-543-3455                                                                                                                                                                                                                                            
+Kathy                     Miller                    723-513-9877                                                                                                                                                                                                                                            
+Besty                     Miller                    725-654-3211                                                                                                                                                                                                                                            
+Besty                     Miller                    723-513-8766                                                                                                                                                                                                                                            
+
+6 행이 선택되었습니다.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Q9>
+SQL> select FirstName, LastName, Phone
+  2  from customer
+  3  join invoice A
+  4  on CustomerID = A.CustomerNumber
+  5  join invoice_item B
+  6  on A.InvoiceNumber = B.InvoiceNumber
+  7  where B.Item = 'Dress Shirt'
+  8  order by LastName ASC, FIrstName DESC;
+
+FIRSTNAME                 LASTNAME                  PHONE                                                                                                                                                                                                                                                   
+------------------------- ------------------------- ------------                                                                                                                                                                                                                                            
+Brenda                    Catnazaro                 723-543-2344                                                                                                                                                                                                                                            
+Nikki                     Kaccation                 723-543-1233                                                                                                                                                                                                                                            
+Bruce                     LeCat                     723-543-3455                                                                                                                                                                                                                                            
+Kathy                     Miller                    723-513-9877                                                                                                                                                                                                                                            
+Besty                     Miller                    725-654-3211                                                                                                                                                                                                                                            
+Besty                     Miller                    723-513-8766                                                                                                                                                                                                                                            
+
+6 행이 선택되었습니다.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Q10>
+SQL> select FirstName, LastName, Phone
+  2  from customer
+  3  where CustomerID in (select CustomerNumber
+  4  from invoice A
+  5  join invoice_item B
+  6  on A.InvoiceNumber = B.InvoiceNumber
+  7  where B.Item = 'Dress Shirt')
+  8  order by LastName ASC, FIrstName DESC;
+
+FIRSTNAME                 LASTNAME                  PHONE                                                                                                                                                                                                                                                   
+------------------------- ------------------------- ------------                                                                                                                                                                                                                                            
+Brenda                    Catnazaro                 723-543-2344                                                                                                                                                                                                                                            
+Nikki                     Kaccation                 723-543-1233                                                                                                                                                                                                                                            
+Bruce                     LeCat                     723-543-3455                                                                                                                                                                                                                                            
+Kathy                     Miller                    723-513-9877                                                                                                                                                                                                                                            
+Besty                     Miller                    723-513-8766                                                                                                                                                                                                                                            
+Besty                     Miller                    725-654-3211                                                                                                                                                                                                                                            
+
+6 행이 선택되었습니다.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+<Q11>
+SQL> select FirstName, LastName, Phone, TotalAmount
+  2  from customer, invoice A, invoice_item B
+  3  where CustomerID = A.CustomerNumber and A.InvoiceNumber = B.InvoiceNumber and B.Item = 'Dress Shirt'
+  4  order by TotalAmount ASC, LastName ASC, FIrstName DESC;
+
+FIRSTNAME                 LASTNAME                  PHONE        TOTALAMOUNT                                                                                                                                                                                                                                
+------------------------- ------------------------- ------------ -----------                                                                                                                                                                                                                                
+Kathy                     Miller                    723-513-9877          12                                                                                                                                                                                                                                
+Besty                     Miller                    725-654-3211        17.5                                                                                                                                                                                                                                
+Brenda                    Catnazaro                 723-543-2344          25                                                                                                                                                                                                                                
+Besty                     Miller                    723-513-8766         140                                                                                                                                                                                                                                
+Bruce                     LeCat                     723-543-3455       152.5                                                                                                                                                                                                                                
+Nikki                     Kaccation                 723-543-1233       158.5                                                                                                                                                                                                                                
+
+6 행이 선택되었습니다.                                                                                                                                                                                                                                                                           
+
+SQL> commit;
+
+커밋이 완료되었습니다.
+
+SQL> spool off

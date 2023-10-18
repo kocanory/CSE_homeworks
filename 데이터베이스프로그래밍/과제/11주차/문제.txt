@@ -1,0 +1,163 @@
+CREATE OR REPLACE PROCEDURE InsertEnroll(sStudentId IN VARCHAR2,
+	sCourseId IN VARCHAR2,
+	nCourseIdNo IN NUMBER,
+	result OUT VARCHAR2)
+IS
+	too_many_sumCourseUnit EXCEPTION;
+	too_many_courses EXCEPTION;
+	too_many_students EXCEPTION;
+	duplicate_time EXCEPTION;
+	nYear NUMBER;
+	nSemester NUMBER;
+	nSumCourseUnit NUMBER;
+	nCourseUnit NUMBER;
+	nCnt NUMBER;
+	nTeachMax NUMBER;
+	s_id_temp enroll.s_id%TYPE;
+	CURSOR enroll_cursor(sCourseId VARCHAR2, nCourseIdNo NUMBER, nYear NUMBER, nSemester NUMBER) IS
+	SELECT s_id
+	FROM enroll
+	WHERE e_year = nYear AND e_semester = nSemester
+	AND c_id = sCourseId AND c_id_no = nCourseIdNo;
+BEGIN
+	result := '';
+	DBMS_OUTPUT.put_line('#');
+	DBMS_OUTPUT.put_line(sStudentId || '님이 과목번호 ' || sCourseId || ', 분반 ' ||
+	TO_CHAR(nCourseIdNo) || '의 수강 등록을 요청하였습니다.');
+	nYear := Date2EnrollYear(SYSDATE);
+	nSemester := Date2EnrollSemester(SYSDATE);
+	
+	SELECT SUM(c.c_unit)
+	INTO nSumCourseUnit
+	FROM course c, enroll e
+	WHERE e.s_id = sStudentId AND e.e_year = nYear AND e.e_semester = nSemester
+	AND e.c_id = c.c_id AND e.c_id_no = c.c_id_no;
+
+	SELECT c_unit
+	INTO nCourseUnit
+	FROM course
+	WHERE c_id = sCourseId and c_id_no = nCourseIdNo;
+	IF (nSumCourseUnit + nCourseUnit > 18) THEN
+		RAISE too_many_sumCourseUnit;
+	END IF;
+
+	SELECT COUNT(*)
+	INTO nCnt
+	FROM enroll
+	WHERE s_id = sStudentId AND c_id = sCourseId;
+	IF (nCnt > 0) THEN
+		RAISE too_many_courses;
+	END IF;
+
+	SELECT t_max
+	INTO nTeachMax
+	FROM teach
+	WHERE t_year= nYear AND t_semester = nSemester
+	AND c_id = sCourseId AND c_id_no= nCourseIdNo;
+
+	nCnt := 0;
+	FOR enroll_cur IN enroll_cursor(sCourseId, nCourseIdNo, nYear, nSemester) LOOP
+		nCnt := nCnt + 1;
+	END LOOP;
+	IF (nCnt >= nTeachMax) THEN
+		RAISE too_many_students;
+	END IF;
+
+	SELECT COUNT(*)
+	INTO nCnt
+	FROM
+	(SELECT t_time
+	FROM teach
+	WHERE t_year=nYear AND t_semester = nSemester
+	AND c_id = sCourseId AND c_id_no = nCourseIdNo
+	INTERSECT
+	SELECT t.t_time
+	FROM teach t, enroll e
+	WHERE e.s_id=sStudentId AND e.e_year=nYear
+	AND e.e_semester = nSemester AND t.t_year=nYear
+	AND t.t_semester = nSemester AND e.c_id=t.c_id
+	AND e.c_id_no=t.c_id_no);
+	IF (nCnt > 0) THEN
+		RAISE duplicate_time;
+	END IF;
+
+	INSERT INTO enroll(S_ID,C_ID,C_ID_NO,E_YEAR,E_SEMESTER)
+	VALUES (sStudentId, sCourseId, nCourseIdNo, nYear, nSemester);
+	COMMIT;
+	result := '수강신청 등록이 완료되었습니다.';
+EXCEPTION
+WHEN too_many_sumCourseUnit THEN
+result := '최대학점을 초과하였습니다';
+WHEN too_many_courses THEN
+result := '이미 등록된 과목을 신청하였습니다';
+WHEN too_many_students THEN
+result := '수강신청 인원이 초과되어 등록이 불가능합니다';
+WHEN duplicate_time THEN
+result := '이미 등록된 과목 중 중복되는 시간이 존재합니다';
+WHEN OTHERS THEN
+ROLLBACK;
+result := SQLCODE;
+END;
+
+CREATE OR REPLACE PROCEDURE emp_delete(delete_empno IN NUMBER) IS	
+	no_emp EXCEPTION;
+	no_subemp EXCEPTION;
+	v_ename emp_week9.ename%TYPE := '';
+	v_sub_empno emp_week9.empno%TYPE;
+	v_sub_ename emp_week9.ename%TYPE;
+	v_sub_dname dept_week9.dname%TYPE;
+	v_sub_job emp_week9.job%TYPE;
+	v_sub_mgr emp_week9.mgr%TYPE;
+	cnt NUMBER;
+	CURSOR mgr(mgr_empno emp_week9.empno%TYPE) IS
+	select empno, ename, dname, job, mgr
+	from emp_week9 e, dept_week9 d
+	where e.deptno = d.deptno and e.mgr = delete_empno;
+	
+BEGIN
+	select count(*)
+	into cnt
+	from emp_week9
+	where empno = delete_empno;
+	IF(cnt <= 0) THEN
+		RAISE no_emp;
+	end if;
+
+	select ename
+	into v_ename
+	from emp_week9
+	where empno = delete_empno;
+	dbms_output.put_line('삭제할 사원 이름 : ' || v_ename);
+	
+	select count(*)
+	into cnt
+	from emp_week9
+	where mgr = delete_empno;
+	if(cnt <= 0) then
+		delete from emp_week9 where empno = delete_empno; 
+		RAISE no_subemp;
+	end if;
+	dbms_output.put_line(chr(10)||chr(13)||'<부하직원 정보>');
+	dbms_output.put_line('사원번호'||'    '||'이름'||'       '||'부서명'||'          '||'직책'||'         '||'관리자번호');
+    	dbms_output.put_line('-------'||'     '||'-------'||'    '||'-------'||'         '||'-------'||'      '||'-------');
+	OPEN mgr(delete_empno);
+	LOOP
+		FETCH mgr Into v_sub_empno, v_sub_ename, v_sub_dname, v_sub_job, v_sub_mgr;
+			EXIT WHEN mgr%NOTFOUND;
+		dbms_output.put_line(rpad(v_sub_empno, 12) || rpad(v_sub_ename, 11) || rpad(v_sub_dname, 16)|| rpad(v_sub_job, 13)|| rpad(v_sub_mgr, 10));
+		update emp_week9
+		set mgr = null
+		where mgr = delete_empno;
+	END LOOP;
+	CLOSE mgr;
+	delete from emp_week9 where empno = delete_empno;
+	commit;
+EXCEPTION
+	WHEN no_emp THEN
+		dbms_output.put_line(chr(10)||chr(13)||'존재하지 않는 사원입니다.');
+	WHEN no_subemp THEN
+		dbms_output.put_line(chr(10)||chr(13)||'부하직원이 없는 사원입니다.');
+END;
+
+	
+		 

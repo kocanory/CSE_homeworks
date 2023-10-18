@@ -1,0 +1,429 @@
+SQL> select Bdate, Address
+  2  from employee
+  3  where Fname = 'John' and Minit = 'B' and Lname = 'Smith';
+
+BDATE    ADDRESS                                                                
+-------- ------------------------------                                         
+65/01/09 731 Fondren, Houston, TX                                               
+
+SQL> select Fname, Lname, Address
+  2  from employee, department
+  3  where Dname = 'Research' and Dnumber = Dno;
+
+FNAME           LNAME           ADDRESS                                         
+--------------- --------------- ------------------------------                  
+Franklin        Wong            638 Voss, Houston, TX                           
+John            Smith           731 Fondren, Houston, TX                        
+Ramesh          Narayan         975 Fire Oak, Humble, TX                        
+Joyce           English         5631 Rice, Houston, TX                          
+
+SQL> select Pnumber, Dnum, Lname, Address, Bdate
+  2  from project, department, employee
+  3  where Dnum = Dnumber and Mgr_ssn = Ssn and Plocation = 'Stafford';
+
+   PNUMBER       DNUM LNAME           ADDRESS                        BDATE      
+---------- ---------- --------------- ------------------------------ --------   
+        10          4 Wallance        291 Berry, Bellaire, TX        41/06/20   
+        30          4 Wallance        291 Berry, Bellaire, TX        41/06/20   
+
+SQL> select Fname, employee.Lname, Address
+  2  from employee, department
+  3  where department,Dname = 'Research' and department.Dnumber = employee.Dno;
+where department,Dname = 'Research' and department.Dnumber = employee.Dno
+                *
+3행에 오류:
+ORA-00920: 관계 연산자가 부적합합니다 
+
+
+SQL> select Fname, employee.Lname, Address
+  2  from employee, department
+  3  where department.Dname = 'Research' and department.Dnumber = employee.Dno;
+
+FNAME           LNAME           ADDRESS                                         
+--------------- --------------- ------------------------------                  
+Franklin        Wong            638 Voss, Houston, TX                           
+John            Smith           731 Fondren, Houston, TX                        
+Ramesh          Narayan         975 Fire Oak, Humble, TX                        
+Joyce           English         5631 Rice, Houston, TX                          
+
+SQL> select E.Fname, E.Lname, S.Fname, S.Lname
+  2  from employee E, employee S
+  3  where E.Super_ssn = S.Ssn;
+
+FNAME           LNAME           FNAME           LNAME                           
+--------------- --------------- --------------- ---------------                 
+Joyce           English         Franklin        Wong                            
+John            Smith           Franklin        Wong                            
+Ramesh          Narayan         Franklin        Wong                            
+Jennifer        Wallance        James           Borg                            
+Franklin        Wong            James           Borg                            
+Ahmad           Jabbar          Jennifer        Wallance                        
+Alicia          Zelaya          Jennifer        Wallance                        
+
+7 행이 선택되었습니다.
+
+SQL> select Ssn
+  2  from employee;
+
+SSN                                                                             
+---------                                                                       
+123456789                                                                       
+333445555                                                                       
+453453453                                                                       
+666884444                                                                       
+888665555                                                                       
+987654321                                                                       
+987987987                                                                       
+999887777                                                                       
+
+8 행이 선택되었습니다.
+
+SQL> select Ssn, Dname
+  2  from employee, department;
+
+SSN       DNAME                                                                 
+--------- ---------------                                                       
+123456789 Administration                                                        
+333445555 Administration                                                        
+453453453 Administration                                                        
+666884444 Administration                                                        
+888665555 Administration                                                        
+987654321 Administration                                                        
+987987987 Administration                                                        
+999887777 Administration                                                        
+123456789 Headquarters                                                          
+333445555 Headquarters                                                          
+453453453 Headquarters                                                          
+
+SSN       DNAME                                                                 
+--------- ---------------                                                       
+666884444 Headquarters                                                          
+888665555 Headquarters                                                          
+987654321 Headquarters                                                          
+987987987 Headquarters                                                          
+999887777 Headquarters                                                          
+123456789 Research                                                              
+333445555 Research                                                              
+453453453 Research                                                              
+666884444 Research                                                              
+888665555 Research                                                              
+987654321 Research                                                              
+
+SSN       DNAME                                                                 
+--------- ---------------                                                       
+987987987 Research                                                              
+999887777 Research                                                              
+
+24 행이 선택되었습니다.
+
+SQL> select  *
+  2  from employee,  department;
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+James           E Borg            888665555 37/11/10                            
+450 Stone, Houston, TX         M      55000                    1 Research       
+         5 333445555 88/05/22                                                   
+                                                                                
+Franklin        T Wong            333445555 55/12/08                            
+638 Voss, Houston, TX          M      40000 888665555          5 Research       
+         5 333445555 88/05/22                                                   
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+                                                                                
+John            B Smith           123456789 65/01/09                            
+731 Fondren, Houston, TX       M      30000 333445555          5 Research       
+         5 333445555 88/05/22                                                   
+                                                                                
+Jennifer        S Wallance        987654321 41/06/20                            
+291 Berry, Bellaire, TX        F      43000 888665555          4 Research       
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+         5 333445555 88/05/22                                                   
+                                                                                
+Alicia          J Zelaya          999887777 68/01/19                            
+3321 Castle, Spring, TX        F      25000 987654321          4 Research       
+         5 333445555 88/05/22                                                   
+                                                                                
+Ramesh          K Narayan         666884444 62/09/15                            
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+975 Fire Oak, Humble, TX       M      38000 333445555          5 Research       
+         5 333445555 88/05/22                                                   
+                                                                                
+Joyce           A English         453453453 72/07/31                            
+5631 Rice, Houston, TX         F      25000 333445555          5 Research       
+         5 333445555 88/05/22                                                   
+                                                                                
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+Ahmad           V Jabbar          987987987 69/03/29                            
+980 Dallas, Houston, TX        M      25000 987654321          4 Research       
+         5 333445555 88/05/22                                                   
+                                                                                
+James           E Borg            888665555 37/11/10                            
+450 Stone, Houston, TX         M      55000                    1 Administration 
+         4 987654321 95/01/01                                                   
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+                                                                                
+Franklin        T Wong            333445555 55/12/08                            
+638 Voss, Houston, TX          M      40000 888665555          5 Administration 
+         4 987654321 95/01/01                                                   
+                                                                                
+John            B Smith           123456789 65/01/09                            
+731 Fondren, Houston, TX       M      30000 333445555          5 Administration 
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+         4 987654321 95/01/01                                                   
+                                                                                
+Jennifer        S Wallance        987654321 41/06/20                            
+291 Berry, Bellaire, TX        F      43000 888665555          4 Administration 
+         4 987654321 95/01/01                                                   
+                                                                                
+Alicia          J Zelaya          999887777 68/01/19                            
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+3321 Castle, Spring, TX        F      25000 987654321          4 Administration 
+         4 987654321 95/01/01                                                   
+                                                                                
+Ramesh          K Narayan         666884444 62/09/15                            
+975 Fire Oak, Humble, TX       M      38000 333445555          5 Administration 
+         4 987654321 95/01/01                                                   
+                                                                                
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+Joyce           A English         453453453 72/07/31                            
+5631 Rice, Houston, TX         F      25000 333445555          5 Administration 
+         4 987654321 95/01/01                                                   
+                                                                                
+Ahmad           V Jabbar          987987987 69/03/29                            
+980 Dallas, Houston, TX        M      25000 987654321          4 Administration 
+         4 987654321 95/01/01                                                   
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+                                                                                
+James           E Borg            888665555 37/11/10                            
+450 Stone, Houston, TX         M      55000                    1 Headquarters   
+         1 888665555 81/06/19                                                   
+                                                                                
+Franklin        T Wong            333445555 55/12/08                            
+638 Voss, Houston, TX          M      40000 888665555          5 Headquarters   
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+         1 888665555 81/06/19                                                   
+                                                                                
+John            B Smith           123456789 65/01/09                            
+731 Fondren, Houston, TX       M      30000 333445555          5 Headquarters   
+         1 888665555 81/06/19                                                   
+                                                                                
+Jennifer        S Wallance        987654321 41/06/20                            
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+291 Berry, Bellaire, TX        F      43000 888665555          4 Headquarters   
+         1 888665555 81/06/19                                                   
+                                                                                
+Alicia          J Zelaya          999887777 68/01/19                            
+3321 Castle, Spring, TX        F      25000 987654321          4 Headquarters   
+         1 888665555 81/06/19                                                   
+                                                                                
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+Ramesh          K Narayan         666884444 62/09/15                            
+975 Fire Oak, Humble, TX       M      38000 333445555          5 Headquarters   
+         1 888665555 81/06/19                                                   
+                                                                                
+Joyce           A English         453453453 72/07/31                            
+5631 Rice, Houston, TX         F      25000 333445555          5 Headquarters   
+         1 888665555 81/06/19                                                   
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME          
+------------------------------ - ---------- --------- ---------- ---------------
+   DNUMBER MGR_SSN   MGR_STAR                                                   
+---------- --------- --------                                                   
+                                                                                
+Ahmad           V Jabbar          987987987 69/03/29                            
+980 Dallas, Houston, TX        M      25000 987654321          4 Headquarters   
+         1 888665555 81/06/19                                                   
+                                                                                
+
+24 행이 선택되었습니다.
+
+SQL> set linesize 300
+SQL> select  *
+  2  from employee,  department;
+
+FNAME           M LNAME           SSN       BDATE    ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME              DNUMBER MGR_SSN   MGR_STAR                                                                                                                                         
+--------------- - --------------- --------- -------- ------------------------------ - ---------- --------- ---------- --------------- ---------- --------- --------                                                                                                                                         
+James           E Borg            888665555 37/11/10 450 Stone, Houston, TX         M      55000                    1 Research                 5 333445555 88/05/22                                                                                                                                         
+Franklin        T Wong            333445555 55/12/08 638 Voss, Houston, TX          M      40000 888665555          5 Research                 5 333445555 88/05/22                                                                                                                                         
+John            B Smith           123456789 65/01/09 731 Fondren, Houston, TX       M      30000 333445555          5 Research                 5 333445555 88/05/22                                                                                                                                         
+Jennifer        S Wallance        987654321 41/06/20 291 Berry, Bellaire, TX        F      43000 888665555          4 Research                 5 333445555 88/05/22                                                                                                                                         
+Alicia          J Zelaya          999887777 68/01/19 3321 Castle, Spring, TX        F      25000 987654321          4 Research                 5 333445555 88/05/22                                                                                                                                         
+Ramesh          K Narayan         666884444 62/09/15 975 Fire Oak, Humble, TX       M      38000 333445555          5 Research                 5 333445555 88/05/22                                                                                                                                         
+Joyce           A English         453453453 72/07/31 5631 Rice, Houston, TX         F      25000 333445555          5 Research                 5 333445555 88/05/22                                                                                                                                         
+Ahmad           V Jabbar          987987987 69/03/29 980 Dallas, Houston, TX        M      25000 987654321          4 Research                 5 333445555 88/05/22                                                                                                                                         
+James           E Borg            888665555 37/11/10 450 Stone, Houston, TX         M      55000                    1 Administration           4 987654321 95/01/01                                                                                                                                         
+Franklin        T Wong            333445555 55/12/08 638 Voss, Houston, TX          M      40000 888665555          5 Administration           4 987654321 95/01/01                                                                                                                                         
+John            B Smith           123456789 65/01/09 731 Fondren, Houston, TX       M      30000 333445555          5 Administration           4 987654321 95/01/01                                                                                                                                         
+
+FNAME           M LNAME           SSN       BDATE    ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME              DNUMBER MGR_SSN   MGR_STAR                                                                                                                                         
+--------------- - --------------- --------- -------- ------------------------------ - ---------- --------- ---------- --------------- ---------- --------- --------                                                                                                                                         
+Jennifer        S Wallance        987654321 41/06/20 291 Berry, Bellaire, TX        F      43000 888665555          4 Administration           4 987654321 95/01/01                                                                                                                                         
+Alicia          J Zelaya          999887777 68/01/19 3321 Castle, Spring, TX        F      25000 987654321          4 Administration           4 987654321 95/01/01                                                                                                                                         
+Ramesh          K Narayan         666884444 62/09/15 975 Fire Oak, Humble, TX       M      38000 333445555          5 Administration           4 987654321 95/01/01                                                                                                                                         
+Joyce           A English         453453453 72/07/31 5631 Rice, Houston, TX         F      25000 333445555          5 Administration           4 987654321 95/01/01                                                                                                                                         
+Ahmad           V Jabbar          987987987 69/03/29 980 Dallas, Houston, TX        M      25000 987654321          4 Administration           4 987654321 95/01/01                                                                                                                                         
+James           E Borg            888665555 37/11/10 450 Stone, Houston, TX         M      55000                    1 Headquarters             1 888665555 81/06/19                                                                                                                                         
+Franklin        T Wong            333445555 55/12/08 638 Voss, Houston, TX          M      40000 888665555          5 Headquarters             1 888665555 81/06/19                                                                                                                                         
+John            B Smith           123456789 65/01/09 731 Fondren, Houston, TX       M      30000 333445555          5 Headquarters             1 888665555 81/06/19                                                                                                                                         
+Jennifer        S Wallance        987654321 41/06/20 291 Berry, Bellaire, TX        F      43000 888665555          4 Headquarters             1 888665555 81/06/19                                                                                                                                         
+Alicia          J Zelaya          999887777 68/01/19 3321 Castle, Spring, TX        F      25000 987654321          4 Headquarters             1 888665555 81/06/19                                                                                                                                         
+Ramesh          K Narayan         666884444 62/09/15 975 Fire Oak, Humble, TX       M      38000 333445555          5 Headquarters             1 888665555 81/06/19                                                                                                                                         
+
+FNAME           M LNAME           SSN       BDATE    ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME              DNUMBER MGR_SSN   MGR_STAR                                                                                                                                         
+--------------- - --------------- --------- -------- ------------------------------ - ---------- --------- ---------- --------------- ---------- --------- --------                                                                                                                                         
+Joyce           A English         453453453 72/07/31 5631 Rice, Houston, TX         F      25000 333445555          5 Headquarters             1 888665555 81/06/19                                                                                                                                         
+Ahmad           V Jabbar          987987987 69/03/29 980 Dallas, Houston, TX        M      25000 987654321          4 Headquarters             1 888665555 81/06/19                                                                                                                                         
+
+24 행이 선택되었습니다.
+
+SQL> select ALL Salary
+  2  from employee;
+
+    SALARY                                                                                                                                                                                                                                                                                                  
+----------                                                                                                                                                                                                                                                                                                  
+     55000                                                                                                                                                                                                                                                                                                  
+     40000                                                                                                                                                                                                                                                                                                  
+     30000                                                                                                                                                                                                                                                                                                  
+     43000                                                                                                                                                                                                                                                                                                  
+     25000                                                                                                                                                                                                                                                                                                  
+     38000                                                                                                                                                                                                                                                                                                  
+     25000                                                                                                                                                                                                                                                                                                  
+     25000                                                                                                                                                                                                                                                                                                  
+
+8 행이 선택되었습니다.
+
+SQL> select DISTINCT Salary
+  2  from employee;
+
+    SALARY                                                                                                                                                                                                                                                                                                  
+----------                                                                                                                                                                                                                                                                                                  
+     38000                                                                                                                                                                                                                                                                                                  
+     55000                                                                                                                                                                                                                                                                                                  
+     43000                                                                                                                                                                                                                                                                                                  
+     30000                                                                                                                                                                                                                                                                                                  
+     40000                                                                                                                                                                                                                                                                                                  
+     25000                                                                                                                                                                                                                                                                                                  
+
+6 행이 선택되었습니다.
+
+SQL> select DISTINCT Pnumber
+  2  from project, department, employee
+  3  where Dnum = Dnumber and Mgr_ssn = Ssn and Lname = 'Smith'
+  4  UNION
+  5  select DISTINCT Pnumber
+  6  from project, works_on, employee
+  7  where Pnumber = Pno and Essn = Ssn and Lname = 'Smith';
+
+   PNUMBER                                                                                                                                                                                                                                                                                                  
+----------                                                                                                                                                                                                                                                                                                  
+         1                                                                                                                                                                                                                                                                                                  
+         2                                                                                                                                                                                                                                                                                                  
+
+SQL> select Fname, Lname
+  2  from employee
+  3  where Address LIKE '%Houston, TX%';
+
+FNAME           LNAME                                                                                                                                                                                                                                                                                       
+--------------- ---------------                                                                                                                                                                                                                                                                             
+James           Borg                                                                                                                                                                                                                                                                                        
+Franklin        Wong                                                                                                                                                                                                                                                                                        
+John            Smith                                                                                                                                                                                                                                                                                       
+Joyce           English                                                                                                                                                                                                                                                                                     
+Ahmad           Jabbar                                                                                                                                                                                                                                                                                      
+
+SQL> select Fname, Lname
+  2  from employee
+  3  where Bdate LIKE '5_______';
+
+FNAME           LNAME                                                                                                                                                                                                                                                                                       
+--------------- ---------------                                                                                                                                                                                                                                                                             
+Franklin        Wong                                                                                                                                                                                                                                                                                        
+
+SQL> select E.Fname, E.Lname, 1.1 * E.Salary AS Increased_sal
+  2  from employee E, works_on W, project P
+  3  where E.Ssn = W.Essn and W.Pno = P.Pnumber and P.Pname = 'ProductX';
+
+FNAME           LNAME           INCREASED_SAL                                                                                                                                                                                                                                                               
+--------------- --------------- -------------                                                                                                                                                                                                                                                               
+John            Smith                   33000                                                                                                                                                                                                                                                               
+Joyce           English                 27500                                                                                                                                                                                                                                                               
+
+SQL> spool off

@@ -1,0 +1,359 @@
+데이터베이스 스키마
+==============================================================================================================================================================================================
+SQL> desc member;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ MEMBERID                                  NOT NULL VARCHAR2(20)
+ SUBSCRIBER                                         VARCHAR2(20)
+ PASSWORD                                  NOT NULL VARCHAR2(15)
+ NAME                                      NOT NULL CHAR(20)
+ SEX                                                CHAR(1)
+ BIRTHDAY                                           DATE
+ EMAIL                                     NOT NULL VARCHAR2(30)
+ PHONE                                              CHAR(13)
+ ISPARTNER                                 NOT NULL NUMBER(38)
+
+SQL> desc video;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ VIDEOID                                   NOT NULL VARCHAR2(20)
+ TITLE                                     NOT NULL VARCHAR2(50)
+ UPLOADDATE                                NOT NULL DATE
+ HITS                                               NUMBER(38)
+ GOODS                                              NUMBER(38)
+ HATES                                              NUMBER(38)
+ MEMBERID                                  NOT NULL VARCHAR2(20)
+ ADVERTISEMENTID                                    VARCHAR2(20)
+
+SQL> desc broadcasting;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ BROADCASTID                               NOT NULL VARCHAR2(20)
+ TITLE                                     NOT NULL VARCHAR2(50)
+ BROADCASTDATE                             NOT NULL DATE
+ HITS                                               NUMBER(38)
+ GOODS                                              NUMBER(38)
+ HATES                                              NUMBER(38)
+ MEMBERID                                           VARCHAR2(20)
+ ADVERTISEMENTID                                    VARCHAR2(20)
+
+SQL> desc company;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ COMPANYID                                 NOT NULL VARCHAR2(20)
+ NAME                                      NOT NULL VARCHAR2(20)
+ ADDRESS                                            VARCHAR2(20)
+ PHONE                                     NOT NULL CHAR(13)
+ ZIP                                                CHAR(5)
+
+SQL> desc advertisement;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ ADVERTISEMENTID                           NOT NULL VARCHAR2(20)
+ TITLE                                     NOT NULL VARCHAR2(50)
+ ADVERTISEMENTPRICE                        NOT NULL NUMBER(38)
+ COMPANYID                                 NOT NULL VARCHAR2(20)
+
+SQL> desc community;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ COMMUNITYID                               NOT NULL VARCHAR2(20)
+ MEMBERID                                  NOT NULL VARCHAR2(20)
+ CONTENT                                   NOT NULL VARCHAR2(100)
+
+SQL> desc video_comment;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ COMMENTID                                 NOT NULL VARCHAR2(20)
+ RE_COMMENT                                         VARCHAR2(20)
+ GOOD                                               NUMBER(38)
+ HATE                                               NUMBER(38)
+ COMMENTDATE                               NOT NULL DATE
+ CONTENT                                   NOT NULL VARCHAR2(200)
+ MEMBERID                                  NOT NULL VARCHAR2(20)
+ VIDEOID                                   NOT NULL VARCHAR2(20)
+
+SQL> desc playlist;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ PLAYLISTNAME                              NOT NULL VARCHAR2(50)
+ MEMBERID                                  NOT NULL VARCHAR2(20)
+ VIDEOID                                   NOT NULL VARCHAR2(20)
+
+SQL> desc broad_comment;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ COMMENTID                                 NOT NULL VARCHAR2(20)
+ RE_COMMENT                                         VARCHAR2(20)
+ COMMENTDATE                               NOT NULL DATE
+ CONTENT                                   NOT NULL VARCHAR2(200)
+ BROADCASTID                               NOT NULL VARCHAR2(20)
+ MEMBERID                                  NOT NULL VARCHAR2(20)
+
+SQL> desc donate;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ MEMBERID                                  NOT NULL VARCHAR2(20)
+ BROADCASTID                               NOT NULL VARCHAR2(20)
+ PRICE                                     NOT NULL NUMBER(38)
+ DONATEDATE                                NOT NULL DATE
+ CONTENT                                            VARCHAR2(100)
+
+SQL> desc commu_comment;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ COMMENTID                                 NOT NULL VARCHAR2(20)
+ RE_COMMENT                                         VARCHAR2(20)
+ GOODS                                              NUMBER(38)
+ HATES                                              NUMBER(38)
+ COMMENTDATE                               NOT NULL DATE
+ CONTENT                                   NOT NULL VARCHAR2(200)
+ COMMUNITYID                               NOT NULL VARCHAR2(20)
+ MEMBERID                                  NOT NULL VARCHAR2(20)
+
+SQL> desc partner;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ MEMBERID                                  NOT NULL VARCHAR2(20)
+ SALARY                                    NOT NULL NUMBER(38)
+ PARTNERDATE                               NOT NULL DATE
+
+SQL> desc general;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ MEMBERID                                  NOT NULL VARCHAR2(20)
+ GENERALDATE                               NOT NULL DATE
+
+SQL> desc faq;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ FAQ_ID                                    NOT NULL VARCHAR2(20)
+ CONTENT                                   NOT NULL VARCHAR2(200)
+
+SQL> desc answer;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ ANSWERID                                  NOT NULL VARCHAR2(20)
+ CONTENT                                   NOT NULL VARCHAR2(200)
+ FAQ_ID                                    NOT NULL VARCHAR2(20)
+
+SQL> desc popularity;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ VIDEOID                                   NOT NULL VARCHAR2(20)
+ TITLE                                     NOT NULL VARCHAR2(50)
+ HITS                                      NOT NULL NUMBER(38)
+ RANKING                                   NOT NULL NUMBER(38)
+==============================================================================================================================================================================================
+
+
+
+
+PL/SQL
+==============================================================================================================================================================================================
+SQL> CREATE OR REPLACE PROCEDURE REGISTER_MEMBER(nMemberId in varchar2, Password in varchar2, Name in varchar2, Sex in char, Birthday in date, Email in varchar2, Phone in char)
+  2  IS
+  3  nCnt number;
+  4  begin
+  5  	select count(*)
+  6  	into nCnt
+  7  	from member m
+  8  	where m.MemberID = nMemberId;
+  9  	if(nCnt = 0) then
+ 10  		insert into member values(nMemberId, null, Password, Name, Sex, Birthday, Email, Phone, 0);
+ 11  		insert into general values(nMemberId, SYSDATE);
+ 12  		commit;
+ 13  	else
+ 14  		dbms_output.put_line('이미 회원가입된 계정입니다.');
+ 15  	end if;
+ 16  end;
+ 17  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE UPLOAD_VIDEO
+  2  (VideoId in varchar2, Title in varchar2, Hits in number, Goods in number, Hates in number, nMemberId in varchar2, AdvertisementId in varchar2)
+  3  IS
+  4  nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from member m
+  9  	where m.MemberID = nMemberId;
+ 10  	if(nCnt > 0) then
+ 11  		insert into video values(VideoId, Title, SYSDATE, Hits, Goods, Hates, nMemberId, AdvertisementId);
+ 12  		commit;
+ 13  	else
+ 14  		dbms_output.put_line('존재하지 않은 계정입니다.');
+ 15  	end if;
+ 16  end;
+ 17  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE BROADCAST
+  2  (BroadcastId in varchar2, Title in varchar2, Hits in number, Goods in number, Hates in number, nMemberId in varchar2, AdvertisementId in varchar2)
+  3  IS
+  4  nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from member m
+  9  	where m.MemberID = nMemberId;
+ 10  	if(nCnt > 0) then
+ 11  		insert into broadcasting values(BroadcastId, Title, SYSDATE, Hits, Goods, Hates, nMemberId, AdvertisementId);
+ 12  		commit;
+ 13  	else
+ 14  		dbms_output.put_line('존재하지 않은 계정입니다.');
+ 15  	end if;
+ 16  end;
+ 17  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE REGISTER_COMPANY
+  2  (nCompanyId in varchar2, Address in varchar2, Name in varchar2, Phone in char, Zip in char)
+  3  IS
+  4  nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from company c
+  9  	where c.CompanyID = nCompanyId;
+ 10  
+ 11  	if(nCnt = 0) then
+ 12  		insert into company values(nCompanyId, Name, Address, Phone, Zip);
+ 13  		commit;
+ 14  	else
+ 15  		dbms_output.put_line('이미 등록된 회사입니다.');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+ 
+SQL> CREATE OR REPLACE PROCEDURE MAKE_COMMUNITY
+  2  (CommunityId in varchar2, nMemberId in varchar2, Content in varchar2)
+  3  IS
+  4  nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from community c
+  9  	where c.MemberID = nMemberId;
+ 10  
+ 11  	if(nCnt = 0) then
+ 12  		insert into community values(CommunityId, nMemberId, Content);
+ 13  		commit;
+ 14  	else
+ 15  		dbms_output.put_line('이미 커뮤니티가 존재합니다.');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE MAKE_COMMENT
+  2  (CommentId in varchar2, RecommentId in varchar2, Content in varchar2, Goods in number, Hates in number, nMemberId in varchar2, CommentedSiteId in varchar2, type in number)
+  3  IS
+  4  begin
+  5  	if(type = 0) then
+  6  		insert into video_comment values(CommentId, RecommentId, Goods, Hates, SYSDATE, Content, nMemberId, CommentedSiteId);
+  7  		commit;
+  8  	elsif(type = 1) then
+  9  		insert into commu_comment values(CommentId, RecommentId, Goods, Hates, SYSDATE, Content, CommentedSiteId, nMemberId);
+ 10  		commit;
+ 11  	else
+ 12  		insert into broad_comment values(CommentId, RecommentId, SYSDATE, Content, CommentedSiteId, nMemberId);
+ 13  	end if;
+ 14  end;
+ 15  /
+
+프로시저가 생성되었습니다.
+ 
+SQL> CREATE OR REPLACE PROCEDURE DONATING
+  2  (nMemberId in varchar2, nBroadcastId in varchar2, Price in number, Content in varchar2)
+  3  IS
+  4  nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from donate d
+  9  	where d.MemberID = nMemberId and d.BroadCastID = nBroadcastId;
+ 10  
+ 11  	if(nCnt = 0) then
+ 12  		insert into donate values(nMemberId, nBroadcastId, Price, SYSDATE, Content);
+ 13  		commit;
+ 14  	else
+ 15  		dbms_output.put_line('이미 후원하셨습니다.');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE MAKE_PLAYLIST
+  2  (Name in varchar2, nMemberId in varchar2, nVideoId in varchar2)
+  3  IS
+  4  nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from playlist
+  9  	where MemberID = nMemberId and VideoID = nVideoId;
+ 10  
+ 11  	if(nCnt = 0) then
+ 12  		insert into playlist values(Name, nMemberId, nVideoId);
+ 13  		commit;
+ 14  	else
+ 15  		dbms_output.put_line('이미 플레이리스트에 추가되었습니다.');
+ 16 	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+ 
+SQL> CREATE OR REPLACE PROCEDURE MAKE_FAQ
+  2  (FAQId in varchar2, nContent in varchar2)
+  3  IS
+  4  nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from FAQ
+  9  	where Content = nContent;
+ 10  
+ 11  	if(nCnt = 0) then
+ 12  		insert into FAQ values(FAQId, nContent);
+ 13  		commit;
+ 14  	else
+ 15  		dbms_output.put_line('이미 등록한 질문입니다.');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE MAKE_ANSWER
+  2  (AnswerId in varchar2, nFAQId in varchar2, nContent in varchar2)
+  3  IS
+  4  nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from FAQ
+  9  	where FAQ_ID = nFAQId;
+ 10  
+ 11  	if(nCnt > 0) then
+ 12  		insert into answer values(AnswerId, nContent, nFAQId);
+ 13  		commit;
+ 14  	else
+ 15  		dbms_output.put_line('없는 질문 입니다.');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+
+SQL> spool off
+

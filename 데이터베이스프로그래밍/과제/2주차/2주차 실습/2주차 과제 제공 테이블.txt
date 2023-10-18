@@ -1,0 +1,209 @@
+
+/* Q1 : 1NF -> 2NF*/
+DROP TABLE STUDENT_ENROLL CASCADE CONSTRAINTS PURGE;
+DROP TABLE STUDENT_ENROLL_2NF CASCADE CONSTRAINTS PURGE; 
+DROP TABLE COURSE_2NF CASCADE CONSTRAINTS PURGE; 
+
+CREATE TABLE STUDENT_ENROLL(
+     Sid VARCHAR(10) NOT NULL,
+     Cid VARCHAR(10) NOT NULL,
+     Time NUMBER,
+     Cname VARCHAR(15),
+     Cunit VARCHAR(2),
+     PRIMARY KEY(Sid, Cid));
+
+INSERT INTO STUDENT_ENROLL VALUES('2019127059','C100',1,'C언어','3');
+INSERT INTO STUDENT_ENROLL VALUES('2019127060','C200',3,'데이터베이스','3');
+INSERT INTO STUDENT_ENROLL VALUES('2019127061','C200',3,'데이터베이스','3');
+INSERT INTO STUDENT_ENROLL VALUES('2019127062','C300',5,'프로그래밍','3');
+
+CREATE TABLE STUDENT_ENROLL_2NF(
+     Sid VARCHAR(10) NOT NULL,
+     Cid VARCHAR(10) NOT NULL,
+     Time NUMBER,
+     PRIMARY KEY(Sid, Cid));
+
+CREATE TABLE COURSE_2NF(
+     Cid VARCHAR(10) NOT NULL,
+     Cname VARCHAR(15),
+     Cunit VARCHAR(2),
+     PRIMARY KEY(Cid));
+
+INSERT INTO STUDENT_ENROLL_2NF VALUES('2019127059','C100',1);
+INSERT INTO STUDENT_ENROLL_2NF VALUES('2019127060','C200',3);
+INSERT INTO STUDENT_ENROLL_2NF VALUES('2019127061','C200',3);
+INSERT INTO STUDENT_ENROLL_2NF VALUES('2019127062','C300',5);
+
+INSERT INTO COURSE_2NF VALUES('C100',C언어','3');
+INSERT INTO COURSE_2NF VALUES('C200','데이터베이스','3');
+INSERT INTO COURSE_2NF VALUES('C200','데이터베이스','3');
+INSERT INTO COURSE_2NF VALUES('C300','프로그래밍','3');
+
+COMMIT:
+
+select * from STUDENT_ENROLL_2NF;
+select * from COURSE_2NF;
+
+select Cid from STUDENT_ENROLL_2NF
+where Cid not in (select st.Cid
+from STUDENT_ENROLL_2NF st, COURSE_2NF co
+where st.Cid = co.Cid);
+
+select * from student_enroll;
+select SId, Cid, Time, Cname, Cunit from STUDENT_ENROLL_2NF natural join COURSE_2NF;
+
+/* Q2 : 2NF -> 3NF*/
+DROP TABLE ITEM CASCADE CONSTRAINTS PURGE;
+DROP TABLE ITEM1_3NF CASCADE CONSTRAINTS PURGE;
+DROP TABLE ITEM2_3NF CASCADE CONSTRAINTS PURGE;
+
+CREATE TABLE ITEM(
+     ItemCode NUMBER NOT NULL,
+     ItemName VARCHAR(50),
+     ItemType VARCHAR(50),
+     Location VARCHAR(5),
+     Manufacturer VARCHAR(25),
+     PRIMARY KEY(ItemCode));
+
+INSERT INTO ITEM VALUES(1000,'Antique Desk','Antique','A1','E. Treasures');
+INSERT INTO ITEM VALUES(1100,'Antique Candle Holders','Antique','A1','Jade Antiques');
+INSERT INTO ITEM VALUES(2300,'Desk Lamp','Lamps and Lighting','B1','Jeremy');
+INSERT INTO ITEM VALUES(4500,'Floor Lamp','Lamps and Lighting','B1','Mr. James');
+
+CREATE TABLE ITEM1_3NF(
+     ItemCode NUMBER NOT NULL,
+     ItemName VARCHAR(50),
+     ItemType VARCHAR(50),
+     Manufacturer VARCHAR(25),
+     PRIMARY KEY(ItemCode));
+
+CREATE TABLE ITEM2_3NF(
+     ItemType VARCHAR(50),
+     Location VARCHAR(5),
+     PRIMARY KEY(ItemType));
+
+INSERT INTO ITEM1_3NF VALUES(1000,'Antique Desk','Antique','E. Treasures');
+INSERT INTO ITEM1_3NF VALUES(1100,'Antique Candle Holders','Antique','Jade Antiques');
+INSERT INTO ITEM1_3NF VALUES(2300,'Desk Lamp','Lamps and Lighting','Jeremy');
+INSERT INTO ITEM1_3NF VALUES(4500,'Floor Lamp','Lamps and Lighting','Mr. James');
+
+INSERT INTO ITEM2_3NF VALUES('Antique','A1');
+INSERT INTO ITEM2_3NF VALUES('Lamps and Lighting','B1');
+
+COMMIT;
+
+select * from ITEM1_3NF;
+select * from ITEM2_3NF;
+
+select ItemType from ITEM1_3NF
+where ItemType not in (select code.ItemType
+from ITEM1_3NF code, ITEM2_3NF type
+where code.ItemType = type.ItemType);
+
+select * from ITEM;
+select ItemCode, ItemName, ItemType, Location, Manufacturer from ITEM1_3NF natural join ITEM2_3NF;
+
+/* Q3 : 3NF -> BCNF*/
+DROP TABLE ITEM_ORDER CASCADE CONSTRAINTS PURGE; 
+DROP TABLE ITEM_ORDER_MANAGER_BCNF CASCADE CONSTRAINTS PURGE; 
+DROP TABLE ITEM_ORDER_BCNF CASCADE CONSTRAINTS PURGE; 
+
+CREATE TABLE ITEM_ORDER(
+     Buyer VARCHAR(25) NOT NULL,
+     Item VARCHAR(50) NOT NULL,
+     Manager VARCHAR(25) NOT NULL,
+     PRIMARY KEY(Buyer, Item));
+
+INSERT INTO ITEM_ORDER VALUES('Chris Bancroft','SSD','Pete Hansen');
+INSERT INTO ITEM_ORDER VALUES('Doris Tierney','SSD','Nancy Meyers');
+INSERT INTO ITEM_ORDER VALUES('Donna Anderson','RAM','Cindy Lo');
+INSERT INTO ITEM_ORDER VALUES('John Griffith','USB','Jerry Martin');
+
+CREATE TABLE ITEM_ORDER_MANAGER_BCNF(
+     Buyer VARCHAR(25) NOT NULL,
+     Manager VARCHAR(25) NOT NULL,
+     PRIMARY KEY(Buyer, Manager));
+
+CREATE TABLE ITEM_ORDER_BCNF(
+     Item VARCHAR(50) NOT NULL,
+     Manager VARCHAR(25) NOT NULL,
+     PRIMARY KEY(Manager));
+
+INSERT INTO ITEM_ORDER_MANAGER_BCNF VALUES('Chris Bancroft','Pete Hansen');
+INSERT INTO ITEM_ORDER_MANAGER_BCNF VALUES('Doris Tierney','Nancy Meyers');
+INSERT INTO ITEM_ORDER_MANAGER_BCNF VALUES('Donna Anderson','Cindy Lo');
+INSERT INTO ITEM_ORDER_MANAGER_BCNF VALUES('John Griffith','Jerry Martin');
+
+INSERT INTO ITEM_ORDER_BCNF VALUES('SSD','Pete Hansen');
+INSERT INTO ITEM_ORDER_BCNF VALUES('SSD','Nancy Meyers');
+INSERT INTO ITEM_ORDER_BCNF VALUES('RAM','Cindy Lo');
+INSERT INTO ITEM_ORDER_BCNF VALUES('USB','Jerry Martin');
+
+COMMIT;
+
+select * from ITEM_ORDER_MANAGER_BCNF;
+select * from ITEM_ORDER_BCNF;
+
+select Manager from ITEM_ORDER_MANAGER_BCNF
+where Manager not in (select b.Manager
+from ITEM_ORDER_MANAGER_BCNF m, ITEM_ORDER_BCNF o
+where m.Manager = o.Manager);
+
+select * from ITEM_ORDER;
+select Buyer, Item, Manager from ITEM_ORDER_MANAGER_BCNF natural join ITEM_ORDER_BCNF;
+
+/* Q4 : BCNF -> 4NF*/
+DROP TABLE EMPLOYEE CASCADE CONSTRAINTS PURGE;
+DROP TABLE EMPLOYEE_EDUCATION_4NF;
+DROP TABLE EMPLOYEE_CAREER_4NF;
+
+CREATE TABLE EMPLOYEE(
+     EmpName VARCHAR(10) NOT NULL,
+     Education VARCHAR(25) NOT NULL,
+     Career VARCHAR(25) NOT NULL,
+     PRIMARY KEY(EmpName, Education, Career));
+
+INSERT INTO EMPLOYEE VALUES('Chau','Sidwell Friends School','JavaScript');
+INSERT INTO EMPLOYEE VALUES('Chau','Brown University','JavaScript');
+INSERT INTO EMPLOYEE VALUES('Green','Columbia University','Python');
+INSERT INTO EMPLOYEE VALUES('Jones','Groton School','Java');
+INSERT INTO EMPLOYEE VALUES('Jones','Groton School','C#');
+INSERT INTO EMPLOYEE VALUES('Jones','Cornell University','Java');
+INSERT INTO EMPLOYEE VALUES('Jones','Cornell University','C#');
+INSERT INTO EMPLOYEE VALUES('Jones','Stanford University','Java');
+INSERT INTO EMPLOYEE VALUES('Jones','Stanford University','C#');
+
+CREATE TABLE EMPLOYEE_EDUCATION_4NF(
+     EmpName VARCHAR(10) NOT NULL,
+     Education VARCHAR(25) NOT NULL,
+     PRIMARY KEY(EmpName, Education));
+
+CREATE TABLE EMPLOYEE_CAREER_4NF(
+     EmpName VARCHAR(10) NOT NULL,
+     Career VARCHAR(25) NOT NULL,
+     PRIMARY KEY(EmpName, Career));
+
+INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Chau','Sidwell Friends School');
+INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Chau','Brown University');
+INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Green','Columbia University');
+INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Jones','Groton School');
+INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Jones','Cornell University');
+INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Jones','Stanford University');
+
+INSERT INTO EMPLOYEE_CAREER_4NF VALUES('Chau','JavaScript');
+INSERT INTO EMPLOYEE_CAREER_4NF VALUES('Green','Python');
+INSERT INTO EMPLOYEE_CAREER_4NF VALUES('Jones','Java');
+INSERT INTO EMPLOYEE_CAREER_4NF VALUES('Jones','C#');
+
+COMMIT;
+
+select * from EMPLOYEE_EDUCATION_4NF;
+select * from EMPLOYEE_CAREER_4NF;
+
+select EmpName from EMPLOYEE_EDUCATION_4NF
+where EmpName not in (select e.EmpName
+from EMPLOYEE_EDUCATION_4NF e, EMPLOYEE_CAREER_4NF c
+where e.EmpName = c.EmpName);
+
+select * from EMPLOYEE;
+select EmpName, Education, Career from EMPLOYEE_EDUCATION_4NF natural join EMPLOYEE_CAREER_4NF;

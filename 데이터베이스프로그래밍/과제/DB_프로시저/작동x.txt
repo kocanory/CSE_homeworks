@@ -1,0 +1,111 @@
+CREATE OR REPLACE PROCEDURE CHANGE_PARTNERSHIP
+(nMemberId in varchar2, Partnership in number, nSalary in number)
+IS
+nPartnership number;
+begin
+	
+	select isPartner
+	into nPartnership
+	from member m
+	where m.MemberID = nMemberId;
+
+	if(nPartnership = 1 and Partnership = 2) then
+		:NEW.update member set Ispartner = Partnership;
+		insert into partner values(nMemberId, nSalary, SYSDATE);
+		delete from general where MemberID = nMemberId;
+
+	elsif(nPartnership = 2 and Partnership = 1) then
+		:NEW.update member set Ispartner = Partnership;
+		insert into general values(nMemberId, SYSDATE);
+		delete from partner where MemberID = nMemberId;
+	else
+		dbms_output.put_line('멤버십 변경이 불가합니다.');
+	end if;
+end;
+/
+
+CREATE OR REPLACE PROCEDURE SUBSCRIBE
+(nMemberId in varchar2, nsubscriber in varchar2)
+IS
+nCnt number;
+begin
+	select count(*)
+	into nCnt
+	from member m
+	where m.MemberID = nMemberId;
+
+	if(nCnt > 0) then
+		update member set :NEW.Subscriber = nsubscriber where MemberID = nMemberId;
+
+	else
+		dbms_output.put_line('현재 존재하지 않는 계정을 구독하려고 합니다');
+	end if;
+end;
+/
+
+CREATE OR REPLACE PROCEDURE CHANGE_COMMENT
+(CommentId in varchar2, nContent in varchar2, type in number)
+IS
+begin
+	if(type = 0) then
+		update video_comment set Content = nContent where CommentID = CommentId;
+	elsif(type = 1) then
+		update commu_comment set Content = nContent where CommentID = CommentId;
+	else
+		update broad_comment set Content = nContent where CommentID = CommentId;
+	end if;
+end;
+/
+
+CREATE OR REPLACE PROCEDURE CHANGE_TITLE
+(ID in varchar2, nTitle in varchar2, type in number)
+IS
+nCnt number := 0;
+begin
+	if(type = 0) then
+		update video set Title = nTitle where VideoID = ID;
+
+		select count(*)
+		into nCnt
+		from popularity
+		where VideoID = ID;
+
+		if(nCnt > 0) then
+			update popularity set Title = nTitle where VideoID = ID;
+		end if;
+	elsif(type = 1) then
+		update broadcasting set Title = nTitle where BroadcastID = ID;
+	else
+		update advertisement set Title = nTitle where AdvertisementID = ID;
+	end if;
+end;
+/
+
+CREATE OR REPLACE PROCEDURE UPDATE_POPULARITY
+(Cnt in number)
+IS
+nRanking number := 0;
+nCnt number :=  0;
+CURSOR cur IS
+	select VideoID, Title, Hits
+	from (select VideoID, Title, Hits from video order by Hits asc)
+	where rownum <= Cnt; 
+begin
+	select count(*)
+	into nCnt
+	from popularity;
+
+	if nCnt > 0 then
+		for video_list in cur loop
+			nRanking := nRanking + 1;
+			update popularity set VideoID = video_list.VideoID, Title = video_list.Title, Hits = video_list.Hits
+			where Ranking = nRanking;
+		end loop;
+	else
+		for video_list in cur loop
+			nRanking := nRanking + 1;
+			insert into popularity values(video_list.VideoID, video_list.Title, video_list.Hits, nRanking);
+		end loop;
+	end if;		
+end;
+/

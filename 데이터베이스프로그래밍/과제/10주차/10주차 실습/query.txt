@@ -1,0 +1,93 @@
+DECLARE
+	v_job emp_week9.job%TYPE;
+	cnt NUMBER := 0;
+BEGIN
+	dbms_output.put_line('직책명');
+	dbms_output.put_line('-------');
+	
+	for job_list in(select distinct job from emp_week9 order by job asc) loop
+		v_job := job_list.job;
+		dbms_output.put_line(v_job);
+		cnt := cnt + 1;
+	end loop;	
+	dbms_output.put_line(chr(10)||chr(13)||'직책의 수 : '|| cnt);
+END;
+
+DECLARE
+	v_dept dept_week9%ROWTYPE;
+	CURSOR dept_list IS
+	select rpad(deptno, 10), rpad(dname, 10), rpad(loc, 10)
+	from dept_week9
+	order by deptno asc;
+BEGIN
+	dbms_output.put_line('부서번호'||'    '||'부서명'||'       '||'위'||'    '||'치');
+	dbms_output.put_line('-------'||'     '||'-------'||'      '||'-------');
+	OPEN dept_list;
+	LOOP
+		FETCH dept_list INTO v_dept.deptno, v_dept.dname, v_dept.loc;
+			EXIT WHEN dept_list%NOTFOUND;		
+		dbms_output.put_line(rpad(v_dept.deptno, 10) || rpad(v_dept.dname, 15) || rpad(v_dept.loc, 10));
+	END LOOP;
+	CLOSE dept_list;
+	EXCEPTION
+	 WHEN OTHERS THEN
+		dbms_output.put_line('ERR MESSAGE : ' || SQLERRM);
+END;
+
+CREATE OR REPLACE PROCEDURE emp_input
+	(v_empno in number, v_ename in varchar2, v_job in varchar2, v_mgr in number, v_hiredate in date, v_sal in number)
+IS
+	v_comm emp_week9.comm%TYPE;
+	v_deptno emp_week9.deptno%TYPE;
+BEGIN
+	
+	if v_job = 'SALESMAN' then
+		v_comm := 10;
+	else
+		v_comm := NULL;
+	end if;
+	
+	select deptno
+	into v_deptno
+	from emp_week9
+	where mgr = v_mgr;
+
+	insert into emp_week9 values(v_empno, v_ename, v_job,  v_mgr, v_hiredate, v_sal, v_comm, v_deptno);
+	commit;
+
+	EXCEPTION
+		WHEN DUP_VAL_ON_INDEX THEN
+			dbms_output.put_line('중복된 사원번호 입니다.');
+END;
+
+CREATE OR REPLACE FUNCTION empno_deptno
+	(v_empno in number)
+	RETURN NUMBER
+IS
+	v_deptno emp_week9.deptno%TYPE;
+BEGIN
+	select deptno
+	into v_deptno
+	from emp_week9
+	where empno = v_empno;
+	dbms_output.put_line('부서 번호 : '||v_deptno);
+RETURN v_deptno;
+END;
+
+CREATE OR REPLACE TRIGGER shops_trigger
+BEFORE INSERT ON shops
+FOR EACH ROW
+DECLARE
+	v_shopprofit shops.shop_profit%TYPE;
+	v_shopcost shops.shop_cost%TYPE;
+	v_shopincome shops.shop_profit%TYPE;
+BEGIN
+	select sum(shop_profit), sum(shop_cost)
+	into v_shopprofit, v_shopcost
+	from shops;
+	v_shopincome := v_shopprofit - v_shopcost;
+	dbms_output.put_line('<INSERT문이 실행되기 전까지의 손익 현황>');
+	dbms_output.put_line('총 수익 : '||v_shopprofit);
+	dbms_output.put_line('총 비용 : '||v_shopcost);
+	dbms_output.put_line('총 순이익 : '||v_shopincome);
+END;

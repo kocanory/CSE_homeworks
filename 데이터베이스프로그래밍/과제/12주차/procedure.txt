@@ -1,0 +1,26 @@
+CREATE OR REPLACE PROCEDURE STUDENT_COUNT
+	(sCourseId in varchar2, nCourseIdNo in number, result out varchar2)
+is
+	nYear number;
+	nSemester number;
+	nCnt number;
+	nTeachMax number;
+	able_insertNum number;
+
+begin 
+	nYear := Date2EnrollYear(SYSDATE);
+	nSemester := Date2EnrollSemester(SYSDATE);
+	
+	select t_max
+	into nTeachMax
+	from teach
+	where t_year = nYear and t_semester = nSemester and c_id = sCourseId and c_id_no = nCourseIdNo;
+
+	select count(*)
+	into nCnt
+	from enroll
+	where e_year = nYear and e_semester = nSemester and c_id = sCourseId and c_id_no = nCourseIdNo;
+	
+	able_insertNum := nTeachMax - nCnt;
+	result := '모집인원은 '|| nTeachMax ||'명이며, 현재 수강 신청을 할 수 있는 인원은 ' || able_insertNum || '명 입니다.';
+end;

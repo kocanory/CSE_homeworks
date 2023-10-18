@@ -1,0 +1,967 @@
+SQL> CREATE TABLE EMPLOYEE
+  2  (Fname VARCHAR(15) NOT NULL,
+  3  Minit CHAR,
+  4  Lname VARCHAR(15) NOT NULL,
+  5  Ssn CHAR(9) NOT NULL,
+  6  Bdate DATE,
+  7  Address VARCHAR(30),
+  8  Sex CHAR,
+  9  Salary DECIMAL(10,2),
+ 10  Super_ssn CHAR(9),
+ 11  Dno INT NOT NULL,
+ 12  PRIMARY KEY (Ssn),
+ 13  FOREIGN KEY (Super_ssn) REFERENCES EMPLOYEE(Ssn));
+
+테이블이 생성되었습니다.
+
+SQL> create table department
+  2  (Dname varchar(15) not null,
+  3  Dnumber int not null,
+  4  Mgr_ssn char(9) not null,
+  5  Mgr_start_date date,
+  6  primary key (Dnumber),
+  7  unique (Dname),
+  8  foreign key (Mgr_ssn) references employee(ssn));
+
+테이블이 생성되었습니다.
+
+SQL> create table dept_locations
+  2  (Dnumber int not null,
+  3  Dlocation varchar(15) not null,
+  4  primary key (Dnumber, Dlocation),
+  5  foreign key (Dnumber) references department(Dnumber));
+
+테이블이 생성되었습니다.
+
+SQL> create table project
+  2  (Pname varchar(15) not null,
+  3  Pnumber int not null,
+  4  Plocation varchar(15),
+  5  Dnum int not null,
+  6  primary key (Pnumber),
+  7  unique (Pname),
+  8  foreign key (Dnum) references department (Dnumber));
+
+테이블이 생성되었습니다.
+
+SQL> create table works_on
+  2  (Essn char(9) not null,
+  3  Pno int not null,
+  4  Hours decimal(3,1) not null,
+  5  primary key (Essn, Pno),
+  6  foreign key (Essn) references employee(Ssn),
+  7  foreign key (Pno) references project(Pnumber));
+
+테이블이 생성되었습니다.
+
+SQL> create table dependent
+  2  (Essn char(9) not null,
+  3  Dependent_name varchar(15) not null,
+  4  Sex char,
+  5  Bdate date,
+  6  Relationship varchar(8),
+  7  primary key (Essn, Dependent_name),
+  8  foreign key (Essn) references employee(Ssn));
+
+테이블이 생성되었습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('James','E','Borg','888665555',to_date('1937-11-10','yyyy-mm-dd'),'450 Stone, Houston, TX','M','55000',NULL,'1');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Franklin','T','Wong','333445555',to_date('1955-12-08','yyyy-mm-dd'),'638 Voss, Houston, TX','M','40000','888665555','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('John','B','Smith','123456789',to_date('1965-01-09','yyyy-mm-dd'),'731 Fondren, Houston, TX','M','30000','333445555','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Jennifer','S','Wallance','987654321',to_date('1941-06-20','yyyy-mm-dd'),'291 Berry, Bellaire, TX','F','43000','888665555','4');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Alicia','J','Zelaya','999887777',to_date('1968-01-19','yyyy-mm-dd'),'3321 Castle, Spring, TX','F','25000','987654321','4');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Ramesh','K','Narayan','666884444',to_date('1962-09-15','yyyy-mm-dd'),'975 Fire Oak, Humble, TX','M','38000','333445555','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Joyce','A','English','453453453',to_date('1972-07-31','yyyy-mm-dd'),'5631 Rice, Houston, TX','F','25000','333445555','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Ahmad','V','Jabbar','987987987',to_date('1969-03-29','yyyy-mm-dd'),'980 Dallas, Houston, TX','M','25000','987654321','4');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from employee;
+
+FNAME           M LNAME           SSN       BDATE    ADDRESS                        S         SALARY SUPER_SSN        DNO
+--------------- - --------------- --------- -------- ------------------------------ - ---------- --------- ----------
+James           E Borg            888665555 37/11/10 450 Stone, Houston, TX         M          55000                    1
+Franklin        T Wong            333445555 55/12/08 638 Voss, Houston, TX          M          40000 888665555          5
+John            B Smith           123456789 65/01/09 731 Fondren, Houston, TX       M          30000 333445555          5
+Jennifer        S Wallance        987654321 41/06/20 291 Berry, Bellaire, TX        F          43000 888665555          4
+Alicia          J Zelaya          999887777 68/01/19 3321 Castle, Spring, TX        F          25000 987654321          4
+Ramesh          K Narayan         666884444 62/09/15 975 Fire Oak, Humble, TX       M          38000 333445555          5
+Joyce           A English         453453453 72/07/31 5631 Rice, Houston, TX         F          25000 333445555          5
+Ahmad           V Jabbar          987987987 69/03/29 980 Dallas, Houston, TX        M          25000 987654321          4
+
+8 행이 선택되었습니다.
+
+SQL> commit
+  2  ;
+
+커밋이 완료되었습니다.
+
+SQL> insert into department values('Research', '5', '333445555',to_date('1988-05-22','yyyy-mm-dd'));
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into department values('Administration', '4', '987654321',to_date('1995-01-01','yyyy-mm-dd'));
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into department values('Headquarters', '1', '888665555',to_date('1981-06-19','yyyy-mm-dd'));
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from department
+  2  ;
+
+DNAME              DNUMBER MGR_SSN   MGR_STAR
+--------------- ---------- --------- --------
+Research                 5 333445555 88/05/22
+Administration           4 987654321 95/01/01
+Headquarters             1 888665555 81/06/19
+
+SQL> insert into dept_locations values('1', 'Houston');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dept_locations values('4', 'Stafford');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dept_locations values('5', 'Bellaire');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dept_locations values('5', 'Sugarland');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dept_locations values('5', 'Houston');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from dept_locations
+  2  ;
+
+   DNUMBER DLOCATION
+---------- ---------------
+         1 Houston
+         4 Stafford
+         5 Bellaire
+         5 Houston
+         5 Sugarland
+
+SQL> insert into project values('ProductX', '1','Bellaire','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into project values('ProductY', '2','Sugarland','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into project values('ProductZ', '3','Houston','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into project values('Computerization', '10','Stafford','4');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into project values('Reorganization', '20','Houston','1');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into project values('Newbenefits', '30','Stafford','4');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from project;
+
+PNAME              PNUMBER PLOCATION             DNUM
+--------------- ---------- --------------- ----------
+ProductX                 1 Bellaire                 5
+ProductY                 2 Sugarland                5
+ProductZ                 3 Houston                  5
+Computerization         10 Stafford                 4
+Reorganization          20 Houston                  1
+Newbenefits             30 Stafford                 4
+
+6 행이 선택되었습니다.
+
+SQL> insert into works_on values('123456789','1','32.5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('123456789','2','7.5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('666884444','3','40.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('453453453','1','20.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('453453453','2','20.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('333445555','2','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('333445555','3','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('333445555','10','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('333445555','20','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('999887777','30','30.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('999887777','10','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('987987987','10','35.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('987987987','30','5.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('987654321','30','20.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('987654321','20','15.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('888665555','20','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from works_on
+  2  ;
+
+ESSN             PNO      HOURS
+--------- ---------- ----------
+123456789          1       32.5
+123456789          2        7.5
+666884444          3         40
+453453453          1         20
+453453453          2         20
+333445555          2         10
+333445555          3         10
+333445555         10         10
+333445555         20         10
+999887777         30         30
+999887777         10         10
+987987987         10         35
+987987987         30          5
+987654321         30         20
+987654321         20         15
+888665555         20         10
+
+16 행이 선택되었습니다.
+
+SQL> insert into dependent values('333445555','Alice','F',to_date('1986-04-05','yyyy-mm-dd'),'Daughter');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('333445555','Theodore','M',to_date('1983-10-25','yyyy-mm-dd'),'Son');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('333445555','Joy','F',to_date('1958-05-03','yyyy-mm-dd'),'Spouse');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('987654321','Abner','M',to_date('1942-02-28','yyyy-mm-dd'),'Spouse');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('123456789','Michael','M',to_date('1988-01-04','yyyy-mm-dd'),'Son');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('123456789','Alice','F',to_date('1988-12-30','yyyy-mm-dd'),'Daughter');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('123456789','Elizabeth','F',to_date('1967-05-05','yyyy-mm-dd'),'Spouse');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from dependent;
+
+ESSN      DEPENDENT_NAME  S BDATE    RELATION
+--------- --------------- - -------- --------
+333445555 Alice           F 86/04/05 Daughter
+333445555 Theodore        M 83/10/25 Son
+333445555 Joy             F 58/05/03 Spouse
+987654321 Abner           M 42/02/28 Spouse
+123456789 Michael         M 88/01/04 Son
+123456789 Alice           F 88/12/30 Daughter
+123456789 Elizabeth       F 67/05/05 Spouse
+
+7 행이 선택되었습니다.
+
+SQL> commit;
+
+커밋이 완료되었습니다.
+
+--------------------------------------------------------------Q0--------------------------------------------------------------
+SQL> select Bdate, Address
+  2  from employee
+  3  where Fname = 'John' and Minit = 'B' and Lname = 'Smith';
+
+BDATE    ADDRESS                                                                
+-------- ------------------------------                                         
+65/01/09 731 Fondren, Houston, TX                                               
+
+
+--------------------------------------------------------------Q1--------------------------------------------------------------
+SQL> select Fname, Lname, Address
+  2  from employee, department
+  3  where Dname = 'Research' and Dnumber = Dno;
+
+FNAME           LNAME           ADDRESS                                         
+--------------- --------------- ------------------------------                  
+Franklin        Wong            638 Voss, Houston, TX                           
+John            Smith           731 Fondren, Houston, TX                        
+Ramesh          Narayan         975 Fire Oak, Humble, TX                        
+Joyce           English         5631 Rice, Houston, TX                          
+
+
+--------------------------------------------------------------Q2--------------------------------------------------------------
+SQL> select Pnumber, Dnum, Lname, Address, Bdate
+  2  from project, department, employee
+  3  where Dnum = Dnumber and Mgr_ssn = Ssn and Plocation = 'Stafford';
+
+   PNUMBER       DNUM LNAME           ADDRESS                        BDATE      
+---------- ---------- --------------- ------------------------------ --------   
+        10          4 Wallance        291 Berry, Bellaire, TX        41/06/20   
+        30          4 Wallance        291 Berry, Bellaire, TX        41/06/20   
+
+
+
+--------------------------------------------------------------Q1A--------------------------------------------------------------
+SQL> select Fname, employee.Lname, Address
+  2  from employee, department
+  3  where department.Dname = 'Research' and department.Dnumber = employee.Dno;
+
+FNAME           LNAME           ADDRESS                                         
+--------------- --------------- ------------------------------                  
+Franklin        Wong            638 Voss, Houston, TX                           
+John            Smith           731 Fondren, Houston, TX                        
+Ramesh          Narayan         975 Fire Oak, Humble, TX                        
+Joyce           English         5631 Rice, Houston, TX                          
+
+
+--------------------------------------------------------------Q8--------------------------------------------------------------
+SQL> select E.Fname, E.Lname, S.Fname, S.Lname
+  2  from employee E, employee S
+  3  where E.Super_ssn = S.Ssn;
+
+FNAME           LNAME           FNAME           LNAME                           
+--------------- --------------- --------------- ---------------                 
+Joyce           English         Franklin        Wong                            
+John            Smith           Franklin        Wong                            
+Ramesh          Narayan         Franklin        Wong                            
+Jennifer        Wallance        James           Borg                            
+Franklin        Wong            James           Borg                            
+Ahmad           Jabbar          Jennifer        Wallance                        
+Alicia          Zelaya          Jennifer        Wallance                        
+
+7 행이 선택되었습니다.
+
+
+--------------------------------------------------------------Q9--------------------------------------------------------------
+SQL> select Ssn
+  2  from employee;
+
+SSN                                                                             
+---------                                                                       
+123456789                                                                       
+333445555                                                                       
+453453453                                                                       
+666884444                                                                       
+888665555                                                                       
+987654321                                                                       
+987987987                                                                       
+999887777                                                                       
+
+8 행이 선택되었습니다.
+
+
+--------------------------------------------------------------Q10--------------------------------------------------------------
+SQL> select Ssn, Dname
+  2  from employee, department;
+
+SSN       DNAME                                                                 
+--------- ---------------                                                       
+123456789 Administration                                                        
+333445555 Administration                                                        
+453453453 Administration                                                        
+666884444 Administration                                                        
+888665555 Administration                                                        
+987654321 Administration                                                        
+987987987 Administration                                                        
+999887777 Administration                                                        
+123456789 Headquarters                                                          
+333445555 Headquarters                                                          
+453453453 Headquarters                                                          
+
+SSN       DNAME                                                                 
+--------- ---------------                                                       
+666884444 Headquarters                                                          
+888665555 Headquarters                                                          
+987654321 Headquarters                                                          
+987987987 Headquarters                                                          
+999887777 Headquarters                                                          
+123456789 Research                                                              
+333445555 Research                                                              
+453453453 Research                                                              
+666884444 Research                                                              
+888665555 Research                                                              
+987654321 Research                                                              
+
+SSN       DNAME                                                                 
+--------- ---------------                                                       
+987987987 Research                                                              
+999887777 Research                                                              
+
+24 행이 선택되었습니다.
+
+
+--------------------------------------------------------------Q10A--------------------------------------------------------------
+SQL> select  *
+  2  from employee,  department;
+
+FNAME           M LNAME           SSN       BDATE    ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME              DNUMBER MGR_SSN   MGR_STAR                                                                                                                                         
+--------------- - --------------- --------- -------- ------------------------------ - ---------- --------- ---------- --------------- ---------- --------- --------                                                                                                                                         
+James           E Borg            888665555 37/11/10 450 Stone, Houston, TX         M      55000                    1 Research                 5 333445555 88/05/22                                                                                                                                         
+Franklin        T Wong            333445555 55/12/08 638 Voss, Houston, TX          M      40000 888665555          5 Research                 5 333445555 88/05/22                                                                                                                                         
+John            B Smith           123456789 65/01/09 731 Fondren, Houston, TX       M      30000 333445555          5 Research                 5 333445555 88/05/22                                                                                                                                         
+Jennifer        S Wallance        987654321 41/06/20 291 Berry, Bellaire, TX        F      43000 888665555          4 Research                 5 333445555 88/05/22                                                                                                                                         
+Alicia          J Zelaya          999887777 68/01/19 3321 Castle, Spring, TX        F      25000 987654321          4 Research                 5 333445555 88/05/22                                                                                                                                         
+Ramesh          K Narayan         666884444 62/09/15 975 Fire Oak, Humble, TX       M      38000 333445555          5 Research                 5 333445555 88/05/22                                                                                                                                         
+Joyce           A English         453453453 72/07/31 5631 Rice, Houston, TX         F      25000 333445555          5 Research                 5 333445555 88/05/22                                                                                                                                         
+Ahmad           V Jabbar          987987987 69/03/29 980 Dallas, Houston, TX        M      25000 987654321          4 Research                 5 333445555 88/05/22                                                                                                                                         
+James           E Borg            888665555 37/11/10 450 Stone, Houston, TX         M      55000                    1 Administration           4 987654321 95/01/01                                                                                                                                         
+Franklin        T Wong            333445555 55/12/08 638 Voss, Houston, TX          M      40000 888665555          5 Administration           4 987654321 95/01/01                                                                                                                                         
+John            B Smith           123456789 65/01/09 731 Fondren, Houston, TX       M      30000 333445555          5 Administration           4 987654321 95/01/01                                                                                                                                         
+
+FNAME           M LNAME           SSN       BDATE    ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME              DNUMBER MGR_SSN   MGR_STAR                                                                                                                                         
+--------------- - --------------- --------- -------- ------------------------------ - ---------- --------- ---------- --------------- ---------- --------- --------                                                                                                                                         
+Jennifer        S Wallance        987654321 41/06/20 291 Berry, Bellaire, TX        F      43000 888665555          4 Administration           4 987654321 95/01/01                                                                                                                                         
+Alicia          J Zelaya          999887777 68/01/19 3321 Castle, Spring, TX        F      25000 987654321          4 Administration           4 987654321 95/01/01                                                                                                                                         
+Ramesh          K Narayan         666884444 62/09/15 975 Fire Oak, Humble, TX       M      38000 333445555          5 Administration           4 987654321 95/01/01                                                                                                                                         
+Joyce           A English         453453453 72/07/31 5631 Rice, Houston, TX         F      25000 333445555          5 Administration           4 987654321 95/01/01                                                                                                                                         
+Ahmad           V Jabbar          987987987 69/03/29 980 Dallas, Houston, TX        M      25000 987654321          4 Administration           4 987654321 95/01/01                                                                                                                                         
+James           E Borg            888665555 37/11/10 450 Stone, Houston, TX         M      55000                    1 Headquarters             1 888665555 81/06/19                                                                                                                                         
+Franklin        T Wong            333445555 55/12/08 638 Voss, Houston, TX          M      40000 888665555          5 Headquarters             1 888665555 81/06/19                                                                                                                                         
+John            B Smith           123456789 65/01/09 731 Fondren, Houston, TX       M      30000 333445555          5 Headquarters             1 888665555 81/06/19                                                                                                                                         
+Jennifer        S Wallance        987654321 41/06/20 291 Berry, Bellaire, TX        F      43000 888665555          4 Headquarters             1 888665555 81/06/19                                                                                                                                         
+Alicia          J Zelaya          999887777 68/01/19 3321 Castle, Spring, TX        F      25000 987654321          4 Headquarters             1 888665555 81/06/19                                                                                                                                         
+Ramesh          K Narayan         666884444 62/09/15 975 Fire Oak, Humble, TX       M      38000 333445555          5 Headquarters             1 888665555 81/06/19                                                                                                                                         
+
+FNAME           M LNAME           SSN       BDATE    ADDRESS                        S     SALARY SUPER_SSN        DNO DNAME              DNUMBER MGR_SSN   MGR_STAR                                                                                                                                         
+--------------- - --------------- --------- -------- ------------------------------ - ---------- --------- ---------- --------------- ---------- --------- --------                                                                                                                                         
+Joyce           A English         453453453 72/07/31 5631 Rice, Houston, TX         F      25000 333445555          5 Headquarters             1 888665555 81/06/19                                                                                                                                         
+Ahmad           V Jabbar          987987987 69/03/29 980 Dallas, Houston, TX        M      25000 987654321          4 Headquarters             1 888665555 81/06/19                                                                                                                                         
+
+24 행이 선택되었습니다.
+
+
+--------------------------------------------------------------Q11--------------------------------------------------------------
+SQL> select ALL Salary
+  2  from employee;
+
+    SALARY                                                                                                                                                                                                                                                                                                  
+----------                                                                                                                                                                                                                                                                                                  
+     55000                                                                                                                                                                                                                                                                                                  
+     40000                                                                                                                                                                                                                                                                                                  
+     30000                                                                                                                                                                                                                                                                                                  
+     43000                                                                                                                                                                                                                                                                                                  
+     25000                                                                                                                                                                                                                                                                                                  
+     38000                                                                                                                                                                                                                                                                                                  
+     25000                                                                                                                                                                                                                                                                                                  
+     25000                                                                                                                                                                                                                                                                                                  
+
+8 행이 선택되었습니다.
+
+
+--------------------------------------------------------------Q11A--------------------------------------------------------------
+SQL> select DISTINCT Salary
+  2  from employee;
+
+    SALARY                                                                                                                                                                                                                                                                                                  
+----------                                                                                                                                                                                                                                                                                                  
+     38000                                                                                                                                                                                                                                                                                                  
+     55000                                                                                                                                                                                                                                                                                                  
+     43000                                                                                                                                                                                                                                                                                                  
+     30000                                                                                                                                                                                                                                                                                                  
+     40000                                                                                                                                                                                                                                                                                                  
+     25000                                                                                                                                                                                                                                                                                                  
+
+6 행이 선택되었습니다.
+
+
+--------------------------------------------------------------Q4A--------------------------------------------------------------
+SQL> select DISTINCT Pnumber
+  2  from project, department, employee
+  3  where Dnum = Dnumber and Mgr_ssn = Ssn and Lname = 'Smith'
+  4  UNION
+  5  select DISTINCT Pnumber
+  6  from project, works_on, employee
+  7  where Pnumber = Pno and Essn = Ssn and Lname = 'Smith';
+
+   PNUMBER                                                                                                                                                                                                                                                                                                  
+----------                                                                                                                                                                                                                                                                                                  
+         1                                                                                                                                                                                                                                                                                                  
+         2                                                                                                                                                                                                                                                                                                  
+
+
+--------------------------------------------------------------Q12--------------------------------------------------------------
+SQL> select Fname, Lname
+  2  from employee
+  3  where Address LIKE '%Houston, TX%';
+
+FNAME           LNAME                                                                                                                                                                                                                                                                                       
+--------------- ---------------                                                                                                                                                                                                                                                                             
+James           Borg                                                                                                                                                                                                                                                                                        
+Franklin        Wong                                                                                                                                                                                                                                                                                        
+John            Smith                                                                                                                                                                                                                                                                                       
+Joyce           English                                                                                                                                                                                                                                                                                     
+Ahmad           Jabbar                                                                                                                                                                                                                                                                                      
+
+
+--------------------------------------------------------------Q12A--------------------------------------------------------------
+SQL> select Fname, Lname
+  2  from employee
+  3  where Bdate LIKE '5_______';
+
+FNAME           LNAME                                                                                                                                                                                                                                                                                       
+--------------- ---------------                                                                                                                                                                                                                                                                             
+Franklin        Wong                                                                                                                                                                                                                                                                                        
+
+
+--------------------------------------------------------------Q13--------------------------------------------------------------
+SQL> select E.Fname, E.Lname, 1.1 * E.Salary AS Increased_sal
+  2  from employee E, works_on W, project P
+  3  where E.Ssn = W.Essn and W.Pno = P.Pnumber and P.Pname = 'ProductX';
+
+FNAME           LNAME           INCREASED_SAL                                                                                                                                                                                                                                                               
+--------------- --------------- -------------                                                                                                                                                                                                                                                               
+John            Smith                   33000                                                                                                                                                                                                                                                               
+Joyce           English                 27500                                                                                                                                                                                                                                                               
+
+
+--------------------------------------------------------------Q14--------------------------------------------------------------
+SQL> select *
+  2  from employee
+  3  where (Salary BETWEEN 30000 AND 40000) AND Dno = 5;
+
+FNAME           M LNAME           SSN       BDATE    ADDRESS                        S     SALARY SUPER_SSN        DNO                                                                                                                                                                                       
+--------------- - --------------- --------- -------- ------------------------------ - ---------- --------- ----------                                                                                                                                                                                       
+Franklin        T Wong            333445555 55/12/08 683 Voss, Houston, TX          M      40000 888665555          5                                                                                                                                                                                       
+John            B Smith           123456789 65/01/09 731 Fondren, Houston, TX       M      30000 333445555          5                                                                                                                                                                                       
+Ramesh          K Narayan         666884444 62/09/15 975 Fire Oak, Humble, TX       M      38000 333445555          5                                                                                                                                                                                       
+
+
+
+
+--------------------------------------------------------------Q15--------------------------------------------------------------
+SQL> select D.Dname, E.Lname, E.Fname, P.Pname
+  2  from department D, employee E, works_on W, project P
+  3  where D.Dnumber = E.Dno AND E.Ssn = W.Essn AND W.Pno = P.Pnumber
+  4  order by D.Dname, E.Lname, E.Fname;
+
+DNAME           LNAME           FNAME           PNAME                                                                                                                                                                                                                                                       
+--------------- --------------- --------------- ---------------                                                                                                                                                                                                                                             
+Administration  Jabbar          Ahmad           Computerization                                                                                                                                                                                                                                             
+Administration  Jabbar          Ahmad           Newbenefits                                                                                                                                                                                                                                                 
+Administration  Wallance        Jennifer        Reorganization                                                                                                                                                                                                                                              
+Administration  Wallance        Jennifer        Newbenefits                                                                                                                                                                                                                                                 
+Administration  Zelaya          Alicia          Computerization                                                                                                                                                                                                                                             
+Administration  Zelaya          Alicia          Newbenefits                                                                                                                                                                                                                                                 
+Headquarters    Borg            James           Reorganization                                                                                                                                                                                                                                              
+Research        English         Joyce           ProductX                                                                                                                                                                                                                                                    
+Research        English         Joyce           ProductY                                                                                                                                                                                                                                                    
+Research        Narayan         Ramesh          ProductZ                                                                                                                                                                                                                                                    
+Research        Smith           John            ProductY                                                                                                                                                                                                                                                    
+Research        Smith           John            ProductX                                                                                                                                                                                                                                                    
+Research        Wong            Franklin        Computerization                                                                                                                                                                                                                                             
+Research        Wong            Franklin        Reorganization                                                                                                                                                                                                                                              
+Research        Wong            Franklin        ProductY                                                                                                                                                                                                                                                    
+Research        Wong            Franklin        ProductZ                                                                                                                                                                                                                                                    
+
+16 행이 선택되었습니다.
+
+
+--------------------------------------------------------------Q18--------------------------------------------------------------
+SQL> select Fname, Lname
+  2  from employee
+  3  where Super_ssn IS NULL;
+
+FNAME           LNAME                                                                                                                                                                                                                                                                                       
+--------------- ---------------                                                                                                                                                                                                                                                                             
+James           Borg                                                                                                                                                                                                                                                                                        
+
+
+--------------------------------------------------------------Q4A--------------------------------------------------------------
+SQL> select DISTINCT Pnumber
+  2  from project
+  3  where Pnumber IN
+  4  (select Pnumber
+  5  from project, department, employee
+  6  where Dnum = Dnumber AND
+  7  Mgr_ssn = Ssn AND Lname = 'Smith')
+  8  OR
+  9  Pnumber IN
+ 10  (select Pno
+ 11  from works_on, employee
+ 12  where Essn = Ssn AND Lname = 'Smith');
+
+   PNUMBER                                                                                                                                                                                                                                                                                                  
+----------                                                                                                                                                                                                                                                                                                  
+         1                                                                                                                                                                                                                                                                                                  
+         2                                                                                                                                                                                                                                                                                                  
+
+
+--------------------------------------------------------------Q16--------------------------------------------------------------
+SQL> select E.Fname, E.Lname
+  2  from employee E
+  3  where E.Ssn IN (select E.Ssn
+  4  from dependent D
+  5  where E.Fname = D.Dependent_name
+  6  AND E.Sex = D.Sex);
+
+선택된 레코드가 없습니다.
+
+
+--------------------------------------------------------------Q16A--------------------------------------------------------------
+SQL> select E.Fname, E.Lname
+  2  from employee E, dependent D
+  3  where E.Ssn = D.Essn AND E.Sex = D.SEX AND E.Fname = D.Dependent_name;
+
+선택된 레코드가 없습니다.
+
+
+--------------------------------------------------------------Q16B--------------------------------------------------------------
+
+SQL> select E.Fname, E.Lname
+  2  from employee E
+  3  where exists (select *
+  4  from dependent D
+  5  where E.Ssn = D.Essn AND
+  6  E.Sex = D.Sex AND
+  7  E.Fname = D.Dependent_name);
+
+선택된 레코드가 없습니다.
+
+--------------------------------------------------------------Q6--------------------------------------------------------------
+SQL> select Fname, Lname
+  2  from employee
+  3  where not exists (select *
+  4  from dependent
+  5  where Ssn = Essn);
+
+FNAME           LNAME                                                                                                                                                                                                                                                                                       
+--------------- ---------------                                                                                                                                                                                                                                                                             
+Joyce           English                                                                                                                                                                                                                                                                                     
+Ramesh          Narayan                                                                                                                                                                                                                                                                                     
+James           Borg                                                                                                                                                                                                                                                                                        
+Ahmad           Jabbar                                                                                                                                                                                                                                                                                      
+Alicia          Zelaya                                                                                                                                                                                                                                                                                      
+
+
+--------------------------------------------------------------Q7--------------------------------------------------------------
+SQL> select Fname, Lname
+  2  from employee
+  3  where exists (select *
+  4  from dependent
+  5  where Ssn = Essn)
+  6  AND exists (select *
+  7  from department
+  8  where Ssn = Mgr_ssn);
+
+FNAME           LNAME                                                                                                                                                                                                                                                                                       
+--------------- ---------------                                                                                                                                                                                                                                                                             
+Franklin        Wong                                                                                                                                                                                                                                                                                        
+Jennifer        Wallance                                                                                                                                                                                                                                                                                    
+
+
+--------------------------------------------------------------Q3A--------------------------------------------------------------
+SQL> select Fname, Lname
+  2  from employee
+  3  where not exists ((select Pnumber
+  4  from project
+  5  where Dnum = 5)
+  6  MINUS (select Pno
+  7  from works_on
+  8  where Ssn = Essn));
+
+선택된 레코드가 없습니다.
+
+
+--------------------------------------------------------------Q3B--------------------------------------------------------------
+SQL> select Fname, Lname
+  2  from employee
+  3  where not exists (select *
+  4  from works_on B
+  5  where (B.Pno IN (select Pnumber
+  6  from project
+  7  where Dnum = 5)
+  8  AND
+  9  not exists (select *
+ 10  from works_on C
+ 11  where C.Essn = Ssn
+ 12  AND C.Pno = B.Pno)));
+
+선택된 레코드가 없습니다.
+
+
+--------------------------------------------------------------Q17--------------------------------------------------------------
+SQL> select DISTINCT Essn
+  2  from works_on
+  3  where Pno IN (1, 2, 3);
+
+ESSN                                                                                                                                                                                                                                                                                                        
+---------                                                                                                                                                                                                                                                                                                   
+123456789                                                                                                                                                                                                                                                                                                   
+333445555                                                                                                                                                                                                                                                                                                   
+453453453                                                                                                                                                                                                                                                                                                   
+666884444                                                                                                                                                                                                                                                                                                   
+
+
+--------------------------------------------------------------Q1A--------------------------------------------------------------
+SQL> select Fname, Lname, Address
+  2  from (employee JOIN department ON Dno = Dnumber)
+  3  where Dname = 'Research';
+
+FNAME           LNAME           ADDRESS                                                                                                                                                                                                                                                                     
+--------------- --------------- ------------------------------                                                                                                                                                                                                                                              
+Franklin        Wong            638 Voss, Houston, TX                                                                                                                                                                                                                                                       
+John            Smith           731 Fondren, Houston, TX                                                                                                                                                                                                                                                    
+Ramesh          Narayan         975 Fire Oak, Humble, TX                                                                                                                                                                                                                                                    
+Joyce           English         5631 Rice, Houston, TX                                                                                                                                                                                                                                                      
+
+
+--------------------------------------------------------------Q1B--------------------------------------------------------------
+SQL> select Fname, Lname, Address
+  2  from employee NATURAL JOIN (select Dname, Dnumber AS Dno, Mgr_ssn AS Mssn, Mgr_start_date AS Msdate
+  3  from department) DEPT
+  4  where Dname = 'Research';
+
+FNAME           LNAME           ADDRESS                                                                                                                                                                                                                                                                     
+--------------- --------------- ------------------------------                                                                                                                                                                                                                                              
+Franklin        Wong            638 Voss, Houston, TX                                                                                                                                                                                                                                                       
+John            Smith           731 Fondren, Houston, TX                                                                                                                                                                                                                                                    
+Ramesh          Narayan         975 Fire Oak, Humble, TX                                                                                                                                                                                                                                                    
+Joyce           English         5631 Rice, Houston, TX                                                                                                                                                                                                                                                      
+
+
+--------------------------------------------------------------Q8B--------------------------------------------------------------
+SQL> select E.Lname AS EMPLOYEE_name,
+  2  S.Lname AS Supervisor_name
+  3  from (employee E LEFT OUTER JOIN employee S
+  4  ON E.Super_ssn = S.Ssn);
+
+EMPLOYEE_NAME   SUPERVISOR_NAME                                                                                                                                                                                                                                                                             
+--------------- ---------------                                                                                                                                                                                                                                                                             
+Wallance        Borg                                                                                                                                                                                                                                                                                        
+Wong            Borg                                                                                                                                                                                                                                                                                        
+English         Wong                                                                                                                                                                                                                                                                                        
+Narayan         Wong                                                                                                                                                                                                                                                                                        
+Smith           Wong                                                                                                                                                                                                                                                                                        
+Jabbar          Wallance                                                                                                                                                                                                                                                                                    
+Zelaya          Wallance                                                                                                                                                                                                                                                                                    
+Borg                                                                                                                                                                                                                                                                                                        
+
+8 행이 선택되었습니다.
+
+
+--------------------------------------------------------------Q2A--------------------------------------------------------------
+SQL> select Pnumber, Dnum, Lname, Address, Bdate
+  2  from ((project JOIN department ON
+  3  Dnum = Dnumber) JOIN employee ON
+  4  Mgr_ssn = Ssn)
+  5  where Plocation = 'Stafford';
+
+   PNUMBER       DNUM LNAME           ADDRESS                        BDATE                                                                                                                                                                                                                                  
+---------- ---------- --------------- ------------------------------ --------                                                                                                                                                                                                                               
+        10          4 Wallance        291 Berry, Bellaire, TX        41/06/20                                                                                                                                                                                                                               
+        30          4 Wallance        291 Berry, Bellaire, TX        41/06/20                                                                                                                                                                                                                               
+
+
+--------------------------------------------------------------Q8C--------------------------------------------------------------
+SQL> select E.Lname, S.Lname
+  2  from employee E, employee S
+  3  where E.super_Ssn = S.ssn(+);
+
+LNAME           LNAME                                                                                                                                                                                                                                                                                       
+--------------- ---------------                                                                                                                                                                                                                                                                             
+Wallance        Borg                                                                                                                                                                                                                                                                                        
+Wong            Borg                                                                                                                                                                                                                                                                                        
+English         Wong                                                                                                                                                                                                                                                                                        
+Narayan         Wong                                                                                                                                                                                                                                                                                        
+Smith           Wong                                                                                                                                                                                                                                                                                        
+Jabbar          Wallance                                                                                                                                                                                                                                                                                    
+Zelaya          Wallance                                                                                                                                                                                                                                                                                    
+Borg                                                                                                                                                                                                                                                                                                        
+
+8 행이 선택되었습니다.
+
+
+--------------------------------------------------------------Q19A--------------------------------------------------------------
+SQL> select SUM(Salary) AS Total_Sal,
+  2  MAX(Salary) AS Highest_Sal,
+  3  MIN(Salary) AS Lowest_Sal,
+  4  AVG(Salary) AS Average_Sal
+  5  from employee;
+
+ TOTAL_SAL HIGHEST_SAL LOWEST_SAL AVERAGE_SAL                                                                                                                                                                                                                                                               
+---------- ----------- ---------- -----------                                                                                                                                                                                                                                                               
+    281000       55000      25000       35125                                                                                                                                                                                                                                                               
+
+
+--------------------------------------------------------------Q22--------------------------------------------------------------
+SQL> select COUNT(*)
+  2  from employee, department
+  3  where Dno = Dnumber AND Dname = 'Research';
+
+  COUNT(*)                                                                                                                                                                                                                                                                                                  
+----------                                                                                                                                                                                                                                                                                                  
+         4                                                                                                                                                                                                                                                                                                  
+
+
+--------------------------------------------------------------Q23--------------------------------------------------------------
+SQL> select COUNT(DISTINCT Salary)
+  2  from employee;
+
+COUNT(DISTINCTSALARY)                                                                                                                                                                                                                                                                                       
+---------------------                                                                                                                                                                                                                                                                                       
+                    6                                                                                                                                                                                                                                                                                       
+
+
+--------------------------------------------------------------Q5--------------------------------------------------------------
+SQL> select Lname, Fname
+  2  from employee
+  3  where (select COUNT(*)
+  4  from dependent
+  5  where Ssn = Essn) >= 2;
+
+LNAME           FNAME                                                                                                                                                                                                                                                                                       
+--------------- ---------------                                                                                                                                                                                                                                                                             
+Wong            Franklin                                                                                                                                                                                                                                                                                    
+Smith           John                                                                                                                                                                                                                                                                                        
+
+
+--------------------------------------------------------------Q24--------------------------------------------------------------
+SQL> select Dno, COUNT(*), AVG(Salary)
+  2  from employee
+  3  group by Dno;
+
+       DNO   COUNT(*) AVG(SALARY)                                                                                                                                                                                                                                                                           
+---------- ---------- -----------                                                                                                                                                                                                                                                                           
+         1          1       55000                                                                                                                                                                                                                                                                           
+         5          4       33250                                                                                                                                                                                                                                                                           
+         4          3       31000                                                                                                                                                                                                                                                                           
+
+
+--------------------------------------------------------------Q26--------------------------------------------------------------
+SQL> select Pnumber, Pname, COUNT(*)
+  2  from project, works_on
+  3  where Pnumber = Pno
+  4  group by Pnumber, Pname
+  5  having COUNT(*) > 2;
+
+   PNUMBER PNAME             COUNT(*)                                                                                                                                                                                                                                                                       
+---------- --------------- ----------                                                                                                                                                                                                                                                                       
+        20 Reorganization           3                                                                                                                                                                                                                                                                       
+        10 Computerization          3                                                                                                                                                                                                                                                                       
+        30 Newbenefits              3                                                                                                                                                                                                                                                                       
+         2 ProductY                 3                                                                                                                                                                                                                                                                       
+
+
+--------------------------------------------------------------Q28--------------------------------------------------------------
+SQL> select Dno, COUNT(*)
+  2  from employee
+  3  where Salary > 40000 AND Dno IN
+  4  (select Dno
+  5  from employee
+  6  group by Dno
+  7  having COUNT(*) > 5)
+  8  group by Dno;
+
+선택된 레코드가 없습니다.
+
+
+--------------------------------------------------------------Q28'--------------------------------------------------------------
+SQL> WITH BIGDEPTS (Dno) AS (select Dno
+  2  from employee
+  3  group by Dno
+  4  having COUNT(*) > 1)
+  5  select e.Dno, COUNT(*)
+  6  from employee e, BIGDEPTS b
+  7  where Salary > 40000 AND e.Dno IN b.Dno
+  8  group by e.Dno;
+
+       DNO   COUNT(*)                                                                                                                                                                                                                                                                                       
+---------- ----------                                                                                                                                                                                                                                                                                       
+         4          1                                                                                                                                                                                                                                                                                       
+
+
+--------------------------------------------------------------Q29--------------------------------------------------------------
+SQL> select Super_ssn, Ssn
+  2  from employee
+  3  START WITH Super_ssn IS NULL
+  4  CONNECT BY PRIOR Ssn = Super_ssn
+  5  order SIBLINGS BY Super_ssn ASC;
+
+SUPER_SSN SSN                                                                                                                                                                                                                                                                                               
+--------- ---------                                                                                                                                                                                                                                                                                         
+          888665555                                                                                                                                                                                                                                                                                         
+888665555 333445555                                                                                                                                                                                                                                                                                         
+333445555 123456789                                                                                                                                                                                                                                                                                         
+333445555 453453453                                                                                                                                                                                                                                                                                         
+333445555 666884444                                                                                                                                                                                                                                                                                         
+888665555 987654321                                                                                                                                                                                                                                                                                         
+987654321 987987987                                                                                                                                                                                                                                                                                         
+987654321 999887777                                                                                                                                                                                                                                                                                         
+
+8 행이 선택되었습니다.
+
+SQL> spool off

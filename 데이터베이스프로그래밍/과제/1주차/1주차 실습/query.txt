@@ -1,0 +1,93 @@
+CREATE TABLE CUSTOMER (CustomerID NUMBER NOT NULL CONSTRAINT PK_CUSTOMER PRIMARY KEY,
+	FirstName CHAR(25) NOT NULL,
+	LastName CHAR(25) NOT NULL,
+	Phone CHAR(12),
+	Emaril VARCHAR(100));
+CREATE TABLE INVOICE (InvoiceNumber NUMBER NOT NULL CONSTRAINT PK_INVOICE PRIMARY KEY,
+	CustomerNumber NUMBER NOT NULL CONSTRAINT FK_CUSTOMERID REFERENCES CUSTOMER(CustomerID),
+	DateIn DATE NOT NULL,
+	DateOut DATE,
+	TotalAmount NUMBER(8,2));
+CREATE TABLE INVOICE_ITEM (InvoiceNumber NUMBER NOT NULL CONSTRAINT FK_INVOICENUMBER REFERENCES INVOICE,
+	ItemNumber NUMBER NOT NULL,
+	Item CHAR(50) NOT NULL,
+	Quantity NUMBER NOT NULL,
+	UnitPrice NUMBER(8,2) NOT NULL,
+	CONSTRAINT PK_INVOIECEITEM PRIMARY KEY (InvoiceNumber, ItemNumber));
+
+INSERT INTO CUSTOMER VALUES (1, 'Nikki', 'Kaccation', '723-543-1233', 'Nikki.Kaccation@somewhere.com');
+INSERT INTO CUSTOMER VALUES (2, 'Brenda', 'Catnazaro', '723-543-2344', 'Brenda.Catnazaro@somewhere.com');
+INSERT INTO CUSTOMER VALUES (3, 'Bruce', 'LeCat', '723-543-3455', 'Bruce.LeCat@somewhere.com');
+INSERT INTO CUSTOMER VALUES (4, 'Besty', 'Miller', '725-654-3211', 'Besty.Miller@somewhere.com');
+INSERT INTO CUSTOMER VALUES (5, 'George', 'Miller', '725-654-4322', 'George.Miller@somewhere.com');
+INSERT INTO CUSTOMER VALUES (6, 'Kathy', 'Miller', '723-513-9877', 'Kathy.Miller@somewhere.com');
+INSERT INTO CUSTOMER VALUES (7, 'Besty', 'Miller', '723-513-8766', 'Besty.Miller@elsewhere.com');
+
+INSERT INTO INVOICE VALUES (2015001, 1, to_date('04-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('06-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 158.50);
+INSERT INTO INVOICE VALUES (2015002, 2, to_date('04-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('06-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 25.00);
+INSERT INTO INVOICE VALUES (2015003, 1, to_date('06-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('08-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 49.00);
+INSERT INTO INVOICE VALUES (2015004, 4, to_date('06-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('08-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 17.50);
+INSERT INTO INVOICE VALUES (2015005, 6, to_date('07-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('11-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 12.00);
+INSERT INTO INVOICE VALUES (2015006, 3, to_date('11-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('13-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 152.50);
+INSERT INTO INVOICE VALUES (2015007, 3, to_date('11-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('13-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 7.00);
+INSERT INTO INVOICE VALUES (2015008, 7, to_date('12-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('14-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 140.00);
+INSERT INTO INVOICE VALUES (2015009, 5, to_date('12-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), to_date('14-OCT-2015','dd-mon-yy','NLS_DATE_LANGUAGE=AMERICAN'), 27.00);
+
+INSERT INTO INVOICE_ITEM VALUES (2015001, 1, 'Blouse', 2, 3.50);
+INSERT INTO INVOICE_ITEM VALUES (2015001, 2, 'Dress Shirt', 5, 2.50);
+INSERT INTO INVOICE_ITEM VALUES (2015001, 3, 'Formal Gown', 2, 10.00);
+INSERT INTO INVOICE_ITEM VALUES (2015001, 4, 'Slacks-Mens', 10, 5.00);
+INSERT INTO INVOICE_ITEM VALUES (2015001, 5, 'Slacks-Womens', 10, 6.00);
+INSERT INTO INVOICE_ITEM VALUES (2015001, 6, 'Suit-Mens', 1, 9.00);
+INSERT INTO INVOICE_ITEM VALUES (2015002, 1, 'Dress Shirt', 10, 2.50);
+INSERT INTO INVOICE_ITEM VALUES (2015003, 1, 'Slacks-Mens', 5, 5.00);
+INSERT INTO INVOICE_ITEM VALUES (2015003, 2, 'Slacks-Womens', 4, 6.00);
+INSERT INTO INVOICE_ITEM VALUES (2015004, 1, 'Dress Shirt', 7, 2.50);
+INSERT INTO INVOICE_ITEM VALUES (2015005, 1, 'Blouse', 2, 3.50);
+INSERT INTO INVOICE_ITEM VALUES (2015005, 2, 'Dress Shirt', 2, 2.50);
+INSERT INTO INVOICE_ITEM VALUES (2015006, 1, 'Blouse', 5, 3.50);
+INSERT INTO INVOICE_ITEM VALUES (2015006, 2, 'Dress Shirt', 10, 2.50);
+INSERT INTO INVOICE_ITEM VALUES (2015006, 3, 'Slacks-Mens', 10, 5.00);
+INSERT INTO INVOICE_ITEM VALUES (2015006, 4, 'Slacks-Womens', 10, 6.00);
+INSERT INTO INVOICE_ITEM VALUES (2015007, 1, 'Blouse', 2, 3.50);
+INSERT INTO INVOICE_ITEM VALUES (2015008, 1, 'Blouse', 3, 3.50);
+INSERT INTO INVOICE_ITEM VALUES (2015008, 2, 'Dress Shirt', 12, 2.50);
+INSERT INTO INVOICE_ITEM VALUES (2015008, 3, 'Slacks-Mens', 8, 5.00);
+INSERT INTO INVOICE_ITEM VALUES (2015008, 4, 'Slacks-Womens', 10, 6.00);
+INSERT INTO INVOICE_ITEM VALUES (2015009, 1, 'Suit-Mens', 3, 9.00);
+
+select DateIn, DateOut, Phone
+from customer, invoice
+where CustomerID = CustomerNumber and TotalAmount >= 100.00;
+
+select FirstName, LastName, Phone
+from customer
+where CustomerID in (select CustomerNumber
+from invoice
+where InvoiceNumber in (select InvoiceNumber
+from invoice_item
+where Item = 'Dress Shirt'))
+order by LastName ASC, FIrstName DESC;
+
+select FirstName, LastName, Phone
+from customer, invoice A, invoice_item B
+where CustomerID = A.CustomerNumber and A.InvoiceNumber = B.InvoiceNumber and B.Item = 'Dress Shirt'
+order by LastName ASC, FIrstName DESC;
+
+select FirstName, LastName, Phone
+from customer
+join invoice A
+on CustomerID = A.CustomerNumber
+join invoice_item B
+on A.InvoiceNumber = B.InvoiceNumber
+where B.Item = 'Dress Shirt'
+order by LastName ASC, FIrstName DESC;
+
+select FirstName, LastName, Phone
+from customer
+where CustomerID in (select CustomerNumber
+from invoice A
+join invoice_item B
+on A.InvoiceNumber = B.InvoiceNumber
+where B.Item = 'Dress Shirt')
+order by LastName ASC, FIrstName DESC;

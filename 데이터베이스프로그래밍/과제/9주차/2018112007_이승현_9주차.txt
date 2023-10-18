@@ -1,0 +1,231 @@
+Q1
+------------------------------------------------------------------------------------------------------------------------------
+SQL> DECLARE
+  2  	v_sal_max emp_week9.sal%TYPE;
+  3  	v_sal_min emp_week9.sal%TYPE;
+  4  BEGIN
+  5  	select max(sal), min(sal)
+  6  	into v_sal_max, v_sal_min
+  7  	from emp_week9;
+  8  	dbms_output.put_line('사원중에 최고 급여는 ' || v_sal_max || '원이고, 최저 급여는 ' || v_sal_min || '원이다.');
+  9  END;
+ 10  /
+사원중에 최고 급여는 5000원이고, 최저 급여는 800원이다.                                                                                               
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+Q2
+------------------------------------------------------------------------------------------------------------------------------
+
+SQL> DECLARE
+  2  	i number := 0;
+  3  	j number := 0;
+  4  BEGIN
+  5  	for i in 1..10 loop
+  6  		for j in 1..i loop
+  7  			dbms_output.put('*');
+  8  		end loop;
+  9  		dbms_output.put_line('');
+ 10  	end loop;
+ 11  END;
+ 12  /
+*                                                                                                                                                     
+**                                                                                                                                                    
+***                                                                                                                                                   
+****                                                                                                                                                  
+*****                                                                                                                                                 
+******                                                                                                                                                
+*******                                                                                                                                               
+********                                                                                                                                              
+*********                                                                                                                                             
+**********                                                                                                                                            
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+Q3
+------------------------------------------------------------------------------------------------------------------------------
+
+SQL> DECLARE
+  2  	v_sal emp_week9.sal%TYPE;
+  3  	i BINARY_INTEGER := 0;
+  4  BEGIN
+  5  	select sal
+  6  	into v_sal
+  7  	from emp_week9
+  8  	where empno = 7698;
+  9  	for sal_list in (select grade, losal, hisal from salgrade) loop
+ 10  		if(sal_list.losal <= v_sal and v_sal <= sal_list.hisal) then
+ 11  			dbms_output.put_line('이 사원의 등급은 ' || sal_list.grade || '입니다.');
+ 12  		end if;
+ 13  	end loop;
+ 14  END;
+ 15  /
+이 사원의 등급은 4입니다.                                                                                                                             
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+Q4
+------------------------------------------------------------------------------------------------------------------------------
+
+SQL> select * from emp_week9;
+
+     EMPNO ENAME      JOB              MGR HIREDATE        SAL       COMM     DEPTNO                                                                  
+---------- ---------- --------- ---------- -------- ---------- ---------- ----------                                                                  
+      7369 SMITH      CLERK           7902 80/12/17        800                    20                                                                  
+      7499 ALLEN      SALESMAN        7698 81/02/20       1600        300         30                                                                  
+      7521 WARD       SALESMAN        7698 81/02/22       1250        500         30                                                                  
+      7566 JONES      MANAGER         7839 81/04/02       2975                    20                                                                  
+      7654 MARTIN     SALESMAN        7698 81/09/28       1250       1400         30                                                                  
+      7698 BLAKE      MANAGER         7839 81/05/01       2850                    30                                                                  
+      7782 CLARK      MANAGER         7839 81/06/09       2450                    10                                                                  
+      7788 SCOTT      ANALYST         7566 87/01/13       3000                    20                                                                  
+      7839 KING       PRESIDENT            81/11/17       5000                    10                                                                  
+      7844 TURNER     SALESMAN        7698 81/09/08       1500          0         30                                                                  
+      7876 ADAMS      CLERK           7788 87/10/23       1100                    20                                                                  
+      7900 JAMES      CLERK           7698 81/12/03        950                    30                                                                  
+      7902 FORD       ANALYST         7566 81/12/03       3000                    20                                                                  
+      7934 MILLER     CLERK           7782 82/01/23       1300                    10                                                                  
+
+14 행이 선택되었습니다.
+
+SQL> DECLARE
+  2  	v_emp emp_week9%ROWTYPE;
+  3  BEGIN
+  4  	select mgr, hiredate, deptno
+  5  	into v_emp.mgr, v_emp.hiredate, v_emp.deptno
+  6  	from emp_week9
+  7  	where empno = 7369;
+  8  	insert into emp_week9 values(7370, 'JASON',  'ANALYST', v_emp.mgr, v_emp.hiredate, 900, NULL, v_emp.deptno);
+  9  	commit;
+ 10  END;
+ 11  /
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+SQL> select * from emp_week9;
+
+     EMPNO ENAME      JOB              MGR HIREDATE        SAL       COMM     DEPTNO                                                                  
+---------- ---------- --------- ---------- -------- ---------- ---------- ----------                                                                  
+      7369 SMITH      CLERK           7902 80/12/17        800                    20                                                                  
+      7499 ALLEN      SALESMAN        7698 81/02/20       1600        300         30                                                                  
+      7521 WARD       SALESMAN        7698 81/02/22       1250        500         30                                                                  
+      7566 JONES      MANAGER         7839 81/04/02       2975                    20                                                                  
+      7654 MARTIN     SALESMAN        7698 81/09/28       1250       1400         30                                                                  
+      7698 BLAKE      MANAGER         7839 81/05/01       2850                    30                                                                  
+      7782 CLARK      MANAGER         7839 81/06/09       2450                    10                                                                  
+      7788 SCOTT      ANALYST         7566 87/01/13       3000                    20                                                                  
+      7839 KING       PRESIDENT            81/11/17       5000                    10                                                                  
+      7844 TURNER     SALESMAN        7698 81/09/08       1500          0         30                                                                  
+      7876 ADAMS      CLERK           7788 87/10/23       1100                    20                                                                  
+      7900 JAMES      CLERK           7698 81/12/03        950                    30                                                                  
+      7902 FORD       ANALYST         7566 81/12/03       3000                    20                                                                  
+      7934 MILLER     CLERK           7782 82/01/23       1300                    10                                                                  
+      7370 JASON      ANALYST         7902 80/12/17        900                    20                                                                  
+
+15 행이 선택되었습니다.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+Q5
+------------------------------------------------------------------------------------------------------------------------------
+
+SQL> select * from emp_week9;
+
+     EMPNO ENAME      JOB              MGR HIREDATE        SAL       COMM     DEPTNO                                                                  
+---------- ---------- --------- ---------- -------- ---------- ---------- ----------                                                                  
+      7369 SMITH      CLERK           7902 80/12/17        800                    20                                                                  
+      7499 ALLEN      SALESMAN        7698 81/02/20       1600        300         30                                                                  
+      7521 WARD       SALESMAN        7698 81/02/22       1250        500         30                                                                  
+      7566 JONES      MANAGER         7839 81/04/02       2975                    20                                                                  
+      7654 MARTIN     SALESMAN        7698 81/09/28       1250       1400         30                                                                  
+      7698 BLAKE      MANAGER         7839 81/05/01       2850                    30                                                                  
+      7782 CLARK      MANAGER         7839 81/06/09       2450                    10                                                                  
+      7788 SCOTT      ANALYST         7566 87/01/13       3000                    20                                                                  
+      7839 KING       PRESIDENT            81/11/17       5000                    10                                                                  
+      7844 TURNER     SALESMAN        7698 81/09/08       1500          0         30                                                                  
+      7876 ADAMS      CLERK           7788 87/10/23       1100                    20                                                                  
+      7900 JAMES      CLERK           7698 81/12/03        950                    30                                                                  
+      7902 FORD       ANALYST         7566 81/12/03       3000                    20                                                                  
+      7934 MILLER     CLERK           7782 82/01/23       1300                    10                                                                  
+      7370 JASON      ANALYST         7902 80/12/17        900                    20                                                                  
+
+15 행이 선택되었습니다.
+
+SQL> DECLARE
+  2  	TYPE sal_table IS TABLE OF emp_week9.sal%TYPE INDEX BY BINARY_INTEGER;
+  3  	TYPE empno_table IS TABLE OF emp_week9.empno%TYPE INDEX BY BINARY_INTEGER;
+  4  	sal_tab sal_table;
+  5  	empno_tab empno_table;
+  6  	i BINARY_INTEGER := 0;
+  7  BEGIN
+  8  	for emp_list in (select empno, sal from emp_week9 where deptno = 10) loop
+  9  		i := i + 1;
+ 10  		sal_tab(i) := emp_list.sal * 0.1;
+ 11  		empno_tab(i) := emp_list.empno;
+ 12  		update emp_week9
+ 13  		set sal = sal + sal_tab(i)
+ 14  		where empno = empno_tab(i);
+ 15  	end loop;
+ 16  	commit;
+ 17  END;
+ 18  /
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+SQL> select * from emp_week9;
+
+     EMPNO ENAME      JOB              MGR HIREDATE        SAL       COMM     DEPTNO                                                                  
+---------- ---------- --------- ---------- -------- ---------- ---------- ----------                                                                  
+      7369 SMITH      CLERK           7902 80/12/17        800                    20                                                                  
+      7499 ALLEN      SALESMAN        7698 81/02/20       1600        300         30                                                                  
+      7521 WARD       SALESMAN        7698 81/02/22       1250        500         30                                                                  
+      7566 JONES      MANAGER         7839 81/04/02       2975                    20                                                                  
+      7654 MARTIN     SALESMAN        7698 81/09/28       1250       1400         30                                                                  
+      7698 BLAKE      MANAGER         7839 81/05/01       2850                    30                                                                  
+      7782 CLARK      MANAGER         7839 81/06/09       2695                    10                                                                  
+      7788 SCOTT      ANALYST         7566 87/01/13       3000                    20                                                                  
+      7839 KING       PRESIDENT            81/11/17       5500                    10                                                                  
+      7844 TURNER     SALESMAN        7698 81/09/08       1500          0         30                                                                  
+      7876 ADAMS      CLERK           7788 87/10/23       1100                    20                                                                  
+      7900 JAMES      CLERK           7698 81/12/03        950                    30                                                                  
+      7902 FORD       ANALYST         7566 81/12/03       3000                    20                                                                  
+      7934 MILLER     CLERK           7782 82/01/23       1430                    10                                                                  
+      7370 JASON      ANALYST         7902 80/12/17        900                    20                                                                  
+
+15 행이 선택되었습니다.
+
+SQL> spool off

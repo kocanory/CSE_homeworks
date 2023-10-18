@@ -1,0 +1,304 @@
+SQL> CREATE OR REPLACE PROCEDURE REGISTER_MEMBER(MemberId in varchar2, Password in varchar2, Name in varchar2, Sex in char, Birthday in date, Email in varchar2, Phone in char)
+  2  IS
+  3  	nCnt number;
+  4  begin
+  5  	select count(*)
+  6  	into nCnt
+  7  	from member m
+  8  	where m.MemberID = MemberId;
+  9  
+ 10  	if(nCnt = 0) then
+ 11  		insert into member values(MemberId, null, Password, Name, Sex, Birthday, Email, Phone, 0);
+ 12  		insert into general values(MemberId, SYSDATE);
+ 13  
+ 14  	else
+ 15  		dbms_output.put_line('이미 회원가입된 계정입니다.');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE CHANGE_PARTNERSHIP
+  2  (MemberId in varchar2, Partnership in number, nSalary in number)
+  3  IS
+  4  	nPartnership number;
+  5  begin
+  6  
+  7  	select isPartner
+  8  	into nPartnership
+  9  	from member m
+ 10  	where m.MemberID = MemberId;
+ 11  
+ 12  	if(nPartnership = 0 and Partnership = 1) then
+ 13  		insert into partner values(MemberId, nSalary, SYSDATE);
+ 14  		delete from general where MemberID = MemberId;
+ 15  
+ 16  	elsif(nPartnership = 1 and Partnership = 0) then
+ 17  		insert into general values(MemberId, SYSDATE);
+ 18  		delete from partner where MemberID = MemberId;
+ 19  	end if;
+ 20  end;
+ 21  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE SUBSCRIBE
+  2  (MemberId in varchar2, subscriber in varchar2)
+  3  IS
+  4  	nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from member m
+  9  	where m.MemberID = subscriber;
+ 10  
+ 11 	if(nCnt > 0) then
+ 12  		update member set Subscriber = subscriber where MemberID = MemberId;
+ 13  
+ 14  	else
+ 15  		dbms_output.put_line('현재 존재하지 않는 계정을 구독하려고 합니다');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE UPLOAD_VIDEO
+  2  (VideoId in varchar2, Title in varchar2, Hits in number, Goods in number, Hates in number, MemberId in varchar2, AdvertisementId in varchar2)
+  3  IS
+  4  	begin
+  5  	insert into video values(VideoId, Title, SYSDATE, Hits, Goods, Hates, MemberId, AdvertisementId);
+  6  end;
+  7  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE BROADCAST
+  2  (BroadcastId in varchar2, Title in varchar2, BroadcastDate in date := SYSDATE, Hits in number, Goods in number, Hates in number, MemberId in varchar2, AdvertisementId in varchar2)
+  3  IS
+  4  	begin
+  5  	insert into broadcasting values(BroadcastId, Title, BroadcastDate, Hits, Goods, Hates, MemberId, AdvertisementId);
+  6  end;
+  7  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE REGISTER_COMPANY
+  2  (CompanyId in varchar2, Address in varchar2, Name in varchar2, Phone in char, Zip in char)
+  3  IS
+  4  	nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from company c
+  9  	where c.CompanyID = CompanyId;
+ 10  
+ 11  	if(nCnt = 0) then
+ 12  		insert into company values(CompanyId, Name, Address, Phone, Zip);
+ 13  
+ 14  	else
+ 15  		dbms_output.put_line('이미 등록된 회사입니다.');
+ 16  	end if;
+ 17  end;
+ 18  
+ 19  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE MAKE_COMMUNITY
+  2  (CommunityId in varchar2, MemberId in varchar2, Content in varchar2)
+  3  IS
+  4  	nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from community c
+  9  where c.MemberID = MemberId;
+ 10  
+ 11  if(nCnt = 0) then
+ 12  	insert into community values(CommunityId, MemberId, Content);
+ 13  
+ 14  else
+ 15  	dbms_output.put_line('이미 커뮤니티가 존재합니다.');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE MAKE_COMMENT
+  2  (CommentId in varchar2, RecommentId in varchar2, CommentDate in date := SYSDATE, Content in varchar2, Goods in number, Hates in number, MemberId in varchar2, CommentedSiteId in varchar2, type in number)
+  3  IS
+  4  begin
+  5  	if(type = 0) then
+  6  		insert into video_comment values(CommentId, RecommentId, Goods, Hates, CommentDate, Content, MemberId, CommentedSiteId);
+  7  	elsif(type = 1) then
+  8  		insert into commu_comment values(CommentId, RecommentId, Goods, Hates, CommentDate, Content, CommentedSiteId, MemberId);
+  9  	else
+ 10  		insert into broad_comment values(CommentId, RecommentId, CommentDate, Content, CommentedSiteId, MemberId);
+ 11  	end if;
+ 12  end;
+ 13  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE DONATING
+  2  (MemberId in varchar2, BroadcastId in varchar2, Price in number, DonateDate in Date := SYSDATE, Content in varchar2)
+  3  IS
+  4  	nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from donate d
+  9  	where d.MemberID = MemberId and d.BroadCastID = BroadcastId;
+ 10  
+ 11  	if(nCnt = 0) then
+ 12  		insert into donate values(MemberId, BroadcastId, Price, DonateDate, Content);
+ 13  
+ 14  	else
+ 15  		dbms_output.put_line('이미 후원하셨습니다..');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE MAKE_PLAYLIST
+  2  (Name in varchar2, MemberId in varchar2, VideoId in varchar2)
+  3  IS
+  4  	nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from playlist
+  9  	where MemberID = MemberId and VideoID = VideoId;
+ 10  
+ 11  	if(nCnt = 0) then
+ 12  		insert into playlist values(Name, MemberId, VideoId);
+ 13  
+ 14  	else
+ 15  		dbms_output.put_line('이미 플레이리스트에 추가되었습니다.');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE UPDATE_POPULARITY
+  2  (VideoId in varchar2, Title in varchar2, Hits in number, Cnt in number)
+  3  IS
+  4  	nRanking number := 0;
+  5  	nCnt number :=  0;
+  6  	CURSOR cur IS
+  7  	select VideoID, Title, Hits
+  8  	from (select VideoID, Title, Hits from video order by Hits asc)
+  9  	where rownum <= Cnt;
+ 10  begin
+ 11  	select count(*)
+ 12  	into nCnt
+ 13  	from popularity;
+ 14  
+ 15  	if nCnt > 0 then
+ 16  		for video_list in cur loop
+ 17  			nRanking := nRanking + 1;
+ 18  			update popularity set VideoID = video_list.VideoID, Title = video_list.Title, Hits = video_list.Hits
+ 19  			where Ranking = nRanking;
+ 20  		end loop;
+ 21  	else
+ 22  		for video_list in cur loop
+ 23  			nRanking := nRanking + 1;
+ 24  			insert into popularity values(video_list.VideoID, video_list.Title, video_list.Hits, nRanking);
+ 25  		end loop;
+ 26  	end if;
+ 27  end;
+ 28  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE MAKE_FAQ
+  2  (FAQId in varchar2, nContent in varchar2)
+  3  IS
+  4  	nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from FAQ
+  9  	where Content = nContent;
+ 10  
+ 11  	if(nCnt = 0) then
+ 12  		insert into FAQ values(FAQId, nContent);
+ 13  
+ 14  	else
+ 15  		dbms_output.put_line('이미 등록한 질문입니다.');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE MAKE_ANSWER
+  2  (AnswerId in varchar2, FAQId in varchar2, nContent in varchar2)
+  3  IS
+  4  	nCnt number;
+  5  begin
+  6  	select count(*)
+  7  	into nCnt
+  8  	from FAQ
+  9  	where FAQ_ID = FAQId;
+ 10  
+ 11  	if(nCnt = 0) then
+ 12  		insert into answer values(AnswerId, FAQId, nContent);
+ 13  
+ 14  	else
+ 15  		dbms_output.put_line('없는 질문 입니다.');
+ 16  	end if;
+ 17  end;
+ 18  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE CHANGE_COMMENT
+  2  (CommentId in varchar2, nContent in varchar2, type in number)
+  3  IS
+  4  begin
+  5  	if(type = 0) then
+  6  		update video_comment set Content = nContent where CommentID = CommentId;
+  7  	elsif(type = 1) then
+  8  		update commu_comment set Content = nContent where CommentID = CommentId;
+  9  	else
+ 10  		update broad_comment set Content = nContent where CommentID = CommentId;
+ 11  	end if;
+ 12  end;
+ 13  /
+
+프로시저가 생성되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE CHANGE_TITLE
+  2  (ID in varchar2, nTitle in varchar2, type in number)
+  3  IS
+  4  	nCnt number := 0;
+  5  begin
+  6  	if(type = 0) then
+  7  		update video set Title = nTitle where VideoID = ID;
+  8  
+  9  	select count(*)
+ 10  	into nCnt
+ 11  	from popularity
+ 12  	where VideoID = ID;
+ 13  
+ 14  		if(nCnt > 0) then
+ 15  			update popularity set Title = nTitle where VideoID = ID;
+ 16  		end if;
+ 17  	elsif(type = 1) then
+ 18  		update broadcasting set Title = nTitle where BroadcastID = ID;
+ 19  	else
+ 20  		update advertisement set Title = nTitle where AdvertisementID = ID;
+ 21  	end if;
+ 22  end;
+ 23  
+ 24  /
+
+프로시저가 생성되었습니다.
+
+SQL> spool off

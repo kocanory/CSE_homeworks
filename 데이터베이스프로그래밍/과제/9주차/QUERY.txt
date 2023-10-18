@@ -1,0 +1,69 @@
+DECLARE
+	v_sal_max emp_week9.sal%TYPE;
+	v_sal_min emp_week9.sal%TYPE;
+BEGIN
+	select max(sal), min(sal)
+	into v_sal_max, v_sal_min
+	from emp_week9;
+	dbms_output.put_line('사원중에 최고 급여는 ' || v_sal_max || '원이고, 최저 급여는 ' || v_sal_min || '원이다.');
+END;
+
+DECLARE
+	i number := 0;
+	j number := 0;
+BEGIN
+	for i in 1..10 loop
+		for j in 1..i loop
+			dbms_output.put('*');
+		end loop;
+		dbms_output.put_line('');
+	end loop;	
+END;
+
+DECLARE
+	v_sal emp_week9.sal%TYPE;
+	i BINARY_INTEGER := 0;
+BEGIN
+	select sal
+	into v_sal
+	from emp_week9
+	where empno = 7698;
+	for sal_list in (select grade, losal, hisal from salgrade) loop
+		if(sal_list.losal <= v_sal and v_sal <= sal_list.hisal) then
+			dbms_output.put_line('이 사원의 등급은 ' || sal_list.grade || '입니다.');
+		end if;
+	end loop;
+END;
+
+DECLARE
+	v_emp emp_week9%ROWTYPE;
+BEGIN
+	select mgr, hiredate, deptno
+	into v_emp.mgr, v_emp.hiredate, v_emp.deptno
+	from emp_week9
+	where empno = 7369;
+	insert into emp_week9 values(7370, 'JASON',  'ANALYST', v_emp.mgr, v_emp.hiredate, 900, NULL, v_emp.deptno);
+	commit;
+END;
+
+select * from emp_week9;
+
+DECLARE
+	TYPE sal_table IS TABLE OF emp_week9.sal%TYPE INDEX BY BINARY_INTEGER;
+	TYPE empno_table IS TABLE OF emp_week9.empno%TYPE INDEX BY BINARY_INTEGER;
+	sal_tab sal_table;
+	empno_tab empno_table;
+	i BINARY_INTEGER := 0;
+BEGIN
+	for emp_list in (select empno, sal from emp_week9 where deptno = 10) loop
+		i := i + 1;
+		sal_tab(i) := emp_list.sal * 0.1;
+		empno_tab(i) := emp_list.empno;
+		update emp_week9
+		set sal = sal + sal_tab(i)
+		where empno = empno_tab(i);
+	end loop;
+	commit;
+END;
+
+select * from emp_week9;

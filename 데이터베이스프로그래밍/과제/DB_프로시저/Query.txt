@@ -1,0 +1,79 @@
+drop table popularity cascade constraint;
+drop table answer cascade constraint;
+drop table faq cascade constraint;
+drop table commu_comment cascade constraint;
+drop table community cascade constraint;
+drop table playlist cascade constraint;
+drop table video_comment cascade constraint;
+drop table general cascade constraint;
+drop table partner cascade constraint;
+drop table donate cascade constraint;
+drop table broad_comment cascade constraint;
+drop table broadcasting cascade constraint;
+drop table video cascade constraint;
+drop table advertisement cascade constraint;
+drop table company cascade constraint;
+drop table member cascade constraint;
+
+
+
+
+
+
+
+insert into member values('abcd', null, '1234', 'kim', 'm', TO_DATE('1999-06-03' , 'YYYY-MM-DD'), 'abcd@naver.com', '010-333-3333', 1);
+insert into member values('efgh', null, '5678', 'lee', 'f', TO_DATE('1994-06-03' , 'YYYY-MM-DD'), 'efgh@naver.com', '010-111-1111', 2);
+insert into member values('ijkl', 'abcd', '0000', 'choi', 'm', null, 'ijkl@naver.com', null, 1);
+insert into member values('mnop', null, '1357', 'park', null, null, 'mnop@naver.com', '010-555-5555', 2);
+insert into member values('qrxt', 'ijkl', '2468', 'jeong', null, TO_DATE('1999-06-03' , 'YYYY-MM-DD'), 'qrxt@naver.com', null, 1);
+
+insert into general values('abcd', SYSDATE);
+insert into general values('ijkl', SYSDATE);
+insert into general values('qrxt', SYSDATE);
+
+insert into partner values('efgh', 10000, SYSDATE);
+insert into partner values('mnop', 10000, SYSDATE);
+
+insert into company values('sam', 'samsung', null, '02-222-2222', null);
+insert into company values('app', 'apple', 'America', '045-333-3333', null);
+
+insert into advertisement values('gal', 'galaxy', '1000', 'sam');
+insert into advertisement values('iph', 'iphone', '1000', 'app');
+
+insert into video values('0001', 'playthesoccer', SYSDATE, 0, 0, 0, 'abcd', 'gal');
+insert into video values('0002', 'unboxing', SYSDATE, null, null, null, 'efgh', 'iph');
+insert into video values('0003', 'lol', SYSDATE, 0, 0, 0, 'abcd', null);
+insert into video values('0004', 'game', SYSDATE, null, null, null, 'mnop', null);
+insert into video values('0005', 'eating', SYSDATE, 0, 0, 0, 'efgh', 'gal');
+
+insert into broadcasting values('0001', 'just', SYSDATE, 0, 0, 0, 'abcd', 'gal');
+
+insert into broad_comment values('0001', null, SYSDATE, 'hello', '0001', 'efgh');
+insert into broad_comment values('0002', '0001', SYSDATE, 'hello', '0001', 'abcd');
+
+insert into donate values('mnop', '0001', '10000', SYSDATE, 'lets play game!');
+
+insert into video_comment values('0001', null, 0, 0, SYSDATE, 'fun!', 'ijkl', '0001');
+insert into video_comment values('0002', '0001', 0, 0, SYSDATE, 'thanks', 'abcd', '0001');
+
+insert into playlist values('sport', 'mnop', '0001');
+
+insert into community values('0001', 'abcd', 'welcome to my world');
+insert into community values('0002', 'qrxt', 'hello world');
+
+insert into commu_comment values('0001', null, 0, 0, SYSDATE, 'first', '0001', 'ijkl');
+insert into commu_comment values('0002', '0001', 0, 0, SYSDATE, 'second', '0001', 'efgh');
+
+insert into FAQ values('0001', 'how do you search video?');
+insert into FAQ values('0002', 'where is the setting page?');
+insert into FAQ values('0003', 'i want to play video in offline');
+insert into FAQ values('0004', 'how do you subscribe user?');
+insert into FAQ values('0005', 'happy new year');
+
+insert into Answer values('0001', 'click search bar and type title', '0001');
+insert into Answer values('0002', 'happy new year too!', '0005');
+
+insert into popularity values('0001', 'playthesoccer', 0, 1);
+insert into popularity values('0003', 'lol', 0, 2);
+insert into popularity values('0005', 'eating', 0, 3);
+ 

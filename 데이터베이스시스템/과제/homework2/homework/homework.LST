@@ -1,0 +1,343 @@
+SQL> INSERT INTO EMPLOYEE VALUES('James','E','Borg','888665555',to_date('1937-11-10','yyyy-mm-dd'),'450 Stone, Houston, TX','M','55000',NULL,'1');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Franklin','T','Wong','333445555',to_date('1955-12-08','yyyy-mm-dd'),'683 Voss, Houston, TX','M','40000','888665555','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('John','B','Smith','123456789',to_date('1965-01-09','yyyy-mm-dd'),'731 Fondren, Houston, TX','M','30000','333445555','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Alicia','J','Zelaya','999887777',to_date('1968-01-19','yyyy-mm-dd'),'3321 Castle, Spring, TX','F','25000','987654321','4');
+INSERT INTO EMPLOYEE VALUES('Alicia','J','Zelaya','999887777',to_date('1968-01-19','yyyy-mm-dd'),'3321 Castle, Spring, TX','F','25000','987654321','4')
+*
+1행에 오류:
+ORA-02291: 무결성 제약조건(ST2018112007.SYS_C00231428)이 위배되었습니다- 부모
+키가 없습니다 
+
+
+SQL> INSERT INTO EMPLOYEE VALUES('Jennifer','S','Wallance','987654321',to_date('1941-06-20','yyyy-mm-dd'),'291 Berry, Bellaire, TX','F','43000','888665555','4');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Alicia','J','Zelaya','999887777',to_date('1968-01-19','yyyy-mm-dd'),'3321 Castle, Spring, TX','F','25000','987654321','4');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Ramesh','K','Narayan','666884444',to_date('1962-09-15','yyyy-mm-dd'),'975 Fire Oak, Humble, TX','M','38000','333445555','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Joyce','A','English','453453453',to_date('1972-07-31','yyyy-mm-dd'),'5631 Rice, Houston, TX','F','25000','333445555','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Ahmad','V','Jabbar','987987987',to_date('1969-03-29','yyyy-mm-dd'),'980 Dallas, Houston, TX','M','25000','987654321','4');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from employee;
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO                
+------------------------------ - ---------- --------- ----------                
+James           E Borg            888665555 37/11/10                            
+450 Stone, Houston, TX         M      55000                    1                
+                                                                                
+Franklin        T Wong            333445555 55/12/08                            
+683 Voss, Houston, TX          M      40000 888665555          5                
+                                                                                
+John            B Smith           123456789 65/01/09                            
+731 Fondren, Houston, TX       M      30000 333445555          5                
+                                                                                
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO                
+------------------------------ - ---------- --------- ----------                
+Jennifer        S Wallance        987654321 41/06/20                            
+291 Berry, Bellaire, TX        F      43000 888665555          4                
+                                                                                
+Alicia          J Zelaya          999887777 68/01/19                            
+3321 Castle, Spring, TX        F      25000 987654321          4                
+                                                                                
+Ramesh          K Narayan         666884444 62/09/15                            
+975 Fire Oak, Humble, TX       M      38000 333445555          5                
+                                                                                
+
+FNAME           M LNAME           SSN       BDATE                               
+--------------- - --------------- --------- --------                            
+ADDRESS                        S     SALARY SUPER_SSN        DNO                
+------------------------------ - ---------- --------- ----------                
+Joyce           A English         453453453 72/07/31                            
+5631 Rice, Houston, TX         F      25000 333445555          5                
+                                                                                
+Ahmad           V Jabbar          987987987 69/03/29                            
+980 Dallas, Houston, TX        M      25000 987654321          4                
+                                                                                
+
+8 행이 선택되었습니다.
+
+SQL> set linesize 150
+SQL> set pagesize 150
+SQL> select * from employee;
+
+FNAME           M LNAME           SSN       BDATE    ADDRESS                        S     SALARY SUPER_SSN        DNO                                 
+--------------- - --------------- --------- -------- ------------------------------ - ---------- --------- ----------                                 
+James           E Borg            888665555 37/11/10 450 Stone, Houston, TX         M      55000                    1                                 
+Franklin        T Wong            333445555 55/12/08 683 Voss, Houston, TX          M      40000 888665555          5                                 
+John            B Smith           123456789 65/01/09 731 Fondren, Houston, TX       M      30000 333445555          5                                 
+Jennifer        S Wallance        987654321 41/06/20 291 Berry, Bellaire, TX        F      43000 888665555          4                                 
+Alicia          J Zelaya          999887777 68/01/19 3321 Castle, Spring, TX        F      25000 987654321          4                                 
+Ramesh          K Narayan         666884444 62/09/15 975 Fire Oak, Humble, TX       M      38000 333445555          5                                 
+Joyce           A English         453453453 72/07/31 5631 Rice, Houston, TX         F      25000 333445555          5                                 
+Ahmad           V Jabbar          987987987 69/03/29 980 Dallas, Houston, TX        M      25000 987654321          4                                 
+
+8 행이 선택되었습니다.
+
+SQL> commit
+  2  ;
+
+커밋이 완료되었습니다.
+
+SQL> insert into department values('Research', '5', '333445555',to_date('1988-05-22','yyyy-mm-dd'));
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into department values('Administration', '4', '987654321',to_date('1995-01-01','yyyy-mm-dd'));
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into department values('Headquarters', '1', '888665555',to_date('1981-06-19','yyyy-mm-dd'));
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from department
+  2  ;
+
+DNAME              DNUMBER MGR_SSN   MGR_STAR                                                                                                         
+--------------- ---------- --------- --------                                                                                                         
+Research                 5 333445555 88/05/22                                                                                                         
+Administration           4 987654321 95/01/01                                                                                                         
+Headquarters             1 888665555 81/06/19                                                                                                         
+
+SQL> insert into dept_locations values('1', 'Houston');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dept_locations values('4', 'Stafford');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dept_locations values('5', 'Bellaire');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dept_locations values('5', 'Sugarland');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dept_locations values('5', 'Houston');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from dept_locations
+  2  ;
+
+   DNUMBER DLOCATION                                                                                                                                  
+---------- ---------------                                                                                                                            
+         1 Houston                                                                                                                                    
+         4 Stafford                                                                                                                                   
+         5 Bellaire                                                                                                                                   
+         5 Houston                                                                                                                                    
+         5 Sugarland                                                                                                                                  
+
+SQL> insert into works_on values('123456789','1','32.5');
+insert into works_on values('123456789','1','32.5')
+*
+1행에 오류:
+ORA-02291: 무결성 제약조건(ST2018112007.SYS_C00231456)이 위배되었습니다- 부모 키가 없습니다 
+
+
+SQL> insert into project values('ProductX', '1','Bellaire','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into project values('ProductY', '2','Sugarland','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into project values('ProductZ', '3','Houston','5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into project values('Computerization', '10','Stafford','4');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into project values('Reorganization', '20','Houston','1');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into project values('Newbenefits', '30','Stafford','4');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from project;
+
+PNAME              PNUMBER PLOACTION             DNUM                                                                                                 
+--------------- ---------- --------------- ----------                                                                                                 
+ProductX                 1 Bellaire                 5                                                                                                 
+ProductY                 2 Sugarland                5                                                                                                 
+ProductZ                 3 Houston                  5                                                                                                 
+Computerization         10 Stafford                 4                                                                                                 
+Reorganization          20 Houston                  1                                                                                                 
+Newbenefits             30 Stafford                 4                                                                                                 
+
+6 행이 선택되었습니다.
+
+SQL> insert into works_on values('123456789','1','32.5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('123456789','2','7.5');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('666884444','3','40.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('453453453','1','20.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('453453453','2','20.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('333445555','2','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('333445555','3','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('333445555','10','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('333445555','20','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('999887777','30','30.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('999887777','10','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('987987987','10','35.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('987987987','30','5.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('987654321','30','20.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('987654321','20','15.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into works_on values('888665555','20','10.0');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from works_on
+  2  ;
+
+ESSN             PNO      HOURS                                                                                                                       
+--------- ---------- ----------                                                                                                                       
+123456789          1       32.5                                                                                                                       
+123456789          2        7.5                                                                                                                       
+666884444          3         40                                                                                                                       
+453453453          1         20                                                                                                                       
+453453453          2         20                                                                                                                       
+333445555          2         10                                                                                                                       
+333445555          3         10                                                                                                                       
+333445555         10         10                                                                                                                       
+333445555         20         10                                                                                                                       
+999887777         30         30                                                                                                                       
+999887777         10         10                                                                                                                       
+987987987         10         35                                                                                                                       
+987987987         30          5                                                                                                                       
+987654321         30         20                                                                                                                       
+987654321         20         15                                                                                                                       
+888665555         20         10                                                                                                                       
+
+16 행이 선택되었습니다.
+
+SQL> insert into dependent values('333445555','Alice','F',to_date('1986-04-05','yyyy-mm-dd'),'Daughter');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('333445555','Theodore','M',to_date('1983-10-25','yyyy-mm-dd'),'Son');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('333445555','Joy','F',to_date('1958-05-03','yyyy-mm-dd'),'Spouse');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('987654321','Abner','M',to_date('1942-02-28','yyyy-mm-dd'),'Spouse');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('123456789','Michael','M',to_date('1988-01-04','yyyy-mm-dd'),'Son');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('123456789','Alice','F',to_date('1988-12-30','yyyy-mm-dd'),'Daughter');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into dependent values('123456789','Elizabeth','F',to_date('1967-05-95','yyyy-mm-dd'),'Spouse');
+insert into dependent values('123456789','Elizabeth','F',to_date('1967-05-95','yyyy-mm-dd'),'Spouse')
+                                                                 *
+1행에 오류:
+ORA-01847: 달의 날짜는 1에서 말일 사이어야 합니다 
+
+
+SQL> insert into dependent values('123456789','Elizabeth','F',to_date('1967-05-05','yyyy-mm-dd'),'Spouse');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select * from dependent;
+
+ESSN      DEPENDENT_NAME  S BDATE    RELATION                                                                                                         
+--------- --------------- - -------- --------                                                                                                         
+333445555 Alice           F 86/04/05 Daughter                                                                                                         
+333445555 Theodore        M 83/10/25 Son                                                                                                              
+333445555 Joy             F 58/05/03 Spouse                                                                                                           
+987654321 Abner           M 42/02/28 Spouse                                                                                                           
+123456789 Michael         M 88/01/04 Son                                                                                                              
+123456789 Alice           F 88/12/30 Daughter                                                                                                         
+123456789 Elizabeth       F 67/05/05 Spouse                                                                                                           
+
+7 행이 선택되었습니다.
+
+SQL> commit;
+
+커밋이 완료되었습니다.
+
+SQL> spool off

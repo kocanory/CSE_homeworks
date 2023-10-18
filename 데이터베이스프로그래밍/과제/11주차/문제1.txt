@@ -1,0 +1,11 @@
+SELECT t_max
+	INTO nTeachMax
+	FROM teach
+	WHERE t_year= nYear AND t_semester = nSemester
+	AND c_id = sCourseId AND c_id_no= nCourseIdNo;
+
+CURSOR enroll_cursor(sCourseId VARCHAR, nCourseIdNo NUMBER, nYear NUMBER, nSemester NUMBER) IS
+	SELECT s_id
+	FROM enroll
+	WHERE e_year = nYear AND e_semester = nSemester
+	AND c_id = sCourseId AND c_id_no = nCourseIdNo;

@@ -1,0 +1,244 @@
+Q1
+----------------------------------------------------------------------------------------------------------------------
+SQL> DECLARE
+  2  	v_job emp_week9.job%TYPE;
+  3  	cnt NUMBER := 0;
+  4  BEGIN
+  5  	dbms_output.put_line('직책명');
+  6  	dbms_output.put_line('-------');
+  7  
+  8  	for job_list in(select distinct job from emp_week9 order by job asc) loop
+  9  		v_job := job_list.job;
+ 10  		dbms_output.put_line(v_job);
+ 11  		cnt := cnt + 1;
+ 12  	end loop;
+ 13  	dbms_output.put_line(chr(10)||chr(13)||'직책의 수 : '|| cnt);
+ 14  END;
+ 15  /
+직책명                                                                                                                                                
+-------                                                                                                                                               
+ANALYST                                                                                                                                               
+CLERK                                                                                                                                                 
+MANAGER                                                                                                                                               
+PRESIDENT                                                                                                                                             
+SALESMAN                                                                                                                                              
+
+
+직책의 수 : 5                                                                                                                                       
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+Q2
+----------------------------------------------------------------------------------------------------------------------
+SQL> DECLARE
+  2  	v_dept dept_week9%ROWTYPE;
+  3  	CURSOR dept_list IS
+  4  	select rpad(deptno, 10), rpad(dname, 10), rpad(loc, 10)
+  5  	from dept_week9
+  6  	order by deptno asc;
+  7  BEGIN
+  8  	dbms_output.put_line('부서번호'||'    '||'부서명'||'       '||'위'||'    '||'치');
+  9  	dbms_output.put_line('-------'||'     '||'-------'||'      '||'-------');
+ 10  	OPEN dept_list;
+ 11  	LOOP
+ 12  		FETCH dept_list INTO v_dept.deptno, v_dept.dname, v_dept.loc;
+ 13  			EXIT WHEN dept_list%NOTFOUND;
+ 14  		dbms_output.put_line(rpad(v_dept.deptno, 10) || rpad(v_dept.dname, 15) || rpad(v_dept.loc, 10));
+ 15  	END LOOP;
+ 16  	CLOSE dept_list;
+ 17  EXCEPTION
+ 18  	WHEN OTHERS THEN
+ 19  		dbms_output.put_line('ERR MESSAGE : ' || SQLERRM);
+ 20  END;
+ 21  /
+부서번호    부서명       위    치                                                                                                                     
+-------     -------      -------                                                                                                                      
+10        ACCOUNTING     NEW YORK                                                                                                                     
+20        RESEARCH       DALLAS                                                                                                                       
+30        SALES          CHICAGO                                                                                                                      
+40        OPERATIONS     BOSTON                                                                                                                       
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+Q3
+----------------------------------------------------------------------------------------------------------------------
+
+SQL> select * from emp_week9;
+
+     EMPNO ENAME      JOB              MGR HIREDATE        SAL       COMM     DEPTNO                                                                  
+---------- ---------- --------- ---------- -------- ---------- ---------- ----------                                                                  
+      7369 SMITH      CLERK           7902 80/12/17        800                    20                                                                  
+      7499 ALLEN      SALESMAN        7698 81/02/20       1600        300         30                                                                  
+      7521 WARD       SALESMAN        7698 81/02/22       1250        500         30                                                                  
+      7566 JONES      MANAGER         7839 81/04/02       2975                    20                                                                  
+      7654 MARTIN     SALESMAN        7698 81/09/28       1250       1400         30                                                                  
+      7698 BLAKE      MANAGER         7839 81/05/01       2850                    30                                                                  
+      7782 CLARK      MANAGER         7839 81/06/09       2695                    10                                                                  
+      7788 SCOTT      ANALYST         7566 87/01/13       3000                    20                                                                  
+      7839 KING       PRESIDENT            81/11/17       5500                    10                                                                  
+      7844 TURNER     SALESMAN        7698 81/09/08       1500          0         30                                                                  
+      7876 ADAMS      CLERK           7788 87/10/23       1100                    20                                                                  
+      7900 JAMES      CLERK           7698 81/12/03        950                    30                                                                  
+      7902 FORD       ANALYST         7566 81/12/03       3000                    20                                                                  
+      7934 MILLER     CLERK           7782 82/01/23       1430                    10                                                                  
+      7370 JASON      ANALYST         7902 80/12/17        900                    20                                                                  
+
+15 행이 선택되었습니다.
+
+SQL> CREATE OR REPLACE PROCEDURE emp_input
+  2  (v_empno in number, v_ename in varchar2, v_job in varchar2, v_mgr in number, v_hiredate in date, v_sal in number)
+  3  IS
+  4  v_comm emp_week9.comm%TYPE;
+  5  v_deptno emp_week9.deptno%TYPE;
+  6  BEGIN
+  7  
+  8  	if v_job = 'SALESMAN' then
+  9  		v_comm := 10;
+ 10  	else
+ 11  		v_comm := NULL;
+ 12  	end if;
+ 13  
+ 14  	select deptno
+ 15  	into v_deptno
+ 16  	from emp_week9
+ 17  	where mgr = v_mgr;
+ 18  
+ 19  	insert into emp_week9 values(v_empno, v_ename, v_job,  v_mgr, v_hiredate, v_sal, v_comm, v_deptno);
+ 20  	commit;
+ 21  
+ 22  EXCEPTION
+ 23  	WHEN DUP_VAL_ON_INDEX THEN
+ 24  		dbms_output.put_line('중복된 사원번호 입니다.');
+ 25  END;
+ 26  /
+
+프로시저가 생성되었습니다.
+
+SQL> EXECUTE emp_input(7900, 'ALVIN', 'SALESMAN', 7788, SYSDATE, 1500);
+중복된 사원번호 입니다.                                                                                                                               
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+SQL> EXECUTE emp_input(7904, 'ALVIN', 'SALESMAN', 7788, SYSDATE, 1500);
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+SQL> select * from emp_week9;
+
+     EMPNO ENAME      JOB              MGR HIREDATE        SAL       COMM     DEPTNO                                                                  
+---------- ---------- --------- ---------- -------- ---------- ---------- ----------                                                                  
+      7904 ALVIN      SALESMAN        7788 22/11/09       1500         10         20                                                                  
+      7369 SMITH      CLERK           7902 80/12/17        800                    20                                                                  
+      7499 ALLEN      SALESMAN        7698 81/02/20       1600        300         30                                                                  
+      7521 WARD       SALESMAN        7698 81/02/22       1250        500         30                                                                  
+      7566 JONES      MANAGER         7839 81/04/02       2975                    20                                                                  
+      7654 MARTIN     SALESMAN        7698 81/09/28       1250       1400         30                                                                  
+      7698 BLAKE      MANAGER         7839 81/05/01       2850                    30                                                                  
+      7782 CLARK      MANAGER         7839 81/06/09       2695                    10                                                                  
+      7788 SCOTT      ANALYST         7566 87/01/13       3000                    20                                                                  
+      7839 KING       PRESIDENT            81/11/17       5500                    10                                                                  
+      7844 TURNER     SALESMAN        7698 81/09/08       1500          0         30                                                                  
+      7876 ADAMS      CLERK           7788 87/10/23       1100                    20                                                                  
+      7900 JAMES      CLERK           7698 81/12/03        950                    30                                                                  
+      7902 FORD       ANALYST         7566 81/12/03       3000                    20                                                                  
+      7934 MILLER     CLERK           7782 82/01/23       1430                    10                                                                  
+      7370 JASON      ANALYST         7902 80/12/17        900                    20                                                                  
+
+16 행이 선택되었습니다.
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+Q4
+----------------------------------------------------------------------------------------------------------------------
+
+SQL> CREATE OR REPLACE FUNCTION empno_deptno
+  2  		(v_empno in number)
+  3  		RETURN NUMBER
+  4  IS
+  5  		v_deptno emp_week9.deptno%TYPE;
+  6  BEGIN
+  7  	select deptno
+  8  	into v_deptno
+  9  	from emp_week9
+ 10  	where empno = v_empno;
+ 11  	dbms_output.put_line('부서 번호 : '||v_deptno);
+ 12  RETURN v_deptno;
+ 13  END;
+ 14  
+ 15  /
+
+함수가 생성되었습니다.
+
+SQL> VAR g_deptno NUMBER
+SQL> EXECUTE :g_deptno := empno_deptno(7788);
+부서 번호 : 20                                                                                                                                        
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+Q5
+----------------------------------------------------------------------------------------------------------------------
+
+SQL> CREATE OR REPLACE TRIGGER shops_trigger
+  2  BEFORE INSERT ON shops
+  3  FOR EACH ROW
+  4  DECLARE
+  5  	v_shopprofit shops.shop_profit%TYPE;
+  6  	v_shopcost shops.shop_cost%TYPE;
+  7  	v_shopincome shops.shop_profit%TYPE;
+  8  BEGIN
+  9  	select sum(shop_profit), sum(shop_cost)
+ 10  	into v_shopprofit, v_shopcost
+ 11  	from shops;
+ 12  	v_shopincome := v_shopprofit - v_shopcost;
+ 13  	dbms_output.put_line('<INSERT문이 실행되기 전까지의 손익 현황>');
+ 14  	dbms_output.put_line('총 수익 : '||v_shopprofit);
+ 15  	dbms_output.put_line('총 비용 : '||v_shopcost);
+ 16  	dbms_output.put_line('총 순이익 : '||v_shopincome);
+ 17  END;
+ 18  /
+
+트리거가 생성되었습니다.
+
+SQL> INSERT INTO SHOPS VALUES (500, '동국상점5', 2500000, 800000);
+<INSERT문이 실행되기 전까지의 손익 현황>                                                                                                              
+총 수익 : 11300000                                                                                                                                    
+총 비용 : 4900000                                                                                                                                     
+총 순이익 : 6400000                                                                                                                                   
+
+1 개의 행이 만들어졌습니다.
+
+SQL> spool off

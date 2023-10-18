@@ -1,0 +1,639 @@
+----------------------------------------------------------------------------------------------------------------------------------------
+<Q1>
+SQL> CREATE TABLE STUDENT_ENROLL(
+  2       Sid VARCHAR(10) NOT NULL,
+  3       Cid VARCHAR(10) NOT NULL,
+  4       Time NUMBER,
+  5       Cname VARCHAR(15),
+  6       Cunit VARCHAR(2),
+  7       PRIMARY KEY(Sid, Cid));
+
+테이블이 생성되었습니다.
+
+SQL> INSERT INTO STUDENT_ENROLL VALUES('2019127059','C100',1,'C언어','3');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO STUDENT_ENROLL VALUES('2019127060','C200',3,'데이터베이스','3');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO STUDENT_ENROLL VALUES('2019127061','C200',3,'데이터베이스','3');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO STUDENT_ENROLL VALUES('2019127062','C300',5,'프로그래밍','3');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> CREATE TABLE STUDENT_ENROLL_2NF(
+  2       Sid VARCHAR(10) NOT NULL,
+  3       Cid VARCHAR(10) NOT NULL,
+  4       Time NUMBER,
+  5       PRIMARY KEY(Sid, Cid));
+
+테이블이 생성되었습니다.
+
+SQL> CREATE TABLE COURSE_2NF(
+  2       Cid VARCHAR(10) NOT NULL,
+  3       Cname VARCHAR(15),
+  4       Cunit VARCHAR(2),
+  5       PRIMARY KEY(Cid));
+
+테이블이 생성되었습니다.
+
+SQL> INSERT INTO STUDENT_ENROLL_2NF VALUES('2019127059','C100',1);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO STUDENT_ENROLL_2NF VALUES('2019127060','C200',3);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO STUDENT_ENROLL_2NF VALUES('2019127061','C200',3);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO STUDENT_ENROLL_2NF VALUES('2019127062','C300',5);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO COURSE_2NF VALUES('C100','C언어','3');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO COURSE_2NF VALUES('C200','데이터베이스','3');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO COURSE_2NF VALUES('C300','프로그래밍','3');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> COMMIT:
+  2  
+SQL> select * from STUDENT_ENROLL_2NF;
+
+SID        CID              TIME                                                                                                                      
+---------- ---------- ----------                                                                                                                      
+2019127059 C100                1                                                                                                                      
+2019127060 C200                3                                                                                                                      
+2019127061 C200                3                                                                                                                      
+2019127062 C300                5                                                                                                                      
+
+SQL> select * from COURSE_2NF;
+
+CID        CNAME           CU                                                                                                                         
+---------- --------------- --                                                                                                                         
+C100       C언어           3                                                                                                                          
+C200       데이터베이스    3                                                                                                                          
+C300       프로그래밍      3          
+
+/* 
+STUDENT_ENROLL(Sid, Cid, Time, Cname, Cunit)을 
+STUDENT_ENROLL_2NF(Sid, Cid, Time)과 COURSE_2NF(Cid, Cname, Cunit) 으로 분해하였습니다. 
+왜냐하면 Cid → Cname, Cunit 가 부분함수 종속이기 때문이기 때문에 STUDENT_ENROLL의 Cid, Cname, Cunit을
+테이블로 따로 구성하여 부분함수 종속이 일어나지 않도록 하였습니다.
+또한 테이블을 분해하고 값을 테이블에 넣을 때 
+원래 저장되어 있던 튜플의 값을 분해된 테이블에 맞게 속성을 분리하고, 중복된 튜플은 제거하였습니다.
+*/                                                                                                               
+ 
+SQL> select Cid from STUDENT_ENROLL_2NF
+  2  where Cid not in (select st.Cid
+  3  from STUDENT_ENROLL_2NF st, COURSE_2NF co
+  4  where st.Cid = co.Cid);
+
+선택된 레코드가 없습니다.
+
+/* 
+참조 무결성 제약 조건을 확인하기 위해 
+STUDENT_ENROLL_2NF과 COURSE_2NF를 join한 테이블에서 조회한 Cid를 
+STUDENT_ENROLL_2NF에 있는지 확인하였더니 선택된 레코드가 없었습니다.
+따라서 참조 무결성 제약 조건을 지키고 있음을 확인할 수 있습니다.
+*/        
+
+SQL> select * from student_enroll;
+
+SID        CID              TIME CNAME           CU                                                                                                   
+---------- ---------- ---------- --------------- --                                                                                                   
+2019127059 C100                1 C언어           3                                                                                                    
+2019127060 C200                3 데이터베이스    3                                                                                                    
+2019127061 C200                3 데이터베이스    3                                                                                                    
+2019127062 C300                5 프로그래밍      3                                                                                                    
+
+SQL> select SId, Cid, Time, Cname, Cunit from STUDENT_ENROLL_2NF natural join COURSE_2NF;
+
+SID        CID              TIME CNAME           CU                                                                                                   
+---------- ---------- ---------- --------------- --                                                                                                   
+2019127059 C100                1 C언어           3                                                                                                    
+2019127060 C200                3 데이터베이스    3                                                                                                    
+2019127061 C200                3 데이터베이스    3                                                                                                    
+2019127062 C300                5 프로그래밍      3         
+
+/* 
+원래 테이블인 STUDENT_ENROLL(Sid, Cid, Time, Cname, Cunit)과 
+이 테이블을 분해한 STUDENT_ENROLL_2NF(Sid, Cid, Time)과 COURSE_2NF(Cid, Cname, Cunit)을 natural join한 테이블을 비교하였더니 
+결과가 같았음을 볼 수 있었습니다.
+따라서 변환 전과 변환 후 데이터에는 변화가 없음을 확인할 수 있었습니다.
+*/           
+
+/* 
+STUDENT_ENROLL(Sid, Cid, Time, Cname, Cunit)를
+STUDENT_ENROLL_2NF(Sid, Cid, Time)과 COURSE_2NF(Cid, Cname, Cunit)으로 분해하여
+(1) 부분 함수 종속을 제거하고, (2) 참조 무결성 제약 조건을 준수하고 있음을 확인하고
+(3) 원 테이블과 분해한 테이블을 natural join한 테이블이 같았음을 확인하였으므로 
+1NF에서 2NF로 정규화가 성공적으로 이루어졌음을 확인할 수 있었습니다.
+*/                                                                                                  
+
+----------------------------------------------------------------------------------------------------------------------------------------
+<Q2>
+SQL> CREATE TABLE ITEM(
+  2       ItemCode NUMBER NOT NULL,
+  3       ItemName VARCHAR(50),
+  4       ItemType VARCHAR(50),
+  5       Location VARCHAR(5),
+  6       Manufacturer VARCHAR(25),
+  7       PRIMARY KEY(ItemCode));
+
+테이블이 생성되었습니다.
+
+SQL> INSERT INTO ITEM VALUES(1000,'Antique Desk','Antique','A1','E. Treasures');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM VALUES(1100,'Antique Candle Holders','Antique','A1','Jade Antiques');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM VALUES(2300,'Desk Lamp','Lamps and Lighting','B1','Jeremy');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM VALUES(4500,'Floor Lamp','Lamps and Lighting','B1','Mr. James');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> CREATE TABLE ITEM1_3NF(
+  2       ItemCode NUMBER NOT NULL,
+  3       ItemName VARCHAR(50),
+  4       ItemType VARCHAR(50),
+  5       Manufacturer VARCHAR(25),
+  6       PRIMARY KEY(ItemCode));
+
+테이블이 생성되었습니다.
+
+SQL> CREATE TABLE ITEM2_3NF(
+  2       ItemType VARCHAR(50),
+  3       Location VARCHAR(5),
+  4       PRIMARY KEY(ItemType));
+
+테이블이 생성되었습니다.
+
+SQL> INSERT INTO ITEM1_3NF VALUES(1000,'Antique Desk','Antique','E. Treasures');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM1_3NF VALUES(1100,'Antique Candle Holders','Antique','Jade Antiques');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM1_3NF VALUES(2300,'Desk Lamp','Lamps and Lighting','Jeremy');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM1_3NF VALUES(4500,'Floor Lamp','Lamps and Lighting','Mr. James');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM2_3NF VALUES('Antique','A1');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM2_3NF VALUES('Lamps and Lighting','B1');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> COMMIT;
+
+커밋이 완료되었습니다.
+
+SQL> select * from ITEM1_3NF;
+
+  ITEMCODE ITEMNAME                                           ITEMTYPE                                           MANUFACTURER                         
+---------- -------------------------------------------------- -------------------------------------------------- -------------------------            
+      1000 Antique Desk                                       Antique                                            E. Treasures                         
+      1100 Antique Candle Holders                             Antique                                            Jade Antiques                        
+      2300 Desk Lamp                                          Lamps and Lighting                                 Jeremy                               
+      4500 Floor Lamp                                         Lamps and Lighting                                 Mr. James                            
+
+SQL> select * from ITEM2_3NF;
+
+ITEMTYPE                                           LOCAT                                                                                              
+-------------------------------------------------- -----                                                                                              
+Antique                                            A1                                                                                                 
+Lamps and Lighting                                 B1          
+
+/* 
+ITEM(ItemCode, ItemName, ItemType, Location, Manufacturer)을 
+ITEM1_3NF(ItemCode, ItemName, ItemType, Manufacturer)과 ITEM2_3NF(ItemType, Location) 으로 분해하였습니다. 
+왜냐하면 ItemType → Location가 이행함수 종속이기 때문이기 떄문에 ITEM의 ItemType, Location을
+테이블로 따로 구성하여 이행함수 종속이 일어나지 않도록 하였습니다.
+또한 테이블을 분해하고 값을 테이블에 넣을 때 
+원래 저장되어 있던 튜플의 값을 분해된 테이블에 맞게 속성을 분리하고, 중복된 튜플은 제거하였습니다.
+*/                                                                                                
+
+SQL> select ItemType from ITEM1_3NF
+  2  where ItemType not in (select code.ItemType
+  3  from ITEM1_3NF code, ITEM2_3NF type
+  4  where code.ItemType = type.ItemType);
+
+선택된 레코드가 없습니다.
+
+/* 
+참조 무결성 제약 조건을 확인하기 위해 
+ITEM1_3NF과 ITEM2_3NF를 join한 테이블에서 조회한 ItemType을
+ITEM1_3NF에 있는지 확인하였더니 선택된 레코드가 없었습니다.
+따라서 참조 무결성 제약 조건을 지키고 있음을 확인할 수 있습니다.
+*/        
+
+SQL> select * from ITEM;
+
+  ITEMCODE ITEMNAME                                           ITEMTYPE                                           LOCAT MANUFACTURER                   
+---------- -------------------------------------------------- -------------------------------------------------- ----- -------------------------      
+      1000 Antique Desk                                       Antique                                            A1    E. Treasures                   
+      1100 Antique Candle Holders                             Antique                                            A1    Jade Antiques                  
+      2300 Desk Lamp                                          Lamps and Lighting                                 B1    Jeremy                         
+      4500 Floor Lamp                                         Lamps and Lighting                                 B1    Mr. James                      
+
+SQL> select ItemCode, ItemName, ItemType, Location, Manufacturer from ITEM1_3NF natural join ITEM2_3NF;
+
+  ITEMCODE ITEMNAME                                           ITEMTYPE                                           LOCAT MANUFACTURER                   
+---------- -------------------------------------------------- -------------------------------------------------- ----- -------------------------      
+      1000 Antique Desk                                       Antique                                            A1    E. Treasures                   
+      1100 Antique Candle Holders                             Antique                                            A1    Jade Antiques                  
+      2300 Desk Lamp                                          Lamps and Lighting                                 B1    Jeremy                         
+      4500 Floor Lamp                                         Lamps and Lighting                                 B1    Mr. James                      
+
+/* 
+원래 테이블인 ITEM(ItemCode, ItemName, ItemType, Location, Manufacturer)과 
+이 테이블을 분해한 ITEM1_3NF(ItemCode, ItemName, ItemType, Manufacturer)과 ITEM2_3NF(ItemType, Location)을 natural join한 테이블을 비교하였더니 
+결과가 같았음을 볼 수 있었습니다.
+따라서 변환 전과 변환 후 데이터에는 변화가 없음을 확인할 수 있었습니다.
+*/           
+
+/* 
+ITEM(ItemCode, ItemName, ItemType, Location, Manufacturer)를
+ITEM1_3NF(ItemCode, ItemName, ItemType, Manufacturer)과 ITEM2_3NF(ItemType, Location)으로 분해하여
+(1) 이행 함수 종속을 제거하고, (2) 참조 무결성 제약 조건을 준수하고 있음을 확인하고
+(3) 원 테이블과 분해한 테이블을 natural join한 테이블이 같았음을 확인하였으므로 
+2NF에서 3NF로 정규화가 성공적으로 이루어졌음을 확인할 수 있었습니다.
+*/   
+
+----------------------------------------------------------------------------------------------------------------------------------------
+<Q3>
+SQL> CREATE TABLE ITEM_ORDER(
+  2       Buyer VARCHAR(25) NOT NULL,
+  3       Item VARCHAR(50) NOT NULL,
+  4       Manager VARCHAR(25) NOT NULL,
+  5       PRIMARY KEY(Buyer, Item));
+
+테이블이 생성되었습니다.
+
+SQL> INSERT INTO ITEM_ORDER VALUES('Chris Bancroft','SSD','Pete Hansen');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM_ORDER VALUES('Doris Tierney','SSD','Nancy Meyers');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM_ORDER VALUES('Donna Anderson','RAM','Cindy Lo');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM_ORDER VALUES('John Griffith','USB','Jerry Martin');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> CREATE TABLE ITEM_ORDER_MANAGER_BCNF(
+  2       Buyer VARCHAR(25) NOT NULL,
+  3       Manager VARCHAR(25) NOT NULL,
+  4       PRIMARY KEY(Buyer, Manager));
+
+테이블이 생성되었습니다.
+ 
+SQL> CREATE TABLE ITEM_ORDER_BCNF(
+  2       Item VARCHAR(50) NOT NULL,
+  3       Manager VARCHAR(25) NOT NULL,
+  4       PRIMARY KEY(Manager));
+
+테이블이 생성되었습니다.
+
+SQL> INSERT INTO ITEM_ORDER_MANAGER_BCNF VALUES('Chris Bancroft','Pete Hansen');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM_ORDER_MANAGER_BCNF VALUES('Doris Tierney','Nancy Meyers');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM_ORDER_MANAGER_BCNF VALUES('Donna Anderson','Cindy Lo');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM_ORDER_MANAGER_BCNF VALUES('John Griffith','Jerry Martin');
+
+1 개의 행이 만들어졌습니다.
+ 
+SQL> INSERT INTO ITEM_ORDER_BCNF VALUES('SSD','Pete Hansen');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM_ORDER_BCNF VALUES('SSD','Nancy Meyers');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM_ORDER_BCNF VALUES('RAM','Cindy Lo');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO ITEM_ORDER_BCNF VALUES('USB','Jerry Martin');
+
+1 개의 행이 만들어졌습니다.
+ 
+SQL> COMMIT;
+
+커밋이 완료되었습니다.
+
+SQL> select * from ITEM_ORDER_MANAGER_BCNF;
+
+BUYER                     MANAGER                                                                                                                     
+------------------------- -------------------------                                                                                                   
+Chris Bancroft            Pete Hansen                                                                                                                 
+Donna Anderson            Cindy Lo                                                                                                                    
+Doris Tierney             Nancy Meyers                                                                                                                
+John Griffith             Jerry Martin                                                                                                                
+
+SQL> select * from ITEM_ORDER_BCNF;
+
+ITEM                                               MANAGER                                                                                            
+-------------------------------------------------- -------------------------                                                                          
+SSD                                                Pete Hansen                                                                                        
+SSD                                                Nancy Meyers                                                                                       
+RAM                                                Cindy Lo                                                                                           
+USB                                                Jerry Martin                                                                                       
+
+/* 
+ITEM_ORDER (Buyer, Item, Manager)을 
+ITEM_ORDER_MANAGER_BCNF(Buyer, Manager)과 ITEM_ORDER_BCNF(Item, Manager) 으로 분해하였습니다. 
+왜냐하면 Manager → Item에서 결정자가 슈퍼키(후보키)가 아니기 때문에 테이블을 분해하여
+ITEM_ORDER_MANAGER_BCNF에서는 Buyer, Manager를 복합키로, ITEM_ORDER_BCNF에서 Manager를 기본키로 지정하여
+후보키가 아닌 결정자를 제거하였습니다.
+또한 테이블을 분해하고 값을 테이블에 넣을 때 
+원래 저장되어 있던 튜플의 값을 분해된 테이블에 맞게 속성을 분리하고, 중복된 튜플은 제거하였습니다.
+*/    
+ 
+SQL> select Manager from ITEM_ORDER_MANAGER_BCNF
+  2  where Manager not in (select m.Manager
+  3  from ITEM_ORDER_MANAGER_BCNF m, ITEM_ORDER_BCNF o
+  4  where m.Manager = o.Manager);
+
+선택된 레코드가 없습니다.
+
+/* 
+참조 무결성 제약 조건을 확인하기 위해 
+ITEM_ORDER_MANAGER_BCNF과 ITEM_ORDER_BCNF를 join한 테이블에서 조회한 Manager를 
+ITEM_ORDER_MANAGER_BCNF에 있는지 확인하였더니 선택된 레코드가 없었습니다.
+따라서 참조 무결성 제약 조건을 지키고 있음을 확인할 수 있습니다.
+*/      
+
+SQL> select * from ITEM_ORDER;
+
+BUYER                     ITEM                                               MANAGER                                                                  
+------------------------- -------------------------------------------------- -------------------------                                                
+Chris Bancroft            SSD                                                Pete Hansen                                                              
+Doris Tierney             SSD                                                Nancy Meyers                                                             
+Donna Anderson            RAM                                                Cindy Lo                                                                 
+John Griffith             USB                                                Jerry Martin                                                             
+
+SQL> select Buyer, Item, Manager from ITEM_ORDER_MANAGER_BCNF natural join ITEM_ORDER_BCNF;
+
+BUYER                     ITEM                                               MANAGER                                                                  
+------------------------- -------------------------------------------------- -------------------------                                                
+Chris Bancroft            SSD                                                Pete Hansen                                                              
+Doris Tierney             SSD                                                Nancy Meyers                                                             
+Donna Anderson            RAM                                                Cindy Lo                                                                 
+John Griffith             USB                                                Jerry Martin                                                             
+
+/* 
+원래 테이블인 ITEM_ORDER(Buyer, Item, Manager)과 
+이 테이블을 분해한 ITEM_ORDER_MANAGER_BCNF(Buyer, Manager)과 ITEM_ORDER_BCNF(Item, Manager)을 natural join한 테이블을 비교하였더니 
+결과가 같았음을 볼 수 있었습니다.
+따라서 변환 전과 변환 후 데이터에는 변화가 없음을 확인할 수 있었습니다.
+*/           
+
+/* 
+ITEM_ORDER(Buyer, Item, Manager)를
+ITEM_ORDER_MANAGER_BCNF(Buyer, Manager)과 ITEM_ORDER_BCNF(Item, Manager)으로 분해하여
+(1) 결정자가 아닌 후보키를 제거하고, (2) 참조 무결성 제약 조건을 준수하고 있음을 확인하고
+(3) 원 테이블과 분해한 테이블을 natural join한 테이블이 같았음을 확인하였으므로 
+3NF에서 BCNF로 정규화가 성공적으로 이루어졌음을 확인할 수 있었습니다.
+*/   
+
+----------------------------------------------------------------------------------------------------------------------------------------
+<Q4>
+SQL> CREATE TABLE EMPLOYEE(
+  2       EmpName VARCHAR(10) NOT NULL,
+  3       Education VARCHAR(25) NOT NULL,
+  4       Career VARCHAR(25) NOT NULL,
+  5       PRIMARY KEY(EmpName, Education, Career));
+
+테이블이 생성되었습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Chau','Sidwell Friends School','JavaScript');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Chau','Brown University','JavaScript');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Green','Columbia University','Python');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Jones','Groton School','Java');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Jones','Groton School','C#');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Jones','Cornell University','Java');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Jones','Cornell University','C#');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Jones','Stanford University','Java');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE VALUES('Jones','Stanford University','C#');
+
+1 개의 행이 만들어졌습니다.
+ 
+SQL> CREATE TABLE EMPLOYEE_EDUCATION_4NF(
+  2       EmpName VARCHAR(10) NOT NULL,
+  3       Education VARCHAR(25) NOT NULL,
+  4       PRIMARY KEY(EmpName, Education));
+
+테이블이 생성되었습니다.
+
+SQL> CREATE TABLE EMPLOYEE_CAREER_4NF(
+  2       EmpName VARCHAR(10) NOT NULL,
+  3       Career VARCHAR(25) NOT NULL,
+  4       PRIMARY KEY(EmpName, Career));
+
+테이블이 생성되었습니다.
+
+SQL> INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Chau','Sidwell Friends School');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Chau','Brown University');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Green','Columbia University');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Jones','Groton School');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Jones','Cornell University');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE_EDUCATION_4NF VALUES('Jones','Stanford University');
+
+1 개의 행이 만들어졌습니다.
+ 
+SQL> INSERT INTO EMPLOYEE_CAREER_4NF VALUES('Chau','JavaScript');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE_CAREER_4NF VALUES('Green','Python');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE_CAREER_4NF VALUES('Jones','Java');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> INSERT INTO EMPLOYEE_CAREER_4NF VALUES('Jones','C#');
+
+1 개의 행이 만들어졌습니다.
+ 
+SQL> COMMIT;
+
+커밋이 완료되었습니다.
+
+SQL> select * from EMPLOYEE_EDUCATION_4NF;
+
+EMPNAME    EDUCATION                                                                                                                                  
+---------- -------------------------                                                                                                                  
+Chau       Brown University                                                                                                                           
+Chau       Sidwell Friends School                                                                                                                     
+Green      Columbia University                                                                                                                        
+Jones      Cornell University                                                                                                                         
+Jones      Groton School                                                                                                                              
+Jones      Stanford University                                                                                                                        
+
+6 행이 선택되었습니다.
+
+SQL> select * from EMPLOYEE_CAREER_4NF;
+
+EMPNAME    CAREER                                                                                                                                     
+---------- -------------------------                                                                                                                  
+Chau       JavaScript                                                                                                                                 
+Green      Python                                                                                                                                     
+Jones      C#                                                                                                                                         
+Jones      Java          
+
+/* 
+EMPLOYEE(EmpName, Education, Career)을 
+EMPLOYEE_EDUCATION_4NF(EmpName, Education)과 EMPLOYEE_CAREER_4NF(EmpName, Career) 으로 분해하였습니다. 
+왜냐하면 EmpName →→ Education, EmpName →→ Career 관계 각각이 다치 종속이기 때문에 테이블을 분해하여
+다치 종속을 제거하였습니다.
+또한 테이블을 분해하고 값을 테이블에 넣을 때 
+원래 저장되어 있던 튜플의 값을 분해된 테이블에 맞게 속성을 분리하고, 중복된 튜플은 제거하였습니다.
+*/                                                                                                                                 
+
+SQL> select EmpName from EMPLOYEE_EDUCATION_4NF
+  2  where EmpName not in (select e.EmpName
+  3  from EMPLOYEE_EDUCATION_4NF e, EMPLOYEE_CAREER_4NF c
+  4  where e.EmpName = c.EmpName);
+
+선택된 레코드가 없습니다.
+
+/* 
+참조 무결성 제약 조건을 확인하기 위해 
+EMPLOYEE_EDUCATION_4NF과 EMPLOYEE_CAREER_4NF를 join한 테이블에서 조회한 EmpName를 
+EMPLOYEE_EDUCATION_4NF에 있는지 확인하였더니 선택된 레코드가 없었습니다.
+따라서 참조 무결성 제약 조건을 지키고 있음을 확인할 수 있습니다.
+*/      
+ 
+SQL> select * from EMPLOYEE;
+
+EMPNAME    EDUCATION                 CAREER                                                                                                           
+---------- ------------------------- -------------------------                                                                                        
+Chau       Brown University          JavaScript                                                                                                       
+Chau       Sidwell Friends School    JavaScript                                                                                                       
+Green      Columbia University       Python                                                                                                           
+Jones      Cornell University        C#                                                                                                               
+Jones      Cornell University        Java                                                                                                             
+Jones      Groton School             C#                                                                                                               
+Jones      Groton School             Java                                                                                                             
+Jones      Stanford University       C#                                                                                                               
+Jones      Stanford University       Java                                                                                                             
+
+9 행이 선택되었습니다.
+
+SQL> select EmpName, Education, Career from EMPLOYEE_EDUCATION_4NF natural join EMPLOYEE_CAREER_4NF;
+
+EMPNAME    EDUCATION                 CAREER                                                                                                           
+---------- ------------------------- -------------------------                                                                                        
+Chau       Brown University          JavaScript                                                                                                       
+Chau       Sidwell Friends School    JavaScript                                                                                                       
+Green      Columbia University       Python                                                                                                           
+Jones      Cornell University        Java                                                                                                             
+Jones      Cornell University        C#                                                                                                               
+Jones      Groton School             Java                                                                                                             
+Jones      Groton School             C#                                                                                                               
+Jones      Stanford University       Java                                                                                                             
+Jones      Stanford University       C#                                                                                                               
+
+9 행이 선택되었습니다.
+
+/* 
+원래 테이블인 EMPLOYEE(EmpName, Education, Career)과 
+이 테이블을 분해한 EMPLOYEE_EDUCATION_4NF(EmpName, Education)과 EMPLOYEE_CAREER_4NF(EmpName, Career)을 natural join한 테이블을 비교하였더니 
+결과가 같았음을 볼 수 있었습니다.
+따라서 변환 전과 변환 후 데이터에는 변화가 없음을 확인할 수 있었습니다.
+*/           
+
+/* 
+EMPLOYEE(EmpName, Education, Career)를
+EMPLOYEE_EDUCATION_4NF(EmpName, Education)과 EMPLOYEE_CAREER_4NF(EmpName, Career)으로 분해하여
+(1) 다치 종속을 제거하고, (2) 참조 무결성 제약 조건을 준수하고 있음을 확인하고
+(3) 원 테이블과 분해한 테이블을 natural join한 테이블이 같았음을 확인하였으므로 
+BCNF에서 4NF로 정규화가 성공적으로 이루어졌음을 확인할 수 있었습니다.
+*/   
+
+SQL> spool off

@@ -1,0 +1,22 @@
+/*CREATE TABLE*/
+
+CREATE TABLE EMPLOYEE
+(Fname VARCHAR(15) NOT NULL,
+Minit CHAR,
+Lname VARCHAR(15) NOT NULL,
+Ssn CHAR(9) NOT NULL,
+Bdate DATE,
+Address VARCHAR(30),
+Sex CHAR,
+Salary DECIMAL(10,2),
+Super_ssn CHAR(9),
+Dno INT NOT NULL,
+PRIMARY KEY (Ssn),
+FOREIGN KEY (Super_ssn) REFERENCES EMPLOYEE(Ssn)); 
+
+
+/* INSERT DATA */
+INSERT INTO EMPLOYEE VALUES('James','E','Borg','888665555',to_date('1937-11-10','yyyy-mm-dd'),'450 Stone, Houston, TX','M','55000',NULL,'1');
+INSERT INTO EMPLOYEE VALUES('Franklin','T','Wong','333445555',to_date('1955-12-08','yyyy-mm-dd'),'683 Voss, Houston, TX','M','40000','888665555','5');
+
+commit;

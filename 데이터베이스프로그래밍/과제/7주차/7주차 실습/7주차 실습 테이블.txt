@@ -1,0 +1,149 @@
+--Employees Table
+
+create table employees(
+id int constraint pk_employee primary key,
+name char(50) not null,
+department char(20) not null,
+budget int
+);
+
+insert into employees values(1, 'King', 'SALES', '100');
+insert into employees values(2, 'Clark', 'OPERATIONS', '80');
+insert into employees values(3, 'Ford', 'ACCOUNTING', '20');
+insert into employees values(4, 'Smith', 'RESEARCH', '70');
+insert into employees values(5, 'Adams', 'MARKETING', '40');
+
+
+--Boats Table
+
+create table boats(
+bid int constraint pk_boats primary key,
+bname varchar2(100) not null,
+color varchar2(50) not null
+);
+
+insert into Boats values (101,'Interlake','Blue');
+insert into Boats values (102,'Interlake','Red');
+insert into Boats values (103,'Clipper','Green');
+insert into Boats values (104,'Marine','Blue');
+
+
+--Sailors Table
+
+create table sailors(
+sid int constraint pk_sailors primary key,
+sname char(50) not null,
+rating int not null,
+age number
+);
+
+insert into sailors values (22,'Dustin',7,45.2);
+insert into sailors values (29,'Brutus',1,33.0);
+insert into sailors values (31,'Lubber',8,55.5);
+insert into sailors values (32,'Andy',8,25.5);
+insert into sailors values (58,'Rusty',10,35.0);
+insert into sailors values (64,'Horatio',7,35.0);
+insert into sailors values (71,'Zorba',10,16.0);
+insert into sailors values (74,'Tom',7,35.0);
+insert into sailors values (85,'Art',3,25.5);
+insert into sailors values (95,'Bob',3,63.5);
+
+
+--Reserves Table
+
+create table reserves(
+sid int constraint fk_reserves_sid references sailors(sid),
+bid int constraint fk_reserves_bid references boats(bid),
+day date not null,
+constraint pk_reserves primary key(sid,bid));
+
+insert into Reserves values (22,101,'19981010');
+insert into Reserves values (22,102,'19981010');
+insert into Reserves values (22,103,'19981008');
+insert into Reserves values (22,104,'19981007');
+insert into Reserves values (31,102,'19981110');
+insert into Reserves values (31,103,'19981106');
+insert into Reserves values (31,104,'19981112');
+insert into Reserves values (64,101,'19980905');
+insert into Reserves values (64,102,'19980908');
+insert into Reserves values (74,103,'19980908');
+
+
+--Artists Table
+
+create table artists(
+artistid int constraint pk_artist primary key,
+lastname char(25) not null,
+firstname char(25) not null,
+nationality char(30),
+dateofbirth number(4),
+datedeceased number(4)
+);
+
+insert into artists values (1, 'Miro', 'Joan', 'Spanish', 1893, 1983);
+insert into artists values (2, 'Kandinsky', 'Wassily', 'Russian', 1866, 1944);
+insert into artists values (3, 'Klee', 'Paul', 'German', 1879, 1940);
+insert into artists values (4, 'Matisse', 'Henri', 'French', 1869, 1954);
+insert into artists values (5, 'Chagall', 'Marc', 'French', 1887, 1985);
+insert into artists values (11, 'Sargent', 'John Singer', 'United States', 1856, 1925);
+insert into artists values (17, 'Tobey', 'Mark', 'United States', 1890, 1976);
+insert into artists values (18, 'Horiuchi', 'Paul', 'United States', 1906, 1999);
+insert into artists values (19, 'Graves', 'Morris', 'United States', 1920, 2001);
+
+
+--Works Table
+
+create table works(
+workid int constraint pk_work primary key,
+title varchar2(55) not null,
+medium varchar2(100),
+description varchar2(1000) default 'Unknown provenance',
+copy varchar2(100) not null,
+artistid int constraint fk_works2_artistid references artists(artistid)
+);
+
+insert into works values(500, 'Memories IV', 'Casein rice paper collage', '31 x 24.8 in.', 'Unique', 18);
+insert into works values(501, 'Surf and Bird', 'High Quality Limited Print', 'Northwest School Expressionist style', '142/500',19);
+insert into works values(502, 'The tilled Field', 'High Quality Limited Print', 'Early Surrealist style', '788/1000',1);
+insert into works values(503, 'La Lecon de Ski', 'High Quality Limited Print', 'Surrealist style', '353/500',1);
+insert into works values(504, 'On White II', 'High Quality Limited Print', 'Bauhaus style of Kandinsky', '435/500',2);
+insert into works values(505, 'Woman with a Hat', 'High Quality Limited Print', 'A very colorful Impressionist piece', '596/750',4);
+insert into works values(506, 'The Woven World', 'Color lithograph', 'Signed', '17/750',17);
+insert into works values(507, 'Night Bird', 'Watercolor on Paper', '50 x 72.5 cm-signed', 'Unique',19);
+insert into works values(508, 'Der Blaue Reiter', 'High Quality Limited Print', '¡°The Blue Rider¡±-Early Pointilism influence', '236/1000',2);
+insert into works values(509, 'Angelus Novus', 'High Quality Limited Print', 'Bauhaus style of Klee', '659/750',3);
+insert into works values(510, 'The Dance', 'High Quality Limited Print', 'An Impressionist masterpiece', '734/1000',4);
+
+
+--CUSTOMERS
+
+create table customers(
+customerid int primary key,
+lastname char(25) not null,
+firstname char(25) not null);
+
+insert into customers values(1000,'Janes','Jeffrey');
+insert into customers values(1001,'Smith','David');
+insert into customers values(1015,'Twilight','Tiffany');
+
+
+--CUSTOMERS_ARTISTS_INT
+
+create table customers_artists_int(
+artistid int,
+customerid int,
+constraint pk_customer_ar_cu primary key(artistid,customerid));
+
+insert into customers_artists_int values (1, 1001);
+insert into customers_artists_int values (11, 1000);
+insert into customers_artists_int values (11,1001);
+insert into customers_artists_int values (11,1015);
+insert into customers_artists_int values (17,1015);
+
+
+create table customers_version2(
+customerid int primary key,
+lastname char(25) not null,
+firstname char(25) not null);
+
+commit;

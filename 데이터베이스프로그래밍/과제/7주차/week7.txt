@@ -1,0 +1,121 @@
+Q1
+----------------------------------------------------------------------------------------------------------------------------------
+SQL> alter table artists add constraint artist_nationality
+  2  check(nationality in ('Spanish', 'Russian', 'German', 'French', 'United States'));
+
+테이블이 변경되었습니다.
+
+SQL> insert into artists(artistid, lastname, firstname, nationality,
+  2  dateofbirth, datedeceased) values(10440, 'Miro3', 'Joan3',
+  3  'Japan', 1900, 1983);
+insert into artists(artistid, lastname, firstname, nationality,
+*
+1행에 오류:
+ORA-02290: 체크 제약조건(ST2018112007.ARTIST_NATIONALITY)이 위배되었습니다 
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+Q2
+----------------------------------------------------------------------------------------------------------------------------------
+SQL> desc artists;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ ARTISTID                                  NOT NULL NUMBER(38)
+ LASTNAME                                  NOT NULL CHAR(25)
+ FIRSTNAME                                 NOT NULL CHAR(25)
+ NATIONALITY                                        CHAR(30)
+ DATEOFBIRTH                                        NUMBER(4)
+ DATEDECEASED                                       NUMBER(4)
+
+SQL> alter table artists modify(nationality char(30) not null);
+
+테이블이 변경되었습니다.
+
+SQL> desc artists;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ ARTISTID                                  NOT NULL NUMBER(38)
+ LASTNAME                                  NOT NULL CHAR(25)
+ FIRSTNAME                                 NOT NULL CHAR(25)
+ NATIONALITY                               NOT NULL CHAR(30)
+ DATEOFBIRTH                                        NUMBER(4)
+ DATEDECEASED                                       NUMBER(4)
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+Q3
+----------------------------------------------------------------------------------------------------------------------------------
+SQL> select s.sname, s.age
+  2  from sailors s
+  3  where not exists
+  4  ((select b.bid
+  5  from boats b)
+  6  minus
+  7  (select r.bid
+  8  from reserves r
+  9  where r.sid = s.sid));
+
+SNAME                                                     AGE                   
+-------------------------------------------------- ----------                   
+Dustin                                                   45.2                   
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+Q4
+----------------------------------------------------------------------------------------------------------------------------------
+SQL> desc employees;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL NUMBER(38)
+ NAME                                      NOT NULL CHAR(50)
+ DEPARTMENT                                NOT NULL CHAR(20)
+ BUDGET                                             NUMBER(38)
+
+SQL> create table employees_v2 as select * from employees;
+
+테이블이 생성되었습니다.
+
+SQL> alter table employees_v2 drop column budget;
+
+테이블이 변경되었습니다.
+
+SQL> alter table employees_v2 add Age number;
+
+테이블이 변경되었습니다.
+
+SQL> desc employees_V2
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ ID                                                 NUMBER(38)
+ NAME                                      NOT NULL CHAR(50)
+ DEPARTMENT                                NOT NULL CHAR(20)
+ AGE                                                NUMBER
+
+SQL> alter table employees_v2 modify(id number(38) not null);
+
+테이블이 변경되었습니다.
+
+SQL> desc employees_V2
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL NUMBER(38)
+ NAME                                      NOT NULL CHAR(50)
+ DEPARTMENT                                NOT NULL CHAR(20)
+ AGE                                                NUMBER
+
+SQL> spool off

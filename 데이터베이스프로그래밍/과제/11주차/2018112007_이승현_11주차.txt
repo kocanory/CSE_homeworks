@@ -1,0 +1,344 @@
+Q1
+-------------------------------------------------------------------------------------------------------------------------------------
+SQL> CREATE OR REPLACE PROCEDURE InsertEnroll(sStudentId IN VARCHAR2,
+  2  	sCourseId IN VARCHAR2,
+  3  	nCourseIdNo IN NUMBER,
+  4 	result OUT VARCHAR2)
+  5  IS
+  6  	too_many_sumCourseUnit EXCEPTION;
+  7  	too_many_courses EXCEPTION;
+  8  	too_many_students EXCEPTION;
+  9  	duplicate_time EXCEPTION;
+ 10  	nYear NUMBER;
+ 11  	nSemester NUMBER;
+ 12  	nSumCourseUnit NUMBER;
+ 13  	nCourseUnit NUMBER;
+ 14  	nCnt NUMBER;
+ 15  	nTeachMax NUMBER;
+ 16  	s_id_temp enroll.s_id%TYPE;
+ 17  	CURSOR enroll_cursor(sCourseId VARCHAR2, nCourseIdNo NUMBER, nYear NUMBER, nSemester NUMBER) IS
+ 18  	SELECT s_id
+ 19  	FROM enroll
+ 20  	WHERE e_year = nYear AND e_semester = nSemester
+ 21  	AND c_id = sCourseId AND c_id_no = nCourseIdNo;
+ 22  BEGIN
+ 23  	result := '';
+ 24  	DBMS_OUTPUT.put_line('#');
+ 25  	DBMS_OUTPUT.put_line(sStudentId || '님이 과목번호 ' || sCourseId || ', 분반 ' ||
+ 26  	TO_CHAR(nCourseIdNo) || '의 수강 등록을 요청하였습니다.');
+ 27  	nYear := Date2EnrollYear(SYSDATE);
+ 28  	nSemester := Date2EnrollSemester(SYSDATE);
+ 29  
+ 30  	SELECT SUM(c.c_unit)
+ 31  	INTO nSumCourseUnit
+ 32  	FROM course c, enroll e
+ 33  	WHERE e.s_id = sStudentId AND e.e_year = nYear AND e.e_semester = nSemester
+ 34  	AND e.c_id = c.c_id AND e.c_id_no = c.c_id_no;
+ 35  
+ 36  	SELECT c_unit
+ 37  	INTO nCourseUnit
+ 38  	FROM course
+ 39  	WHERE c_id = sCourseId and c_id_no = nCourseIdNo;
+ 40  	IF (nSumCourseUnit + nCourseUnit > 18) THEN
+ 41  		RAISE too_many_sumCourseUnit;
+ 42  	END IF;
+ 43  
+ 44  	SELECT COUNT(*)
+ 45  	INTO nCnt
+ 46  	FROM enroll
+ 47  	WHERE s_id = sStudentId AND c_id = sCourseId;
+ 48  	IF (nCnt > 0) THEN
+ 49  		RAISE too_many_courses;
+ 50  	END IF;
+ 51  
+ 52  	SELECT t_max
+ 53  	INTO nTeachMax
+ 54  	FROM teach
+ 55  	WHERE t_year= nYear AND t_semester = nSemester
+ 56  	AND c_id = sCourseId AND c_id_no= nCourseIdNo;
+ 57  
+ 58  	nCnt := 0;
+ 59  	FOR enroll_cur IN enroll_cursor(sCourseId, nCourseIdNo, nYear, nSemester) LOOP
+ 60  		nCnt := nCnt + 1;
+ 61  	END LOOP;
+ 62  	IF (nCnt >= nTeachMax) THEN
+ 63  		RAISE too_many_students;
+ 64  	END IF;
+ 65  
+ 66  	SELECT COUNT(*)
+ 67  	INTO nCnt
+ 68  	FROM
+ 69  	(SELECT t_time
+ 70  	FROM teach
+ 71  	WHERE t_year=nYear AND t_semester = nSemester
+ 72  	AND c_id = sCourseId AND c_id_no = nCourseIdNo
+ 73  	INTERSECT
+ 74  	SELECT t.t_time
+ 75  	FROM teach t, enroll e
+ 76  	WHERE e.s_id=sStudentId AND e.e_year=nYear
+ 77  	AND e.e_semester = nSemester AND t.t_year=nYear
+ 78  	AND t.t_semester = nSemester AND e.c_id=t.c_id
+ 79  	AND e.c_id_no=t.c_id_no);
+ 80  	IF (nCnt > 0) THEN
+ 81  		RAISE duplicate_time;
+ 82  	END IF;
+ 83  
+ 84  	INSERT INTO enroll(S_ID,C_ID,C_ID_NO,E_YEAR,E_SEMESTER)
+ 85  	VALUES (sStudentId, sCourseId, nCourseIdNo, nYear, nSemester);
+ 86  	COMMIT;
+ 87  	result := '수강신청 등록이 완료되었습니다.';
+ 88  EXCEPTION
+ 89  	WHEN too_many_sumCourseUnit THEN
+ 90  		result := '최대학점을 초과하였습니다';
+ 91  	WHEN too_many_courses THEN
+ 92  		result := '이미 등록된 과목을 신청하였습니다';
+ 93  	WHEN too_many_students THEN
+ 94  		result := '수강신청 인원이 초과되어 등록이 불가능합니다';
+ 95  	WHEN duplicate_time THEN
+ 96  		result := '이미 등록된 과목 중 중복되는 시간이 존재합니다';
+ 97  	WHEN OTHERS THEN
+ 98  		ROLLBACK;
+ 99  result := SQLCODE;
+100  END;
+101  /
+
+프로시저가 생성되었습니다.
+
+SQL> DECLARE
+  2  	result VARCHAR2(100) := '';
+  3  BEGIN
+  4  	DBMS_OUTPUT.ENABLE;
+  5  	DBMS_OUTPUT.PUT_LINE('**************** Insert 및 에러 처리 테스트 ********************');
+  6  	InsertEnroll('20011234', 'C400', 3, result);
+  7  	DBMS_OUTPUT.PUT_LINE('결과 : ' || result);
+  8  	InsertEnroll('20011234', 'C900', 3, result);
+  9  	DBMS_OUTPUT.PUT_LINE('결과 : ' || result);
+ 10  	InsertEnroll('20011234', 'M100', 3, result);
+ 11  	DBMS_OUTPUT.PUT_LINE('결과 : ' || result);
+ 12  	InsertEnroll('20011234', 'C800', 3, result);
+ 13  	DBMS_OUTPUT.PUT_LINE('결과 : ' || result);
+ 14  	InsertEnroll('20011234', 'M700', 3, result);
+ 15  	DBMS_OUTPUT.PUT_LINE('결과 : ' || result);
+ 16  	DBMS_OUTPUT.PUT_LINE('***************** CURSOR를 이용한 SELECT 테스트 ****************');
+ 17  	SelectTimeTable('20011234', 2023, 1);
+ 18  	DELETE FROM enroll
+ 19  	WHERE s_id='20011234' AND c_id='C800' AND c_id_no=3;
+ 20  END;
+ 21  /
+**************** Insert 및 에러 처리 테스트 ********************                                                                                      
+#                                                                                                                                                     
+20011234님이 과목번호 C400, 분반 3의 수강 등록을 요청하였습니다.                                                                                      
+결과 : 이미 등록된 과목을 신청하였습니다                                                                                                              
+#                                                                                                                                                     
+20011234님이 과목번호 C900, 분반 3의 수강 등록을 요청하였습니다.                                                                                      
+결과 : 수강신청 인원이 초과되어 등록이 불가능합니다                                                                                                   
+#                                                                                                                                                     
+20011234님이 과목번호 M100, 분반 3의 수강 등록을 요청하였습니다.                                                                                      
+결과 : 이미 등록된 과목 중 중복되는 시간이 존재합니다                                                                                                 
+#                                                                                                                                                     
+20011234님이 과목번호 C800, 분반 3의 수강 등록을 요청하였습니다.                                                                                      
+결과 : 수강신청 등록이 완료되었습니다.                                                                                                                
+#                                                                                                                                                     
+20011234님이 과목번호 M700, 분반 3의 수강 등록을 요청하였습니다.                                                                                      
+결과 : 최대학점을 초과하였습니다                                                                                                                      
+***************** CURSOR를 이용한 SELECT 테스트 ****************                                                                                      
+#                                                                                                                                                     
+2023년도 1학기의 20011234님의 수강신청 시간표입니다.                                                                                                  
+교시:2, 과목번호:C300, 과목명:알고리즘, 분반:3, 학점:3, 장소:인-416                                                                                   
+교시:3, 과목번호:C500, 과목명:운영체제, 분반:3, 학점:3, 장소:인-201                                                                                   
+교시:4, 과목번호:C100, 과목명:컴퓨터 프로그래밍, 분반:3, 학점:3, 장소:인-201                                                                          
+교시:5, 과목번호:C200, 과목명:자료구조, 분반:3, 학점:3, 장소:인-201                                                                                   
+교시:6, 과목번호:C400, 과목명:데이터베이스 시스템, 분반:3, 학점:3, 장소:인-201                                                                        
+교시:7, 과목번호:C800, 과목명:데이터베이스 프로그래밍, 분반:3, 학점:3, 장소:인-309                                                                    
+총 6 과목과 총 18학점을 신청하였습니다.                                                                                                               
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+-------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+Q2
+-------------------------------------------------------------------------------------------------------------------------------------
+SQL> CREATE OR REPLACE PROCEDURE emp_delete(delete_empno IN NUMBER) IS
+  2  	no_emp EXCEPTION;
+  3  	no_subemp EXCEPTION;
+  4  	v_ename emp_week9.ename%TYPE := '';
+  5  	v_sub_empno emp_week9.empno%TYPE;
+  6  	v_sub_ename emp_week9.ename%TYPE;
+  7  	v_sub_dname dept_week9.dname%TYPE;
+  8  	v_sub_job emp_week9.job%TYPE;
+  9  	v_sub_mgr emp_week9.mgr%TYPE;
+ 10  	cnt NUMBER;
+ 11  	CURSOR mgr(mgr_empno emp_week9.empno%TYPE) IS
+ 12  	select empno, ename, dname, job, mgr
+ 13  	from emp_week9 e, dept_week9 d
+ 14  	where e.deptno = d.deptno and e.mgr = delete_empno;
+ 15  
+ 16  BEGIN
+ 17  	select count(*)
+ 18  	into cnt
+ 19  	from emp_week9
+ 20  	where empno = delete_empno;
+ 21  	IF(cnt <= 0) THEN
+ 22  		RAISE no_emp;
+ 23  	end if;
+ 24  
+ 25  	select ename
+ 26  	into v_ename
+ 27  	from emp_week9
+ 28  	where empno = delete_empno;
+ 29  	dbms_output.put_line('삭제할 사원 이름 : ' || v_ename);
+ 30  
+ 31  	select count(*)
+ 32  	into cnt
+ 33  	from emp_week9
+ 34  	where mgr = delete_empno;
+ 35  	if(cnt <= 0) then
+ 36  		delete from emp_week9 where empno = delete_empno;
+ 37  		RAISE no_subemp;
+ 38  	end if;
+ 39  	dbms_output.put_line(chr(10)||chr(13)||'<부하직원 정보>');
+ 40  	dbms_output.put_line('사원번호'||'    '||'이름'||'       '||'부서명'||'          '||'직책'||'         '||'관리자번호');
+ 41   dbms_output.put_line('-------'||'     '||'-------'||'    '||'-------'||'         '||'-------'||'      '||'-------');
+ 42  	OPEN mgr(delete_empno);
+ 43  	LOOP
+ 44  		FETCH mgr Into v_sub_empno, v_sub_ename, v_sub_dname, v_sub_job, v_sub_mgr;
+ 45  			EXIT WHEN mgr%NOTFOUND;
+ 46  		dbms_output.put_line(rpad(v_sub_empno, 12) || rpad(v_sub_ename, 11) || rpad(v_sub_dname, 16)|| rpad(v_sub_job, 13)|| rpad(v_sub_mgr, 10));
+ 47  		update emp_week9
+ 48  		set mgr = null
+ 49  		where mgr = delete_empno;
+ 50  	END LOOP;
+ 51  	CLOSE mgr;
+ 52  	delete from emp_week9 where empno = delete_empno;
+ 53  	commit;
+ 54  EXCEPTION
+ 55  	WHEN no_emp THEN
+ 56  		dbms_output.put_line(chr(10)||chr(13)||'존재하지 않는 사원입니다.');
+ 57  	WHEN no_subemp THEN
+ 58  		dbms_output.put_line(chr(10)||chr(13)||'부하직원이 없는 사원입니다.');
+ 59  END;
+ 60  /
+
+프로시저가 생성되었습니다.
+
+SQL> select * from emp_week9;
+
+     EMPNO ENAME      JOB              MGR HIREDATE        SAL       COMM     DEPTNO                                                                  
+---------- ---------- --------- ---------- -------- ---------- ---------- ----------                                                                  
+      7904 ALVIN      SALESMAN        7788 22/11/09       1500         10         20                                                                  
+      7369 SMITH      CLERK           7902 80/12/17        800                    20                                                                  
+      7499 ALLEN      SALESMAN        7698 81/02/20       1600        300         30                                                                  
+      7521 WARD       SALESMAN        7698 81/02/22       1250        500         30                                                                  
+      7566 JONES      MANAGER         7839 81/04/02       2975                    20                                                                  
+      7654 MARTIN     SALESMAN        7698 81/09/28       1250       1400         30                                                                  
+      7698 BLAKE      MANAGER         7839 81/05/01       2850                    30                                                                  
+      7782 CLARK      MANAGER         7839 81/06/09       2695                    10                                                                  
+      7788 SCOTT      ANALYST         7566 87/01/13       3000                    20                                                                  
+      7839 KING       PRESIDENT            81/11/17       5500                    10                                                                  
+      7844 TURNER     SALESMAN        7698 81/09/08       1500          0         30                                                                  
+      7876 ADAMS      CLERK           7788 87/10/23       1100                    20                                                                  
+      7900 JAMES      CLERK           7698 81/12/03        950                    30                                                                  
+      7902 FORD       ANALYST         7566 81/12/03       3000                    20                                                                  
+      7934 MILLER     CLERK           7782 82/01/23       1430                    10                                                                  
+      7370 JASON      ANALYST         7902 80/12/17        900                    20                                                                  
+
+16 행이 선택되었습니다.
+
+SQL> execute emp_delete(7566);
+삭제할 사원 이름 : JONES                                                                                                                              
+
+
+<부하직원 정보>                                                                                                                                     
+사원번호    이름       부서명          직책         관리자번호                                                                                        
+-------     -------    -------         -------      -------                                                                                           
+7788        SCOTT      RESEARCH        ANALYST      7566                                                                                              
+7902        FORD       RESEARCH        ANALYST      7566                                                                                              
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+SQL> select * from emp_week9;
+
+     EMPNO ENAME      JOB              MGR HIREDATE        SAL       COMM     DEPTNO                                                                  
+---------- ---------- --------- ---------- -------- ---------- ---------- ----------                                                                  
+      7904 ALVIN      SALESMAN        7788 22/11/09       1500         10         20                                                                  
+      7369 SMITH      CLERK           7902 80/12/17        800                    20                                                                  
+      7499 ALLEN      SALESMAN        7698 81/02/20       1600        300         30                                                                  
+      7521 WARD       SALESMAN        7698 81/02/22       1250        500         30                                                                  
+      7654 MARTIN     SALESMAN        7698 81/09/28       1250       1400         30                                                                  
+      7698 BLAKE      MANAGER         7839 81/05/01       2850                    30                                                                  
+      7782 CLARK      MANAGER         7839 81/06/09       2695                    10                                                                  
+      7788 SCOTT      ANALYST              87/01/13       3000                    20                                                                  
+      7839 KING       PRESIDENT            81/11/17       5500                    10                                                                  
+      7844 TURNER     SALESMAN        7698 81/09/08       1500          0         30                                                                  
+      7876 ADAMS      CLERK           7788 87/10/23       1100                    20                                                                  
+      7900 JAMES      CLERK           7698 81/12/03        950                    30                                                                  
+      7902 FORD       ANALYST              81/12/03       3000                    20                                                                  
+      7934 MILLER     CLERK           7782 82/01/23       1430                    10                                                                  
+      7370 JASON      ANALYST         7902 80/12/17        900                    20                                                                  
+
+15 행이 선택되었습니다.
+
+SQL> execute emp_delete(7934);
+삭제할 사원 이름 : MILLER                                                                                                                             
+
+
+부하직원이 없는 사원입니다.                                                                                                                         
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+SQL> select * from emp_week9;
+
+     EMPNO ENAME      JOB              MGR HIREDATE        SAL       COMM     DEPTNO                                                                  
+---------- ---------- --------- ---------- -------- ---------- ---------- ----------                                                                  
+      7904 ALVIN      SALESMAN        7788 22/11/09       1500         10         20                                                                  
+      7369 SMITH      CLERK           7902 80/12/17        800                    20                                                                  
+      7499 ALLEN      SALESMAN        7698 81/02/20       1600        300         30                                                                  
+      7521 WARD       SALESMAN        7698 81/02/22       1250        500         30                                                                  
+      7654 MARTIN     SALESMAN        7698 81/09/28       1250       1400         30                                                                  
+      7698 BLAKE      MANAGER         7839 81/05/01       2850                    30                                                                  
+      7782 CLARK      MANAGER         7839 81/06/09       2695                    10                                                                  
+      7788 SCOTT      ANALYST              87/01/13       3000                    20                                                                  
+      7839 KING       PRESIDENT            81/11/17       5500                    10                                                                  
+      7844 TURNER     SALESMAN        7698 81/09/08       1500          0         30                                                                  
+      7876 ADAMS      CLERK           7788 87/10/23       1100                    20                                                                  
+      7900 JAMES      CLERK           7698 81/12/03        950                    30                                                                  
+      7902 FORD       ANALYST              81/12/03       3000                    20                                                                  
+      7370 JASON      ANALYST         7902 80/12/17        900                    20                                                                  
+
+14 행이 선택되었습니다.
+
+SQL> execute emp_delete(9999);
+
+
+존재하지 않는 사원입니다.                                                                                                                           
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+SQL> select * from emp_week9;
+
+     EMPNO ENAME      JOB              MGR HIREDATE        SAL       COMM     DEPTNO                                                                  
+---------- ---------- --------- ---------- -------- ---------- ---------- ----------                                                                  
+      7904 ALVIN      SALESMAN        7788 22/11/09       1500         10         20                                                                  
+      7369 SMITH      CLERK           7902 80/12/17        800                    20                                                                  
+      7499 ALLEN      SALESMAN        7698 81/02/20       1600        300         30                                                                  
+      7521 WARD       SALESMAN        7698 81/02/22       1250        500         30                                                                  
+      7654 MARTIN     SALESMAN        7698 81/09/28       1250       1400         30                                                                  
+      7698 BLAKE      MANAGER         7839 81/05/01       2850                    30                                                                  
+      7782 CLARK      MANAGER         7839 81/06/09       2695                    10                                                                  
+      7788 SCOTT      ANALYST              87/01/13       3000                    20                                                                  
+      7839 KING       PRESIDENT            81/11/17       5500                    10                                                                  
+      7844 TURNER     SALESMAN        7698 81/09/08       1500          0         30                                                                  
+      7876 ADAMS      CLERK           7788 87/10/23       1100                    20                                                                  
+      7900 JAMES      CLERK           7698 81/12/03        950                    30                                                                  
+      7902 FORD       ANALYST              81/12/03       3000                    20                                                                  
+      7370 JASON      ANALYST         7902 80/12/17        900                    20                                                                  
+
+14 행이 선택되었습니다.
+
