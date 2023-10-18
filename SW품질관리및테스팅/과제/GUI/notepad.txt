@@ -1,0 +1,15 @@
+import org.sikuli.script.FindFailed;
+import org.sikuli.script.Screen;
+
+public class notepad {
+	public static void main(String[] args) throws FindFailed, InterruptedException { 
+		String icon = "노트패드 아이콘 절대 경로";
+		String note = "노트패드 사진 절대 경로";
+		
+		Screen s=new Screen();
+		s.find(icon); 
+		s.doubleClick();
+		s.click(note);
+		s.type(note,"This is Nice Sikuli Tutorial!!!!");
+	}
+}

@@ -1,0 +1,8 @@
+adb devices
+adb reboot
+adb shell getprop ro.build.version.release
+adb shell screencap -p /sdcard/screen.png
+adb pull /sdcard/screen.png
+adb shell rm /sdcard/screen.png
+adb shell screenrecord /sdcard/example.mp4
+adb shell input text “helloworld”

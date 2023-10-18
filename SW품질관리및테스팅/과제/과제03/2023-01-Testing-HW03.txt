@@ -1,0 +1,31 @@
+과제#3(2점)
+2023.04.25 00:00:00 ~2023.05.02 23:59:59
+
+아래 4개의 파일과 2개의 유튜브 영상을 보고 각각의 내용을 요약하고 각각을 통해 얻을 수 있는 소프트웨어 품질관리와 관련된 내용 정리하시오.
+
+아래의 논문들은 교내에서 검색해서 얻을 수 있는 자료입니다. 직접 검색해서 보셔도 될 것 같습니다.
+검색이 어려운 분들을 위해 PDF 파일과 url을 첨부합니다.
+
+<> USENIX Paper(2014)
+Simple Testing Can Prevent Most Critical Failures: An Analysis of Production Failures in Distributed Data-Intensive Systems
+(https://www.usenix.org/conference/osdi14/technical-sessions/presentation/yuan)
+Simple Testing Can Prevent Most Critical Failures(osdi14-paper-yuan).pdf
+
+<> IEEE ICIS 2017, May 24-26, 2017, Wuhan China
+Analysis of Quality Evaluation Based on ISO/IEC SQuaRE Series Standards and Its Considerations
+Analysis_of_quality_evaluation_based_on_ISO_IEC_SQuaRE_series_standards_and_its_considerations.pdf
+
+<> IEEE Magazine Software 2022
+- Testing Software Systems , pp 8~17 , JULY/AUGUST 2022 , IEEE SOFTWARE
+ 09801810(Testing Software Systems).pdf
+
+- Can Software Engineering Harness the Benefits of Advanced AI ? , pp 99~104 , NOVEMBER/DECEMBER 2022 , IEEE SOFTWARE 
+- 09928179(Can Software Engineering Harness the Benefits of Advanced AI).pdf
+
+<> Youtube 동영상
+- "TDD가 최고의 설계기술이다" 여러분은 동의할 수 있나요?
+TDD Is The Best Design Technique - YouTube.url (﻿https://www.youtube.com/watch?v=ln4WnxX-wrw﻿)
+
+- TDD에서 단위테스트의 세가지 타입
+The 3 Types of Unit Test in TDD - YouTube.url (https://www.youtube.com/watch?v=W40mpZP9xQQ)
+2020년에도 비슷한 영상이 있기는 했지만 최근 영상으로 시청해보기를 바랍니다.

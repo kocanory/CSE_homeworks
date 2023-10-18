@@ -1,0 +1,7 @@
+ModuleCache.noindex
+Index/
+Logs/
+Build/
+.scannerwork
+Coverage.xml
+Coverage.report

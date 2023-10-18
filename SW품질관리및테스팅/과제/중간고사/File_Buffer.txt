@@ -1,0 +1,64 @@
+File_Buffer
+Init_Exit
+Cmd_Driver
+UserCmd
+(if) Parser
+do_while(csued)
+(Parser
+-(while) Parser, Msg
+-(if) Parser true : Msg
+-UserCmd
+-UserCmd
+-Parser
+-(if) Parser true : Parser
+-(if) Parser true : UserCmd
+-UserCmd
+-(switch) Parser
+1:
+2:Parser (if) Parser true: UserCmd, UserCmd
+3:Parser (if) Parser true: UserCmd, UserCmd
+4:Parser (if) Parser true: UserCmd, UserCmd
+5:Parser (if) Parser true: UserCmd, UserCmd
+6:Parser (if) Parser true: UserCmd, UserCmd
+7:Parser (if) Parser true: UserCmd, UserCmd
+default:Msg
+-(if) Parser
+true : UserCmd
+false : UserCmd
+-(if) Parser
+true : Parser
+-return : UserCmd)
+(if) csued 
+true : Run_Command
+-Cmd_Driver
+- switch(UserCmd)
+Q : Cmd_Driver File_Buffer
+X : Cmd_Driver File_Buffer
+H : Cmd_Driver
+T : Cmd_Driver
+E : Cmd_Driver
+N : Cmd_Driver
+B : Cmd_Driver
+W : Cmd_Driver
+C : Cmd_Driver
+L : Cmd_Driver
+S : Cmd_Driver
+D : Cmd_Driver
+A : Cmd_Driver
+F : Cmd_Driver
+R : Cmd_Driver
+Y : Cmd_Driver
+Z : Cmd_Driver
+P : Cmd_Driver
+I : Cmd_Driver
+K : Cmd_Driver
+O : Cmd_Driver
+M : Cmd_Driver
+default : Msg Msg
+- return : Cmd_Driver
+else:Msg
+
+Init_exit
+-if (File_Buffer) true : Init_exit File_Buffer
+	if(File_Buffer) true: Msg else: Init_exit
+- Init_exit

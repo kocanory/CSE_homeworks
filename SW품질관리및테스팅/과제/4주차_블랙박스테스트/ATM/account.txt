@@ -1,0 +1,8 @@
+0;osama123;1122;OsamaMursleen;Current;57124;Active
+1;-1;-1;-1;-1;-1;-1
+2;maryam;1234;MaryamKhan;Current;6000;Active
+3;scw0619;-123;0000000;ABCD;AAA;33
+5;me;me;meme;Savings;10000;Active
+6;y;-1234;meme;Current;-10000;1234
+7;1234;1234;1234;zz;-10000;d
+8;1;1;1;1;0;1

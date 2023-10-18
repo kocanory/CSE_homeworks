@@ -1,0 +1,11 @@
+adb -s emulator-5554 shell
+monkey -v 200
+monkey -p com.google.android.youtube -v 200
+monkey -p com.google.android.apps.maps --pct-touch 100 -v 100
+monkey -p com.google.android.deskclock --pct-touch 70 --pct-majornav 30 -v 100
+monkey -p com.android.chrome --throttle 1000 -v 100
+
+
+monkey -p com.google.android.youtube --pct-syskeys 70 5000 
+monkey -p com.google.android.apps.maps -p com.google.android.deskclock 2000 --pct-touch 70
+monkey --pct-touch 30 -p com.android.chrome --throttle 1000 3000

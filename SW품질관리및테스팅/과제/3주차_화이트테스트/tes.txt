@@ -1,0 +1,45 @@
+	FILE* inp;
+    unit_t data;
+    int    i, status;
+
+    /*  Gets database of units from file                               */
+    inp = fopen("units.dat", "r");
+    i = 0;
+
+    for (status = fscan_unit(inp, &data); status == 1 && i < unit_max; status = fscan_unit(inp, data)) {
+        units[i++] = data;
+    }
+    fclose(inp);
+
+    /* Issue error message on premature exit                           */
+    if (status == 0) {
+        printf("\n*** Error in data format ***\n");
+        printf("*** Using first %d data values ***\n", i);
+    }
+    else if (status != EOF) {
+        printf("\n*** Error: too much data in file ***\n");
+        printf("*** Using first %d data values ***\n", i);
+    }
+
+	for (status = scanf("%lf%s%s", &quantity, old_units, new_units); status == 3; status = scanf("%lf%s%s", &quantity, old_units, new_units)) 
+    {
+        printf("Attempting conversion of %.4f %s to %s . . .\n",
+            quantity, old_units, new_units);
+        old_index = search(units, old_units, num_units);
+        new_index = search(units, new_units, num_units);
+        if (old_index == NOT_FOUND)
+            printf("Unit %s not in database\n", old_units);
+        else if (new_index == NOT_FOUND)
+            printf("Unit %s not in database\n", new_units);
+        else if (strcmp(units[old_index].cls,
+            units[new_index].cls) != 0)
+            printf("Cannot convert %s (%s) to %s (%s)\n",
+                old_units, units[old_index].cls,
+                new_units, units[new_index].cls);
+        else
+            printf("%.4f%s  =  %.4f %s\n", quantity, old_units,
+                convert(quantity, units[old_index].standard,
+                    units[new_index].standard),
+                new_units);
+        printf("\nEnter a conversion problem or q to quit.\n> ");
+    }

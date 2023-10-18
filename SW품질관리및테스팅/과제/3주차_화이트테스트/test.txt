@@ -1,0 +1,38 @@
+if (status == 4) status = 1;
+else if (status != EOF) status = 0;
+
+if (status == 0)
+else if (status != EOF)
+
+if (strcmp(units[i].name, target) == 0 || strcmp(units[i].abbrev, target) == 0)
+else
+
+if (found)
+else
+
+if (old_index == NOT_FOUND)
+else if (new_index == NOT_FOUND)
+else if (strcmp(units[old_index].cls, units[new_index].cls) != 0)
+else
+
+milligram mg mass 0.000001
+gram g mass 0.001
+kilogram kg mass 1
+ton t mass 1000
+kiloton ton amss 1000000
+second s time 1
+minute min time 60
+hour hr time 3600
+day d time 86400
+meter m length 1
+kilometer km length 1000
+centimeter cm length 0.01
+millimeter mm length 0.001
+inch in length 39.370079
+feet ft length 3.28084
+mile mi length 0.000621
+ampere amp electric 1
+abampere abamp electric 10
+kelvin k temperature 1
+mole mol substance 1
+candela cd luminous 1
